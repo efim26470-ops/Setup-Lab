@@ -1,7 +1,7 @@
 'use strict';
 
 const STORAGE_KEY = 'setuplab.state.v1';
-const APP_VERSION = '1.1.1';
+const APP_VERSION = '1.2.0';
 const categoryIcons = { pc:'⌨', sim:'◉', cinema:'▰', workspace:'▦', photo:'◍', audio:'♫' };
 const typeLabels = {
   cpu:'Процессор', gpu:'Видеокарта', motherboard:'Материнская плата', ram:'Память', storage:'Накопитель', psu:'Блок питания', case:'Корпус', cooler:'Охлаждение',
@@ -28,11 +28,31 @@ const typeWeights = {
   amplifier:1.2,turntable:.8,headphones:1.2,activemonitors:1.4,interface:.9,microphone:.8
 };
 
+const currencyMeta = {
+  EUR:{label:'EUR',name:'Евро',symbol:'€'},
+  RUB:{label:'RUB',name:'Российский рубль',symbol:'₽'},
+  USD:{label:'USD',name:'Доллар США',symbol:'$'},
+  GBP:{label:'GBP',name:'Фунт стерлингов',symbol:'£'},
+  CNY:{label:'CNY',name:'Китайский юань',symbol:'¥'},
+  RSD:{label:'RSD',name:'Сербский динар',symbol:'дин.'}
+};
+const verifiedRates = { EUR:1, USD:1.1435, RUB:86.5906, GBP:.8518, CNY:7.7712, RSD:117.37 };
+const verifiedRatesDate = '10.07.2026';
+const officialDomains = {
+  'AMD':'amd.com','Intel':'intel.com','NVIDIA':'nvidia.com','ASUS':'asus.com','ASRock':'asrock.com','MSI':'msi.com','Gigabyte':'gigabyte.com','Corsair':'corsair.com','Kingston':'kingston.com','Crucial':'crucial.com','G.Skill':'gskill.com','TeamGroup':'teamgroupinc.com','Samsung':'samsung.com','WD':'westerndigital.com','SanDisk':'sandisk.com','Seagate':'seagate.com','Solidigm':'solidigm.com','Seasonic':'seasonic.com','Cooler Master':'coolermaster.com','be quiet!':'bequiet.com','Fractal Design':'fractal-design.com','HYTE':'hyte.com','NZXT':'nzxt.com','Lian Li':'lian-li.com','Noctua':'noctua.at','ARCTIC':'arctic.de','DeepCool':'deepcool.com','Thermalright':'thermalright.com',
+  'MOZA Racing':'mozaracing.com','Fanatec':'fanatec.com','Simagic':'simagic.com','Simucube':'simucube.com','Asetek SimSports':'aseteksimsports.com','Heusinkveld':'heusinkveld.com','VRS':'virtualracingschool.com','Thrustmaster':'thrustmaster.com','Logitech':'logitech.com','Playseat':'playseat.com','Next Level Racing':'nextlevelracing.com','Sim-Lab':'sim-lab.eu','Trak Racer':'trakracer.com','GT Omega':'gtomega.com','RSeat':'rseat.net','SHH':'shiftershh.com','Apex Sim Racing':'apexsimracing.com',
+  'LG':'lg.com','Sony':'sony.com','Samsung':'samsung.com','Panasonic':'panasonic.com','Philips':'philips.com','Hisense':'hisense.com','TCL':'tcl.com','Epson':'epson.com','JVC':'jvc.com','BenQ':'benq.com','Formovie':'formovie.com','Denon':'denon.com','Marantz':'marantz.com','Onkyo':'onkyo.com','Anthem':'anthemav.com','Yamaha':'yamaha.com','KEF':'kef.com','Focal':'focal.com','DALI':'dali-speakers.com','Bowers & Wilkins':'bowerswilkins.com','Q Acoustics':'qacoustics.com','Klipsch':'klipsch.com','Polk Audio':'polkaudio.com','SVS':'svsound.com','REL':'rel.net','Sonos':'sonos.com','Bose':'bose.com','Sennheiser':'sennheiser.com','Kaleidescape':'kaleidescape.com','Magnetar':'magnetar-audio.com','Zidoo':'zidoo.tv','Elite Screens':'elitescreens.com','Screen Innovations':'screeninnovations.com','Stewart Filmscreen':'stewartfilmscreen.com','Vividstorm':'vividstormscreen.com',
+  'Apple':'apple.com','Dell':'dell.com','Eizo':'eizo.com','IKEA':'ikea.com','Herman Miller':'hermanmiller.com','Steelcase':'steelcase.com','Haworth':'haworth.com','Humanscale':'humanscale.com','FlexiSpot':'flexispot.com','Branch':'branchfurniture.com','USM':'usm.com','Grovemade':'grovemade.com','Secretlab':'secretlab.co','Ergotron':'ergotron.com','CBS':'colebrookbossonsaunders.com','Keychron':'keychron.com','Wooting':'wooting.io','HHKB':'hhkeyboard.us','NuPhy':'nuphy.com','Razer':'razer.com','Microsoft':'microsoft.com','Anker':'anker.com','CalDigit':'caldigit.com','OWC':'owc.com','Kensington':'kensington.com','Elgato':'elgato.com','Dyson':'dyson.com','Philips Hue':'philips-hue.com','OBSBOT':'obsbot.com','Insta360':'insta360.com','Contour Design':'contourdesign.com',
+  'Canon':'canon.com','Nikon':'nikon.com','Fujifilm':'fujifilm.com','Leica':'leica-camera.com','OM System':'omsystem.com','Sigma':'sigma-global.com','Tamron':'tamron.com','DJI':'dji.com','Zhiyun':'zhiyun-tech.com','Godox':'godox.com','Profoto':'profoto.com','Manfrotto':'manfrotto.com','Gitzo':'gitzo.com','Peak Design':'peakdesign.com','SmallRig':'smallrig.com','Leofoto':'leofoto.com','Lexar':'lexar.com','Angelbird':'angelbird.com','ProGrade':'progradedigital.com',
+  'Cambridge Audio':'cambridgeaudio.com','Hegel':'hegel.com','NAD':'nadelectronics.com','Naim':'naimaudio.com','Rotel':'rotel.com','Monitor Audio':'monitoraudio.com','Wharfedale':'wharfedale.co.uk','Arendal Sound':'arendalsound.com','Audeze':'audeze.com','Beyerdynamic':'beyerdynamic.com','HiFiMAN':'hifiman.com','Meze Audio':'mezeaudio.com','Technics':'technics.com','Rega':'rega.co.uk','Pro-Ject':'project-audio.com','Bluesound':'bluesound.com','Eversolo':'eversolo.com','Matrix Audio':'matrix-digi.com','WiiM':'wiimhome.com','Genelec':'genelec.com','Neumann':'neumann.com','ADAM Audio':'adam-audio.com','Kali Audio':'kaliaudio.com','Focusrite':'focusrite.com','Universal Audio':'uaudio.com','RME':'rme-audio.de','MOTU':'motu.com','Audient':'audient.com','Shure':'shure.com','Rode':'rode.com','Audio-Technica':'audio-technica.com','Electro-Voice':'electrovoice.com','JBL':'jbl.com'
+};
+
 const defaultState = {
-  version: 1,
+  version: 2,
   theme: 'dark',
-  currency: 'EUR',
-  rates: { EUR: 1, USD: 1.08, RUB: 96 },
+  currency: 'RUB',
+  rates: { ...verifiedRates },
+  ratesUpdated: verifiedRatesDate,
   electricityEUR: .30,
   hoursPerDay: 4,
   activeView: 'dashboard',
@@ -65,7 +85,13 @@ function loadState(){
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return structuredClone(defaultState);
     const parsed = JSON.parse(raw);
-    return { ...structuredClone(defaultState), ...parsed, rates:{...defaultState.rates,...(parsed.rates||{})} };
+    const merged = { ...structuredClone(defaultState), ...parsed, rates:{...defaultState.rates,...(parsed.rates||{})} };
+    if(Number(parsed.version||1)<2){
+      merged.version=2;
+      merged.rates={...verifiedRates};
+      merged.ratesUpdated=verifiedRatesDate;
+    }
+    return merged;
   } catch { return structuredClone(defaultState); }
 }
 function saveState(){
@@ -88,11 +114,46 @@ function categoryName(group){ return catalog.categories[group]?.name || group; }
 function itemTypeName(type){ return typeLabels[type] || type; }
 function iconFor(group){ return categoryIcons[group] || '◇'; }
 function convertEUR(value){ return Number(value || 0) * (state.rates[state.currency] || 1); }
-function currencySymbol(){ return ({EUR:'€',USD:'$',RUB:'₽'})[state.currency] || state.currency; }
+function currencySymbol(){ return currencyMeta[state.currency]?.symbol || state.currency; }
 function money(valueEUR, compact=false){
   const value = convertEUR(valueEUR);
-  return new Intl.NumberFormat('ru-RU',{style:'currency',currency:state.currency,maximumFractionDigits:compact?0:(value<100?2:0),notation:compact&&Math.abs(value)>=100000?'compact':'standard'}).format(value);
+  const digits = state.currency==='RUB' || state.currency==='RSD' ? 0 : (value<100?2:0);
+  return new Intl.NumberFormat('ru-RU',{style:'currency',currency:state.currency,maximumFractionDigits:compact?0:digits,notation:compact&&Math.abs(value)>=100000?'compact':'standard'}).format(value);
 }
+function currencyOptions(selected=state.currency){
+  return Object.entries(currencyMeta).map(([id,c])=>`<option value="${id}" ${selected===id?'selected':''}>${c.symbol} ${c.label}</option>`).join('');
+}
+function syncTopControls(){
+  const quick=$('#quickCurrency'); if(quick) quick.value=state.currency;
+  const label=$('#currencyRateLabel'); if(label) label.textContent=`1 EUR = ${number(state.rates[state.currency]||1, state.currency==='RUB'||state.currency==='RSD'?2:4)} ${state.currency}`;
+}
+function productQuery(item){ return `${item.brand||''} ${item.name||''}`.replace(/\s+/g,' ').trim(); }
+function officialLookupURL(item){
+  if(item.purchase?.official) return item.purchase.official;
+  const domain=officialDomains[item.brand];
+  const q=domain?`site:${domain} ${productQuery(item)}`:`${productQuery(item)} official product`;
+  return `https://www.google.com/search?q=${encodeURIComponent(q)}`;
+}
+function purchaseLinks(item){
+  const q=encodeURIComponent(productQuery(item));
+  const stored=item.purchase||{};
+  const links=[
+    {id:'market',label:'Яндекс Маркет',note:'Сравнить предложения',url:stored.market||`https://market.yandex.ru/search?text=${q}`,icon:'Я'},
+    {id:'ozon',label:'Ozon',note:'Поиск в России',url:stored.ozon||`https://www.ozon.ru/search/?text=${q}`,icon:'O'}
+  ];
+  if(['pc','workspace','cinema','photo'].includes(item.group)) links.push({id:'dns',label:'DNS',note:'Проверить наличие',url:stored.dns||`https://www.dns-shop.ru/search/?q=${q}`,icon:'D'});
+  links.push({id:'official',label:'Официальный сайт',note:'Характеристики и MSRP',url:officialLookupURL(item),icon:'↗'});
+  return links;
+}
+function priceState(item){
+  const market=item.priceBasis==='market';
+  return {label:market?'Цена проверена':'Ориентировочная цена',className:market?'verified':'estimate',date:item.priceChecked||item.updated||''};
+}
+function scoreBand(score){
+  const s=Number(score)||0;
+  if(s>=90)return 'Флагман'; if(s>=75)return 'Высокий класс'; if(s>=60)return 'Сильный'; if(s>=40)return 'Базовый'; return 'Начальный';
+}
+function categoryAccent(group){ const v=catalog.categories[group]?.accent||'#7c5cff'; return /^#[0-9a-f]{3,8}$/i.test(v)?v:'#7c5cff'; }
 function number(value, digits=0){ return new Intl.NumberFormat('ru-RU',{maximumFractionDigits:digits}).format(value); }
 function hashString(value=''){
   let hash=0;
@@ -272,7 +333,7 @@ function seedDemoBuilds(){
 }
 
 function renderAll(){
-  renderDashboard(); renderBuilds(); renderCatalog(); renderCompare(); renderSettings(); setActiveView(state.activeView,false);
+  renderDashboard(); renderBuilds(); renderCatalog(); renderCompare(); renderSettings(); setActiveView(state.activeView,false); syncTopControls();
 }
 
 function pageHead(eyebrow,title,description,actions=''){
@@ -292,8 +353,8 @@ function renderDashboard(){
       <div class="hero-copy">
         <span class="eyebrow">Configuration intelligence</span>
         <h1>Соберите комплект без слабых мест</h1>
-        <p>SetupLab считает стоимость, условную производительность, цену балла, совместимость, расходы на три года и запас для апгрейда — полностью локально на вашем устройстве.</p>
-        <div class="actions"><button class="primary" data-action="new-build">＋ Новая сборка</button><button class="secondary" data-action="go" data-view="compare">Сравнить варианты</button></div>
+        <p>SetupLab сравнивает стоимость, условный балл, совместимость, расходы и запас для апгрейда. У каждой позиции есть ссылки на российские магазины и официальный источник.</p>
+        <div class="actions"><button class="primary" data-action="new-build">＋ Новая сборка</button><button class="secondary" data-action="go" data-view="compare">Сравнить варианты</button><button class="ghost" data-action="score-help">Как считаются баллы</button></div>
       </div>
       <div class="hero-visual" aria-hidden="true"><div class="orbit"><span class="orbit-node">${iconFor('pc')}</span><span class="orbit-node">${iconFor('sim')}</span><span class="orbit-node">${iconFor('photo')}</span><span class="orbit-node">${iconFor('audio')}</span></div></div>
     </section>
@@ -342,7 +403,11 @@ function renderCatalog(){
   const visible=groupItems.filter(i=>(state.catalogType==='all'||i.type===state.catalogType)&&(!q||`${i.brand} ${i.name} ${Object.values(i.specs||{}).join(' ')}`.toLowerCase().includes(q)));
   const cards=visible.map(productCardHTML).join('');
   const actions=`<button class="secondary" data-action="remote-catalog">Каталог по URL</button><button class="secondary" data-action="import-catalog">Импорт JSON</button><button class="primary" data-action="custom-item">＋ Своя позиция</button>`;
-  $('#view-catalog').innerHTML = pageHead('Редактируемая база',`Каталог · ${allItems().length} позиций`,`В разделе «${categoryName(state.catalogGroup)}» показано ${visible.length} из ${groupItems.length} позиций. Цены редактируются, фотографии подгружаются по мере прокрутки.`,actions)+`
+  $('#view-catalog').innerHTML = pageHead('Каталог и магазины',`Каталог · ${allItems().length} позиций`,`В разделе «${categoryName(state.catalogGroup)}» показано ${visible.length} из ${groupItems.length}. Валюта: ${state.currency}; курсы обновлены ${state.ratesUpdated||verifiedRatesDate}.`,actions)+`
+    <div class="catalog-notice">
+      <div><span class="notice-icon">₽</span><span><b>Ссылки на покупку для каждой позиции</b><small>Яндекс Маркет, Ozon, DNS и поиск на официальном сайте. Финальная цена и наличие проверяются в магазине.</small></span></div>
+      <button class="ghost compact" data-action="score-help" data-group="${state.catalogGroup}">Что означают баллы?</button>
+    </div>
     <div class="toolbar"><div class="segmented">${groups}</div><div class="search-field"><input id="catalogSearch" value="${escapeHTML(state.catalogSearch)}" placeholder="Поиск по модели и характеристикам"></div><select id="catalogType">${typeOptions}</select></div>
     ${cards?`<div class="catalog-grid">${cards}</div>`:emptyHTML('Ничего не найдено','Измените поисковый запрос или добавьте собственную позицию.')}`;
   if(state.activeView==='catalog') hydrateImages();
@@ -351,11 +416,13 @@ function renderCatalog(){
 function productCardHTML(item){
   const img=itemImage(item);
   const specs=Object.entries(item.specs||{}).slice(0,3).map(([k,v])=>`<span>${escapeHTML(v)}</span>`).join('');
-  return `<article class="catalog-card" data-product-id="${item.id}">
-    <div class="product-image" data-item-image="${item.id}"><div class="product-placeholder">${iconFor(item.group)}</div>${img?imageHTML(img,item):''}</div>
-    <div class="catalog-card-body"><div class="product-brand">${escapeHTML(item.brand)}</div><h3>${escapeHTML(item.name)}</h3><div class="spec-pills">${specs}</div>
-      <div class="product-foot"><div class="product-price"><b>${money(item.priceEUR)}</b><small>${escapeHTML(itemTypeName(item.type))}</small></div><span class="score-ring" style="--p:${clamp(item.score||0,0,100)}"><b>${item.score||0}</b></span></div>
-      <div class="card-actions"><button class="secondary" data-action="add-item" data-id="${item.id}">Добавить</button><button class="icon-button" data-action="product-detail" data-id="${item.id}" aria-label="Подробнее">›</button></div>
+  const price=priceState(item), links=purchaseLinks(item), primary=links[0];
+  return `<article class="catalog-card" data-product-id="${item.id}" style="--card-accent:${categoryAccent(item.group)}">
+    <div class="product-image" data-item-image="${item.id}"><div class="product-placeholder">${iconFor(item.group)}</div>${img?imageHTML(img,item):''}<span class="price-status ${price.className}">${price.label}</span></div>
+    <div class="catalog-card-body"><div class="card-kicker"><div class="product-brand">${escapeHTML(item.brand)}</div><button class="score-info-mini" data-action="score-help" data-group="${item.group}" aria-label="Объяснение баллов">?</button></div><h3>${escapeHTML(item.name)}</h3><div class="spec-pills">${specs}</div>
+      <div class="product-foot"><div class="product-price"><b>${money(item.priceEUR)}</b><small>${escapeHTML(itemTypeName(item.type))}${price.date?` · ${escapeHTML(price.date)}`:''}</small></div><button class="score-ring" data-action="score-help" data-group="${item.group}" style="--p:${clamp(item.score||0,0,100)}" title="${escapeHTML(scoreBand(item.score))}: ${item.score||0}/100"><b>${item.score||0}</b></button></div>
+      <div class="score-caption"><span>${escapeHTML(scoreBand(item.score))}</span><span>балл внутри типа</span></div>
+      <div class="card-actions card-actions-store"><button class="secondary" data-action="add-item" data-id="${item.id}">Добавить</button><a class="shop-button" href="${escapeHTML(primary.url)}" target="_blank" rel="noopener noreferrer">Купить</a><button class="icon-button" data-action="product-detail" data-id="${item.id}" aria-label="Подробнее">›</button></div>
     </div></article>`;
 }
 function imageHTML(img,item){
@@ -389,13 +456,14 @@ function renderSettings(){
       <section class="setting-card"><h3>Визуальная тема</h3><p>Каждая тема меняет фон, акценты, стеклянные поверхности и системный цвет PWA.</p><div class="theme-cards">
         ${themeCard('dark','Тёмная')}${themeCard('light','Светлая')}${themeCard('corsa','Assetto Corsa')}
       </div></section>
-      <section class="setting-card"><h3>Валюта и стоимость энергии</h3><p>Каталог хранит базовые цены в евро. Курсы редактируются вручную и работают офлайн.</p><div class="setting-stack form-grid">
-        <label><span>Валюта</span><select id="settingCurrency"><option ${state.currency==='EUR'?'selected':''}>EUR</option><option ${state.currency==='USD'?'selected':''}>USD</option><option ${state.currency==='RUB'?'selected':''}>RUB</option></select></label>
+      <section class="setting-card"><h3>Валюта и стоимость энергии</h3><p>База хранится в EUR, а интерфейс мгновенно пересчитывает суммы. Проверенные курсы зафиксированы на ${state.ratesUpdated||verifiedRatesDate} и остаются редактируемыми.</p><div class="setting-stack form-grid">
+        <label><span>Валюта интерфейса</span><select id="settingCurrency">${currencyOptions()}</select></label>
         <label><span>Электроэнергия, €/кВт·ч</span><input id="settingElectricity" type="number" min="0" step="0.01" value="${state.electricityEUR}"></label>
-        <label><span>USD за 1 EUR</span><input id="rateUSD" type="number" min="0" step="0.01" value="${state.rates.USD}"></label>
-        <label><span>RUB за 1 EUR</span><input id="rateRUB" type="number" min="0" step="0.1" value="${state.rates.RUB}"></label>
+        ${['USD','RUB','GBP','CNY','RSD'].map(code=>`<label><span>${code} за 1 EUR</span><input data-rate-code="${code}" type="number" min="0" step="0.0001" value="${state.rates[code]}"></label>`).join('')}
         <label class="full"><span>Среднее использование в день, часов</span><input id="settingHours" type="number" min="0" max="24" step="0.5" value="${state.hoursPerDay}"></label>
+        <div class="full actions"><button type="button" class="secondary" data-action="restore-rates">Восстановить проверенные курсы</button><small class="muted">Курс RUB — официальный ориентир Банка России; USD/CNY — референсные курсы ECB.</small></div>
       </div></section>
+      <section class="setting-card"><h3>Система баллов</h3><p>Баллы нужны для сравнения вариантов внутри одного направления. Это прозрачная модель SetupLab, а не универсальный лабораторный бенчмарк.</p><div class="setting-stack"><button class="secondary" data-action="score-help">Открыть подробное объяснение</button><div class="score-scale"><span>0–39<br><b>Начальный</b></span><span>40–59<br><b>Базовый</b></span><span>60–74<br><b>Сильный</b></span><span>75–89<br><b>Высокий</b></span><span>90–100<br><b>Флагман</b></span></div></div></section>
       <section class="setting-card"><h3>Данные приложения</h3><p>Резервная копия содержит сборки, пользовательские позиции, исправления каталога и кэш изображений.</p><div class="setting-stack"><button class="secondary" data-action="export-data">Скачать резервную копию</button><button class="secondary" data-action="import-data">Импортировать копию</button><button class="ghost" data-action="clear-image-cache">Очистить кэш фотографий</button></div></section>
       <section class="setting-card"><h3>Каталог проекта</h3><p>Файл catalog.json можно редактировать прямо в репозитории. Дополнительно поддерживается импорт собственного JSON без пересборки приложения.</p><div class="setting-stack"><button class="secondary" data-action="export-catalog">Скачать текущий каталог</button><button class="secondary" data-action="remote-catalog">Подключить JSON по URL</button><button class="secondary" data-action="import-catalog">Импортировать catalog.json</button><button class="primary" data-action="custom-item">Добавить свою позицию</button></div></section>
       <section class="setting-card"><h3>Установка на iPhone</h3><p>Откройте сайт в Safari, нажмите «Поделиться», затем «На экран Домой». SetupLab запустится без адресной строки и будет работать офлайн.</p><div class="setting-stack"><button class="secondary" data-action="install-help">Показать инструкцию</button></div></section>
@@ -430,6 +498,7 @@ function bindEvents(){
     else if(action==='build-menu'){ event.stopPropagation(); openBuildMenu(target.dataset.id); }
     else if(action==='catalog-group'){ state.catalogGroup=target.dataset.group; state.catalogType='all'; saveState(); renderCatalog(); }
     else if(action==='product-detail') openProduct(target.dataset.id);
+    else if(action==='score-help') openScoreHelp(target.dataset.group||state.catalogGroup);
     else if(action==='add-item') openAddItem(target.dataset.id);
     else if(action==='custom-item') openCustomItem();
     else if(action==='close-modal' && (target===event.target || target.closest('.icon-button'))) closeModal();
@@ -448,6 +517,7 @@ function bindEvents(){
     else if(action==='remote-catalog') openRemoteCatalog();
     else if(action==='clear-image-cache'){ state.imageCache={}; saveState(); renderAll(); toast('Кэш очищен','Фотографии будут загружены заново при открытии каталога.'); }
     else if(action==='install-help') showInstallHelp();
+    else if(action==='restore-rates'){ state.rates={...verifiedRates}; state.ratesUpdated=verifiedRatesDate; saveState(); renderAll(); toast('Курсы восстановлены',`Проверенные значения на ${verifiedRatesDate}.`); }
     else if(action==='reset-app') resetApp();
     else if(action==='export-report') exportComparisonReport();
   });
@@ -464,10 +534,9 @@ function bindEvents(){
     if(el.dataset.action==='compare-select'){
       const arr=[...state.compareIds]; arr[Number(el.dataset.index)]=el.value; state.compareIds=arr.filter(Boolean); saveState(); renderCompare();
     }
-    if(el.id==='settingCurrency'){ state.currency=el.value; saveState(); renderAll(); }
+    if(el.id==='settingCurrency'||el.id==='quickCurrency'){ state.currency=el.value; saveState(); renderAll(); }
     if(el.id==='settingElectricity'){ state.electricityEUR=Number(el.value)||0; saveState(); renderAll(); }
-    if(el.id==='rateUSD'){ state.rates.USD=Number(el.value)||1; saveState(); renderAll(); }
-    if(el.id==='rateRUB'){ state.rates.RUB=Number(el.value)||1; saveState(); renderAll(); }
+    if(el.dataset.rateCode){ state.rates[el.dataset.rateCode]=Number(el.value)||1; state.ratesUpdated='Изменено вручную'; saveState(); renderAll(); }
     if(el.id==='settingHours'){ state.hoursPerDay=clamp(Number(el.value)||0,0,24); saveState(); renderAll(); }
   });
   document.addEventListener('submit',event=>{
@@ -550,11 +619,28 @@ function removeBuildItem(buildId,itemId){
   b.updatedAt=Date.now(); saveState(); renderAll(); openBuild(buildId); toast('Компонент удалён');
 }
 
+
+function openScoreHelp(group='pc'){
+  const labels={pc:'ПК',sim:'автосима',cinema:'домашнего кинотеатра',workspace:'рабочего места',photo:'фотооборудования',audio:'музыкальной системы'};
+  const weighted=Object.entries(typeWeights).filter(([type])=>allItems().some(i=>i.group===group&&i.type===type)).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const weightRows=weighted.map(([type,w])=>`<div class="spec-row"><span>${escapeHTML(itemTypeName(type))}</span><b>вес ×${number(w,2)}</b></div>`).join('');
+  openModal('Как считаются баллы',`Модель для ${labels[group]||'конфигурации'}`,`
+    <div class="score-explainer">
+      <section class="score-hero"><span class="score-ring score-ring-large" style="--p:82"><b>82</b></span><div><h3>Баллы — относительная оценка 0–100</h3><p>Оценка компонента сравнивает его возможности с другими позициями того же типа. Процессор не сравнивается напрямую с креслом или объективом.</p></div></section>
+      <div class="score-band-grid"><div><b>0–39</b><small>Начальный уровень</small></div><div><b>40–59</b><small>Базовый</small></div><div><b>60–74</b><small>Сильный</small></div><div><b>75–89</b><small>Высокий класс</small></div><div><b>90–100</b><small>Флагман</small></div></div>
+      <section class="explain-card"><h3>Баллы сборки</h3><p>SetupLab берёт средневзвешенную оценку компонентов. Самые важные элементы получают больший вес, затем применяется коэффициент полноты: незавершённая сборка не может получить максимальный итог.</p><div class="spec-table">${weightRows}</div></section>
+      <section class="explain-card"><h3>Цена одного балла</h3><p>Итоговая стоимость делится на балл сборки. Чем меньше значение, тем выгоднее конфигурация при сопоставимом назначении. Сравнивать цену балла корректно только между сборками одного направления.</p></section>
+      <section class="issue warn"><span class="dot"></span><span>Баллы не заменяют FPS-тесты, измерения звука, DxOMark или лабораторные обзоры. Их можно локально изменить вместе с ценой и характеристиками.</span></section>
+    </div>`,true);
+}
+
 function openProduct(id){
   const item=getItem(id); if(!item)return;
-  const img=itemImage(item);
+  const img=itemImage(item), price=priceState(item), links=purchaseLinks(item);
   const specs=Object.entries(item.specs||{}).map(([k,v])=>`<div class="spec-row"><span>${escapeHTML(k)}</span><b>${escapeHTML(v)}</b></div>`).join('');
-  openModal(item.name,item.brand,`<div class="detail-layout"><div><div class="detail-image" data-item-image="${item.id}"><div class="product-placeholder">${iconFor(item.group)}</div>${img?imageHTML(img,item):''}</div><div class="actions" style="margin-top:10px"><button class="secondary" data-action="find-image" data-id="${item.id}">Найти фото</button></div></div><div class="detail-data"><div class="metric-grid"><article class="metric-card"><small>Цена</small><b>${money(item.priceEUR)}</b></article><article class="metric-card"><small>Баллы</small><b>${item.score}/100</b></article><article class="metric-card"><small>Апгрейд</small><b>${item.upgrade}%</b></article><article class="metric-card"><small>Расходы/год</small><b>${money(item.futureAnnualEUR||0)}</b></article></div><div class="spec-table">${specs||'<div class="spec-row"><span>Характеристики</span><b>Не заполнены</b></div>'}</div><div class="actions"><button class="primary" data-action="add-item" data-id="${item.id}">Добавить в сборку</button><button class="secondary" data-action="edit-product" data-id="${item.id}">Изменить данные</button></div><p class="muted" style="font-size:10px;line-height:1.45;margin:0">${escapeHTML(item.sourceNote||'Данные редактируются локально.')}</p></div></div>`,true);
+  const stores=links.map(link=>`<a class="store-card ${link.id==='market'?'featured':''}" href="${escapeHTML(link.url)}" target="_blank" rel="noopener noreferrer"><span class="store-icon">${escapeHTML(link.icon)}</span><span><b>${escapeHTML(link.label)}</b><small>${escapeHTML(link.note)}</small></span><i>↗</i></a>`).join('');
+  const priceReference=item.priceReferenceUrl?`<a class="price-reference" href="${escapeHTML(item.priceReferenceUrl)}" target="_blank" rel="noopener noreferrer">Открыть источник ценового ориентира ↗</a>`:'';
+  openModal(item.name,item.brand,`<div class="detail-layout"><div><div class="detail-image" data-item-image="${item.id}"><div class="product-placeholder">${iconFor(item.group)}</div>${img?imageHTML(img,item):''}<span class="price-status ${price.className}">${price.label}</span></div><div class="actions" style="margin-top:10px"><button class="secondary" data-action="find-image" data-id="${item.id}">Найти фото</button></div></div><div class="detail-data"><div class="metric-grid"><article class="metric-card metric-price"><small>Цена каталога</small><b>${money(item.priceEUR)}</b><span>${price.date?`проверено ${escapeHTML(price.date)}`:'редактируется локально'}</span></article><article class="metric-card metric-clickable" data-action="score-help" data-group="${item.group}"><small>Баллы · ${escapeHTML(scoreBand(item.score))}</small><b>${item.score}/100</b><span>Нажмите для объяснения</span></article><article class="metric-card"><small>Апгрейд</small><b>${item.upgrade}%</b></article><article class="metric-card"><small>Расходы/год</small><b>${money(item.futureAnnualEUR||0)}</b></article></div><div class="spec-table">${specs||'<div class="spec-row"><span>Характеристики</span><b>Не заполнены</b></div>'}</div><section class="purchase-panel"><div class="panel-head"><div><h3>Купить или проверить цену</h3><p>Ссылки открываются в новой вкладке. Цена и наличие могут измениться.</p></div></div><div class="store-grid">${stores}</div>${priceReference}</section><div class="actions"><button class="primary" data-action="add-item" data-id="${item.id}">Добавить в сборку</button><button class="secondary" data-action="edit-product" data-id="${item.id}">Изменить цену и данные</button></div><p class="muted source-note">${escapeHTML(item.sourceNote||'Данные редактируются локально.')}</p></div></div>`,true);
   hydrateImages();
 }
 function openAddItem(id){
@@ -576,23 +662,23 @@ function openCustomItem(prefill={}){
   const group=prefill.group||state.catalogGroup||'pc';
   const groupOptions=Object.entries(catalog.categories).map(([id,c])=>`<option value="${id}" ${id===group?'selected':''}>${escapeHTML(c.name)}</option>`).join('');
   const typeOptions=Object.entries(typeLabels).map(([id,label])=>`<option value="${id}" ${prefill.type===id?'selected':''}>${escapeHTML(label)}</option>`).join('');
-  openModal('Своя позиция','Пользовательский каталог',`<form id="customItemForm" class="form-grid"><label><span>Раздел</span><select name="group">${groupOptions}</select></label><label><span>Тип</span><select name="type">${typeOptions}</select></label><label><span>Бренд</span><input name="brand" required value="${escapeHTML(prefill.brand||'')}"></label><label><span>Модель</span><input name="name" required value="${escapeHTML(prefill.name||'')}"></label><label><span>Цена, EUR</span><input name="priceEUR" type="number" min="0" step="0.01" value="${prefill.priceEUR||0}"></label><label><span>Производительность, 0–100</span><input name="score" type="number" min="0" max="100" value="${prefill.score||70}"></label><label><span>Апгрейдность, 0–100</span><input name="upgrade" type="number" min="0" max="100" value="${prefill.upgrade||70}"></label><label><span>Будущие расходы/год, EUR</span><input name="futureAnnualEUR" type="number" min="0" step="0.01" value="${prefill.futureAnnualEUR||0}"></label><label><span>Потребление, Вт</span><input name="powerW" type="number" min="0" value="${prefill.powerW||0}"></label><label><span>URL фотографии</span><input name="image" type="url" value="${escapeHTML(prefill.image||'')}"></label><label class="full"><span>Характеристики: одна строка «Название: значение»</span><textarea name="specs" placeholder="Сокет: AM5&#10;Память: DDR5">${escapeHTML(prefill.specsText||'')}</textarea></label><div class="full actions"><button type="button" class="ghost" data-action="close-modal">Отмена</button><button class="primary" type="submit">Сохранить</button></div></form>`,true);
+  openModal('Своя позиция','Пользовательский каталог',`<form id="customItemForm" class="form-grid"><label><span>Раздел</span><select name="group">${groupOptions}</select></label><label><span>Тип</span><select name="type">${typeOptions}</select></label><label><span>Бренд</span><input name="brand" required value="${escapeHTML(prefill.brand||'')}"></label><label><span>Модель</span><input name="name" required value="${escapeHTML(prefill.name||'')}"></label><label><span>Базовая цена, EUR</span><input name="priceEUR" type="number" min="0" step="0.01" value="${prefill.priceEUR||0}"></label><label><span>Производительность, 0–100</span><input name="score" type="number" min="0" max="100" value="${prefill.score||70}"></label><label><span>Апгрейдность, 0–100</span><input name="upgrade" type="number" min="0" max="100" value="${prefill.upgrade||70}"></label><label><span>Будущие расходы/год, EUR</span><input name="futureAnnualEUR" type="number" min="0" step="0.01" value="${prefill.futureAnnualEUR||0}"></label><label><span>Потребление, Вт</span><input name="powerW" type="number" min="0" value="${prefill.powerW||0}"></label><label><span>URL фотографии</span><input name="image" type="url" value="${escapeHTML(prefill.image||'')}"></label><label class="full"><span>Прямая ссылка на покупку (необязательно)</span><input name="purchaseURL" type="url" value="${escapeHTML(prefill.purchaseURL||'')}" placeholder="https://..."></label><label class="full"><span>Характеристики: одна строка «Название: значение»</span><textarea name="specs" placeholder="Сокет: AM5&#10;Память: DDR5">${escapeHTML(prefill.specsText||'')}</textarea></label><div class="full actions"><button type="button" class="ghost" data-action="close-modal">Отмена</button><button class="primary" type="submit">Сохранить</button></div></form>`,true);
 }
 function parseSpecs(text){
   return Object.fromEntries(String(text||'').split('\n').map(s=>s.trim()).filter(Boolean).map(line=>{ const idx=line.indexOf(':'); return idx>-1?[line.slice(0,idx).trim(),line.slice(idx+1).trim()]:['Описание',line]; }));
 }
 function submitCustomItem(form){
-  const d=new FormData(form); const item={id:uid('custom'),group:String(d.get('group')),type:String(d.get('type')),brand:String(d.get('brand')).trim(),name:String(d.get('name')).trim(),priceEUR:Number(d.get('priceEUR'))||0,score:clamp(Number(d.get('score'))||0,0,100),upgrade:clamp(Number(d.get('upgrade'))||0,0,100),futureAnnualEUR:Number(d.get('futureAnnualEUR'))||0,powerW:Number(d.get('powerW'))||0,image:String(d.get('image')||'').trim(),specs:parseSpecs(d.get('specs')),compatibility:{},imageQuery:`${d.get('brand')} ${d.get('name')} product photo`,sourceNote:'Пользовательская позиция',updated:new Date().toISOString().slice(0,10)};
+  const d=new FormData(form); const item={id:uid('custom'),group:String(d.get('group')),type:String(d.get('type')),brand:String(d.get('brand')).trim(),name:String(d.get('name')).trim(),priceEUR:Number(d.get('priceEUR'))||0,score:clamp(Number(d.get('score'))||0,0,100),upgrade:clamp(Number(d.get('upgrade'))||0,0,100),futureAnnualEUR:Number(d.get('futureAnnualEUR'))||0,powerW:Number(d.get('powerW'))||0,image:String(d.get('image')||'').trim(),purchase:{market:String(d.get('purchaseURL')||'').trim()},priceBasis:'estimate',priceChecked:new Date().toISOString().slice(0,10),specs:parseSpecs(d.get('specs')),compatibility:{},imageQuery:`${d.get('brand')} ${d.get('name')} product photo`,sourceNote:'Пользовательская позиция',updated:new Date().toISOString().slice(0,10)};
   state.customItems.unshift(item); state.catalogGroup=item.group; saveState(); closeModal(); renderAll(); setActiveView('catalog'); toast('Позиция добавлена','Совместимость можно уточнить через импорт расширенного JSON.');
 }
 
 function openEditProduct(id){
   const item=getItem(id); if(!item)return;
-  openModal('Изменить данные','Локальное переопределение',`<form id="editProductForm" class="form-grid"><input type="hidden" name="id" value="${item.id}"><label><span>Цена, EUR</span><input name="priceEUR" type="number" min="0" step="0.01" value="${item.priceEUR}"></label><label><span>Баллы, 0–100</span><input name="score" type="number" min="0" max="100" value="${item.score}"></label><label><span>Апгрейдность, 0–100</span><input name="upgrade" type="number" min="0" max="100" value="${item.upgrade}"></label><label><span>Расходы/год, EUR</span><input name="futureAnnualEUR" type="number" min="0" step="0.01" value="${item.futureAnnualEUR||0}"></label><label><span>Потребление, Вт</span><input name="powerW" type="number" min="0" value="${item.powerW||0}"></label><label><span>URL фотографии</span><input name="image" type="url" value="${escapeHTML(item.image||'')}"></label><label class="full"><span>Характеристики</span><textarea name="specs">${escapeHTML(Object.entries(item.specs||{}).map(([k,v])=>`${k}: ${v}`).join('\n'))}</textarea></label><div class="full actions"><button type="button" class="secondary" data-action="find-image" data-id="${item.id}">Найти фото</button><button class="primary" type="submit">Сохранить</button></div></form>`,true);
+  openModal('Изменить данные','Локальное переопределение',`<form id="editProductForm" class="form-grid"><input type="hidden" name="id" value="${item.id}"><label><span>Базовая цена, EUR</span><input name="priceEUR" type="number" min="0" step="0.01" value="${item.priceEUR}"></label><label><span>Баллы, 0–100</span><input name="score" type="number" min="0" max="100" value="${item.score}"></label><label><span>Апгрейдность, 0–100</span><input name="upgrade" type="number" min="0" max="100" value="${item.upgrade}"></label><label><span>Расходы/год, EUR</span><input name="futureAnnualEUR" type="number" min="0" step="0.01" value="${item.futureAnnualEUR||0}"></label><label><span>Потребление, Вт</span><input name="powerW" type="number" min="0" value="${item.powerW||0}"></label><label><span>URL фотографии</span><input name="image" type="url" value="${escapeHTML(item.image||'')}"></label><label class="full"><span>Прямая ссылка на покупку</span><input name="purchaseURL" type="url" value="${escapeHTML(item.purchase?.market||'')}" placeholder="https://..."></label><label class="full"><span>Характеристики</span><textarea name="specs">${escapeHTML(Object.entries(item.specs||{}).map(([k,v])=>`${k}: ${v}`).join('\n'))}</textarea></label><div class="full actions"><button type="button" class="secondary" data-action="find-image" data-id="${item.id}">Найти фото</button><button class="primary" type="submit">Сохранить</button></div></form>`,true);
 }
 function submitEditProduct(form){
   const d=new FormData(form), id=String(d.get('id'));
-  state.catalogOverrides[id]={...(state.catalogOverrides[id]||{}),priceEUR:Number(d.get('priceEUR'))||0,score:clamp(Number(d.get('score'))||0,0,100),upgrade:clamp(Number(d.get('upgrade'))||0,0,100),futureAnnualEUR:Number(d.get('futureAnnualEUR'))||0,powerW:Number(d.get('powerW'))||0,image:String(d.get('image')||'').trim(),specs:parseSpecs(d.get('specs'))};
+  state.catalogOverrides[id]={...(state.catalogOverrides[id]||{}),priceEUR:Number(d.get('priceEUR'))||0,score:clamp(Number(d.get('score'))||0,0,100),upgrade:clamp(Number(d.get('upgrade'))||0,0,100),futureAnnualEUR:Number(d.get('futureAnnualEUR'))||0,powerW:Number(d.get('powerW'))||0,image:String(d.get('image')||'').trim(),purchase:{...(getItem(id)?.purchase||{}),market:String(d.get('purchaseURL')||'').trim()},priceBasis:'local',priceChecked:new Date().toISOString().slice(0,10),specs:parseSpecs(d.get('specs'))};
   saveState(); closeModal(); renderAll(); toast('Данные обновлены','Изменения сохранены только на этом устройстве.');
 }
 
@@ -675,7 +761,7 @@ async function importDataFile(file){
 async function importCatalogFile(file){
   try {
     const data=JSON.parse(await file.text()); if(!Array.isArray(data.items))throw new Error('Invalid catalog');
-    const normalized=data.items.map((i,index)=>({id:i.id||uid(`import-${index}`),group:i.group||'pc',type:i.type||'custom',brand:i.brand||'Без бренда',name:i.name||`Позиция ${index+1}`,priceEUR:Number(i.priceEUR)||0,score:clamp(Number(i.score)||0,0,100),upgrade:clamp(Number(i.upgrade)||0,0,100),futureAnnualEUR:Number(i.futureAnnualEUR)||0,powerW:Number(i.powerW)||0,specs:i.specs||{},compatibility:i.compatibility||{},image:i.image||'',imageQuery:i.imageQuery||`${i.brand||''} ${i.name||''} product photo`,sourceNote:i.sourceNote||'Импортированная позиция',updated:i.updated||new Date().toISOString().slice(0,10)}));
+    const normalized=data.items.map((i,index)=>({id:i.id||uid(`import-${index}`),group:i.group||'pc',type:i.type||'custom',brand:i.brand||'Без бренда',name:i.name||`Позиция ${index+1}`,priceEUR:Number(i.priceEUR)||0,score:clamp(Number(i.score)||0,0,100),upgrade:clamp(Number(i.upgrade)||0,0,100),futureAnnualEUR:Number(i.futureAnnualEUR)||0,powerW:Number(i.powerW)||0,specs:i.specs||{},compatibility:i.compatibility||{},image:i.image||'',imageQuery:i.imageQuery||`${i.brand||''} ${i.name||''} product photo`,sourceNote:i.sourceNote||'Импортированная позиция',purchase:i.purchase||{},priceBasis:i.priceBasis||'estimate',priceChecked:i.priceChecked||i.updated||new Date().toISOString().slice(0,10),updated:i.updated||new Date().toISOString().slice(0,10)}));
     const ids=new Set([...catalog.items.map(i=>i.id),...state.customItems.map(i=>i.id)]); normalized.forEach(i=>{ if(ids.has(i.id)) i.id=uid('import'); ids.add(i.id); }); state.customItems=[...normalized,...state.customItems]; saveState(); renderAll(); setActiveView('catalog'); toast('Каталог импортирован',`Добавлено позиций: ${normalized.length}`);
   } catch { toast('Ошибка каталога','Ожидается JSON-объект с массивом items.','bad'); }
 }
