@@ -10,10 +10,10 @@
   <meta name="format-detection" content="telephone=no">
   <meta name="color-scheme" content="dark light">
   <title>SetupLab — мастер конфигураций</title>
-  <link rel="manifest" href="manifest.webmanifest?v=1.3.2">
+  <link rel="manifest" href="manifest.webmanifest?v=1.4.0">
   <link rel="apple-touch-icon" href="icons/icon-180.png">
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=1.3.2">
+  <link rel="stylesheet" href="styles.css?v=1.4.0">
 </head>
 <body>
   <div class="ambient ambient-a"></div>
@@ -37,9 +37,13 @@
     <aside class="sidebar glass" aria-label="Навигация">
       <nav class="nav-list">
         <button class="nav-item active" data-action="go" data-view="dashboard"><span>⌂</span><b>Обзор</b></button>
+        <button class="nav-item" data-action="go" data-view="wizard"><span>✦</span><b>Мастер подбора</b></button>
         <button class="nav-item" data-action="go" data-view="builds"><span>▤</span><b>Сборки</b></button>
         <button class="nav-item" data-action="go" data-view="catalog"><span>◫</span><b>Каталог</b></button>
+        <button class="nav-item" data-action="go" data-view="simlab"><span>◉</span><b>Sim Racing Lab</b></button>
+        <button class="nav-item" data-action="go" data-view="presets"><span>▦</span><b>Готовые комплекты</b></button>
         <button class="nav-item" data-action="go" data-view="compare"><span>⌁</span><b>Сравнение</b></button>
+        <button class="nav-item" data-action="go" data-view="inventory"><span>◇</span><b>Мои устройства</b></button>
         <button class="nav-item" data-action="go" data-view="settings"><span>⚙</span><b>Настройки</b></button>
       </nav>
       <div class="sidebar-foot">
@@ -55,16 +59,20 @@
           <span class="boot-spinner" aria-hidden="true"></span>
         </div>
       </section>
+      <section class="view" id="view-wizard"></section>
       <section class="view" id="view-builds"></section>
       <section class="view" id="view-catalog"></section>
+      <section class="view" id="view-simlab"></section>
+      <section class="view" id="view-presets"></section>
       <section class="view" id="view-compare"></section>
+      <section class="view" id="view-inventory"></section>
       <section class="view" id="view-settings"></section>
     </main>
 
     <nav class="bottom-nav glass" aria-label="Мобильная навигация">
       <button class="active" data-action="go" data-view="dashboard"><span>⌂</span><small>Обзор</small></button>
       <button data-action="go" data-view="builds"><span>▤</span><small>Сборки</small></button>
-      <button class="add-fab" id="mobileAddBuild" aria-label="Новая сборка">+</button>
+      <button class="add-fab" id="mobileLabButton" data-action="quick-lab" aria-label="Открыть лабораторию">+</button>
       <button data-action="go" data-view="catalog"><span>◫</span><small>Каталог</small></button>
       <button data-action="go" data-view="compare"><span>⌁</span><small>Сравнить</small></button>
     </nav>
@@ -99,7 +107,7 @@
         try{ if('caches' in window){var keys=await caches.keys();await Promise.all(keys.filter(function(k){return k.indexOf('setuplab')===0;}).map(function(k){return caches.delete(k);}));} }catch(e){}
         try{ if('serviceWorker' in navigator){var regs=await navigator.serviceWorker.getRegistrations();await Promise.all(regs.map(function(r){return r.unregister();}));} }catch(e){}
         try{ var raw=localStorage.getItem('setuplab.state.v1'); if(raw){JSON.parse(raw);} }catch(e){try{localStorage.removeItem('setuplab.state.v1');}catch(_){} }
-        location.replace(location.pathname+'?repair=1&v=1.3.2');
+        location.replace(location.pathname+'?repair=1&v=1.4.0');
       };
     }
     window.__SETUPLAB_SHOW_RECOVERY__=recovery;
@@ -108,6 +116,7 @@
     window.__SETUPLAB_BOOT_WATCHDOG__=setTimeout(function(){recovery('Загрузка заняла слишком много времени. Проверьте соединение или восстановите технический кэш.');},15000);
   })();
   </script>
-  <script src="app.js?v=1.3.2" defer></script>
+  <script src="app.js?v=1.4.0" defer></script>
+  <script src="features.js?v=1.4.0" defer></script>
 </body>
 </html>

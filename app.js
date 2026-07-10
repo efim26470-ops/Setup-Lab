@@ -1,7 +1,7 @@
 'use strict';
 
 const STORAGE_KEY = 'setuplab.state.v1';
-const APP_VERSION = '1.3.2';
+const APP_VERSION = '1.4.0';
 const categoryIcons = { pc:'⌨', sim:'◉', cinema:'▰', workspace:'▦', photo:'◍', audio:'♫' };
 const typeLabels = {
   cpu:'Процессор', gpu:'Видеокарта', motherboard:'Материнская плата', ram:'Память', storage:'Накопитель', psu:'Блок питания', case:'Корпус', cooler:'Охлаждение',
@@ -950,5 +950,3 @@ function registerServiceWorker(){
     reg.update().catch(()=>{});
   }).catch(()=>{});
 }
-
-init();
