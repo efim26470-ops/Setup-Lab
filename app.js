@@ -1,7 +1,7 @@
 'use strict';
 
 const STORAGE_KEY = 'setuplab.state.v1';
-const APP_VERSION = '1.1.0';
+const APP_VERSION = '1.1.1';
 const categoryIcons = { pc:'⌨', sim:'◉', cinema:'▰', workspace:'▦', photo:'◍', audio:'♫' };
 const typeLabels = {
   cpu:'Процессор', gpu:'Видеокарта', motherboard:'Материнская плата', ram:'Память', storage:'Накопитель', psu:'Блок питания', case:'Корпус', cooler:'Охлаждение',
@@ -94,11 +94,49 @@ function money(valueEUR, compact=false){
   return new Intl.NumberFormat('ru-RU',{style:'currency',currency:state.currency,maximumFractionDigits:compact?0:(value<100?2:0),notation:compact&&Math.abs(value)>=100000?'compact':'standard'}).format(value);
 }
 function number(value, digits=0){ return new Intl.NumberFormat('ru-RU',{maximumFractionDigits:digits}).format(value); }
-function itemImage(item){
-  if (item.image) return { url:item.image, credit:item.imageCredit || 'Пользовательское изображение' };
-  const cached = state.imageCache[item.id];
-  return cached ? { url:cached.thumbnail || cached.url, credit:[cached.creator,cached.license].filter(Boolean).join(' · '), landing:cached.landing } : null;
+function hashString(value=''){
+  let hash=0;
+  for(let i=0;i<value.length;i++) hash=((hash<<5)-hash+value.charCodeAt(i))|0;
+  return Math.abs(hash);
 }
+function autoImageQuery(item){
+  return `${item.brand||''} ${item.name||''} ${itemTypeName(item.type)} product photo`.trim();
+}
+function bingImageURL(item){
+  const host=(hashString(item.id||item.name)%4)+1;
+  const query=encodeURIComponent(autoImageQuery(item));
+  return `https://tse${host}.mm.bing.net/th?q=${query}&w=900&h=600&c=7&rs=1&p=0&o=7&pid=1.7&mkt=en-US&cc=US&setlang=en&adlt=moderate&t=1`;
+}
+function fallbackImageURL(item){
+  const known=Object.prototype.hasOwnProperty.call(typeLabels,item.type);
+  return `./assets/fallbacks/${known?item.type:'generic'}.svg`;
+}
+function itemImage(item){
+  if (item.image) return { url:item.image, credit:item.imageCredit || 'Пользовательское изображение', kind:'custom' };
+  const cached = state.imageCache[item.id];
+  if(cached) return { url:cached.thumbnail || cached.url, credit:[cached.creator,cached.license].filter(Boolean).join(' · '), landing:cached.landing, kind:'cached' };
+  return { url:bingImageURL(item), credit:'Веб-фото', kind:'auto' };
+}
+function handleProductImageError(img){
+  if(!img) return;
+  const auto=img.dataset.autoSrc;
+  const fallback=img.dataset.fallbackSrc;
+  if(auto && img.dataset.triedAuto!=='1'){
+    img.dataset.triedAuto='1';
+    img.src=auto;
+    return;
+  }
+  if(fallback && img.dataset.triedFallback!=='1'){
+    img.dataset.triedFallback='1';
+    img.closest('.product-image, .detail-image')?.classList.add('using-fallback');
+    const credit=img.parentElement?.querySelector('.image-credit');
+    if(credit) credit.textContent='Офлайн-иллюстрация';
+    img.src=fallback;
+    return;
+  }
+  img.remove();
+}
+window.handleProductImageError=handleProductImageError;
 function buildItems(build){
   return (build?.items || []).map(entry => ({ entry, item:getItem(entry.id) })).filter(x=>x.item);
 }
@@ -206,7 +244,7 @@ function checkCompatibility(build, rows){
 async function init(){
   applyTheme();
   try {
-    const res = await fetch('./catalog.json',{cache:'no-store'});
+    const res = await fetch(`./catalog.json?v=${APP_VERSION}`,{cache:'no-store'});
     if(!res.ok) throw new Error(`HTTP ${res.status}`);
     catalog = await res.json();
   } catch (err) {
@@ -321,7 +359,10 @@ function productCardHTML(item){
     </div></article>`;
 }
 function imageHTML(img,item){
-  return `<img src="${escapeHTML(img.url)}" alt="${escapeHTML(item.brand+' '+item.name)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">${img.credit?`<span class="image-credit">${escapeHTML(img.credit)}</span>`:''}`;
+  const auto=bingImageURL(item);
+  const fallback=fallbackImageURL(item);
+  const isAuto=img.kind==='auto' || img.url===auto;
+  return `<img src="${escapeHTML(img.url)}" alt="${escapeHTML(item.brand+' '+item.name)}" loading="lazy" decoding="async" referrerpolicy="no-referrer" data-auto-src="${isAuto?'':escapeHTML(auto)}" data-fallback-src="${escapeHTML(fallback)}" data-tried-auto="${isAuto?'1':'0'}" onerror="handleProductImageError(this)">${img.credit?`<span class="image-credit">${escapeHTML(img.credit)}</span>`:''}`;
 }
 
 function renderCompare(){
@@ -708,7 +749,7 @@ function showInstallHelp(){
   openModal('Установка SetupLab','PWA',body);
 }
 function registerServiceWorker(){
-  if('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(reg=>reg.update()).catch(()=>{});
+  if('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register(`./sw.js?v=${APP_VERSION}`,{updateViaCache:'none'}).then(reg=>reg.update()).catch(()=>{});
 }
 
 init();

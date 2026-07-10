@@ -586,3 +586,32 @@ canvas { display:block; width:100%; height:340px; }
   background: var(--accent-soft);
   color: var(--accent);
 }
+
+/* v1.1.1: reliable product media */
+.product-image,
+.detail-image {
+  background:
+    radial-gradient(circle at 50% 35%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 48%),
+    linear-gradient(145deg, color-mix(in srgb, var(--panel-soft) 94%, #fff 6%), var(--panel-solid));
+}
+.product-image img,
+.detail-image img {
+  position:relative;
+  z-index:1;
+  object-fit:contain;
+  padding:16px;
+  box-sizing:border-box;
+  background:rgba(255,255,255,.94);
+}
+.product-image.using-fallback img,
+.detail-image.using-fallback img {
+  padding:0;
+  background:transparent;
+}
+.product-image .image-credit,
+.detail-image .image-credit { z-index:2; }
+[data-theme="corsa"] .product-image img,
+[data-theme="corsa"] .detail-image img { background:rgba(245,245,245,.96); }
+@media (max-width:760px){
+  .product-image img,.detail-image img{padding:10px}
+}
