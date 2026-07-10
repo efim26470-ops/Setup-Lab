@@ -1,6 +1,6 @@
 'use strict';
 
-/* SetupLab 1.4 — intelligent configuration modules */
+/* SetupLab 1.5.0 — expanded catalog and strict budget planner */
 const V14_VIEWS = ['dashboard','wizard','builds','catalog','simlab','presets','compare','inventory','settings'];
 const V14_THEMES = ['dark','light','graphite','navy','titanium','mono','corsa','porsche','amg','mclaren','brutalist','industrial','oled','blueprint','terminal'];
 const V14_DIMENSIONS = {
@@ -214,25 +214,82 @@ const ALLOC_V14={
   photo:{camera:.45,lens:.38,storage:.05,tripod:.06,gimbal:.10,flash:.06},
   audio:{speakers:.36,activemonitors:.48,headphones:.28,amplifier:.26,source:.12,interface:.16,turntable:.24,microphone:.14}
 };
-function candidateUtilityV14(item,target,priority,brand){
-  const d=itemDimensionsV14(item); let val=item.score*.55+item.upgrade*.18+d.value*.27-Math.abs(item.score-target)*.18;
-  if(priority==='performance')val+=item.score*.22; if(priority==='value')val+=d.value*.28; if(priority==='upgrade')val+=item.upgrade*.25;
-  if(brand&&brand!=='any'&&item.brand===brand)val+=14; return val;
+function candidateUtilityV14(item,target,priority,brand,slotBudget=Infinity){
+  const d=itemDimensionsV14(item),price=Math.max(1,Number(item.priceEUR)||0);
+  let val=item.score*.50+item.upgrade*.16+d.value*.22-Math.abs(item.score-target)*.16;
+  if(priority==='performance')val+=item.score*.28;
+  if(priority==='value')val+=d.value*.36;
+  if(priority==='upgrade')val+=item.upgrade*.30;
+  if(brand&&brand!=='any'&&item.brand===brand)val+=14;
+  if(Number.isFinite(slotBudget)){
+    const ratio=price/Math.max(1,slotBudget);
+    if(ratio<=1) val+=(1-ratio)*12;
+    else val-=(ratio-1)*80;
+  }
+  return val;
 }
-function chooseCandidateV14(group,types,budget,target,profile,used,selected=[]){
-  let candidates=allItems().filter(i=>i.group===group&&types.includes(i.type)&&!used.has(i.id)&&itemMatchesPlatformV14(i,profile.platform));
+function ruleSatisfiedV15(group,rule,selected){
+  const types=rule.split('|');
+  if(selected.some(i=>types.includes(i.type))) return true;
+  if(group==='sim'){
+    const base=selected.find(i=>i.type==='wheelbase');
+    if(types.includes('wheel')&&base?.compatibility?.includesWheel) return true;
+    if(types.includes('pedals')&&base?.compatibility?.includesPedals) return true;
+  }
+  if(group==='photo'){
+    const camera=selected.find(i=>i.type==='camera');
+    if(types.includes('lens')&&camera?.compatibility?.includesLens) return true;
+  }
+  return false;
+}
+function ecosystemKeyV15(value){
+  return String(value||'').toLowerCase().replace(/racing|simsports|simulation|simulations|\s|[-_]/g,'');
+}
+function ecosystemsMatchV15(a,b){
+  const aa=ecosystemKeyV15(a),bb=ecosystemKeyV15(b);
+  return !aa||!bb||aa==='universal'||bb==='universal'||aa===bb;
+}
+function requiredRulesV15(group,profile={}){
+  return (essentialTypes[group]||[]).filter(rule=>!(group==='sim'&&profile.mount==='desk'&&rule.split('|').includes('cockpit')));
+}
+function requiredRulesCompleteV15(group,selected,profile={}){
+  return requiredRulesV15(group,profile).every(rule=>ruleSatisfiedV15(group,rule,selected));
+}
+
+let wizardPoolIndexV15=null;
+let wizardPoolStampV15='';
+function ensureWizardPoolIndexV15(){
+  const items=allItems();
+  const stamp=`${items.length}:${items[0]?.id||''}:${items[items.length-1]?.id||''}:${catalog.version||''}`;
+  if(wizardPoolIndexV15&&wizardPoolStampV15===stamp)return wizardPoolIndexV15;
+  const map=new Map();
+  for(const item of items){
+    const key=`${item.group}:${item.type}`;
+    if(!map.has(key))map.set(key,[]);
+    map.get(key).push(item);
+  }
+  wizardPoolIndexV15=map;wizardPoolStampV15=stamp;
+  return map;
+}
+function candidatePoolV15(group,types,profile,used,selected=[]){
+  const index=ensureWizardPoolIndexV15();
+  let candidates=[];
+  for(const type of types)candidates.push(...(index.get(`${group}:${type}`)||[]));
+  candidates=candidates.filter(i=>!used.has(i.id)&&itemMatchesPlatformV14(i,profile.platform));
   const first=t=>selected.find(i=>i.type===t);
   if(group==='sim'){
     const base=first('wheelbase');
+    if(types.includes('pedals')) candidates=candidates.filter(i=>!/clutch pedal/i.test(`${i.brand} ${i.name}`));
+    if(types.includes('shifter')) candidates=candidates.filter(i=>!/active shifter knob/i.test(`${i.brand} ${i.name}`));
     if(profile.torqueMin&&types.includes('wheelbase')) candidates=candidates.filter(i=>Number(i.compatibility?.torqueNm)>=profile.torqueMin);
-    if(types.includes('wheel')&&base) candidates=candidates.filter(i=>i.compatibility?.ecosystem===base.compatibility?.ecosystem||i.compatibility?.ecosystem==='Universal');
-    if(types.includes('pedals')&&base) candidates=candidates.filter(i=>!i.compatibility?.ecosystem||i.compatibility?.ecosystem==='Universal'||i.compatibility?.ecosystem===base.compatibility?.ecosystem||i.compatibility?.connection==='USB');
+    if(types.includes('wheel')&&base) candidates=candidates.filter(i=>ecosystemsMatchV15(i.compatibility?.ecosystem,base.compatibility?.ecosystem));
+    if(types.includes('pedals')&&base) candidates=candidates.filter(i=>ecosystemsMatchV15(i.compatibility?.ecosystem,base.compatibility?.ecosystem)||i.compatibility?.connection==='USB');
     if(types.includes('cockpit')&&base) candidates=candidates.filter(i=>Number(i.compatibility?.maxTorqueNm||0)>=Number(base.compatibility?.torqueNm||0));
     if(types.includes('wheel')){const terms=V14_DISCIPLINES[profile.discipline]?.wheel||[];const matched=candidates.filter(i=>terms.some(t=>`${i.brand} ${i.name}`.toLowerCase().includes(t.toLowerCase())));if(matched.length)candidates=matched;}
   }
-  if(group==='photo'&&types.includes('lens')){const camera=first('camera');if(camera)candidates=candidates.filter(i=>i.compatibility?.mount===camera.compatibility?.mount);}
+  if(group==='photo'&&types.includes('lens')){const camera=first('camera');if(camera)candidates=candidates.filter(i=>String(i.compatibility?.mount||'').split(' / ').some(m=>String(camera.compatibility?.mount||'').includes(m)));}
   if(group==='pc'){
-    const cpu=first('cpu'),gpu=first('gpu'),mb=first('motherboard'),pcCase=first('case');
+    const cpu=first('cpu'),gpu=first('gpu'),mb=first('motherboard');
     if(types.includes('motherboard')&&cpu)candidates=candidates.filter(i=>i.compatibility?.socket===cpu.compatibility?.socket);
     if(types.includes('ram')&&mb)candidates=candidates.filter(i=>i.compatibility?.memoryType===mb.compatibility?.memoryType);
     if(types.includes('psu')&&gpu)candidates=candidates.filter(i=>Number(i.compatibility?.wattage||0)>=Number(gpu.compatibility?.recommendedPsuW||0));
@@ -242,22 +299,127 @@ function chooseCandidateV14(group,types,budget,target,profile,used,selected=[]){
   if(group==='workspace'&&types.includes('monitorarm')){const monitor=first('monitor');if(monitor)candidates=candidates.filter(i=>Number(i.compatibility?.maxWeightKg||0)>=Number(monitor.compatibility?.weightKg||0));}
   if(group==='audio'&&types.includes('speakers')){const amp=first('amplifier');if(amp)candidates=candidates.filter(i=>Number(i.compatibility?.impedance||0)>=Number(amp.compatibility?.impedanceMin||0));}
   if(group==='cinema'&&types.includes('speakers')){const rec=first('receiver');if(rec)candidates=candidates.filter(i=>Number(rec.compatibility?.channels||0)+1>=Number(i.compatibility?.channelsNeeded||0));}
-  const affordable=candidates.filter(i=>Number(i.priceEUR)<=budget*1.12); if(affordable.length)candidates=affordable;
-  candidates.sort((a,b)=>candidateUtilityV14(b,target,profile.priority,profile.brand)-candidateUtilityV14(a,target,profile.priority,profile.brand));
+  return candidates;
+}
+function chooseCandidateV14(group,types,budget,target,profile,used,selected=[]){
+  let candidates=candidatePoolV15(group,types,profile,used,selected);
+  if(!candidates.length)return null;
+  const hard=Math.max(0,Number(budget)||0);
+  const affordable=candidates.filter(i=>Number(i.priceEUR)<=hard+.01);
+  if(affordable.length)candidates=affordable;
+  else candidates=[...candidates].sort((a,b)=>Number(a.priceEUR)-Number(b.priceEUR)).slice(0,12);
+  candidates.sort((a,b)=>candidateUtilityV14(b,target,profile.priority,profile.brand,hard)-candidateUtilityV14(a,target,profile.priority,profile.brand,hard));
   return candidates[0]||null;
 }
-function generatePlanV14(group,budgetEUR,tier,profile={}){
-  const ratios={economy:.62,balanced:.84,maximum:1},targets={economy:58,balanced:76,maximum:91}; const cap=budgetEUR*(ratios[tier]||1),target=targets[tier]||76;
-  const rules=essentialTypes[group]||[],used=new Set(),items=[],selected=[]; let spent=0;
+function cheapestCandidateV15(group,types,profile,used,selected=[]){
+  return candidatePoolV15(group,types,profile,used,selected).sort((a,b)=>Number(a.priceEUR)-Number(b.priceEUR))[0]||null;
+}
+function reserveForRulesV15(group,rules,profile,used,selected){
+  let reserve=0,shadow=[...selected],shadowUsed=new Set(used);
   for(const rule of rules){
-    const types=rule.split('|'); if(selected.some(i=>types.includes(i.type)))continue;
-    const share=Math.max(...types.map(t=>ALLOC_V14[group]?.[t]||1/rules.length)),slot=Math.max(35,cap*share); const item=chooseCandidateV14(group,types,Math.min(slot,cap-spent+slot*.35),target,profile,used,selected);
-    if(item){items.push({id:item.id,qty:1});selected.push(item);used.add(item.id);spent+=Number(item.priceEUR)||0;}
+    if(ruleSatisfiedV15(group,rule,shadow))continue;
+    const item=cheapestCandidateV15(group,rule.split('|'),profile,shadowUsed,shadow);
+    if(item){reserve+=Number(item.priceEUR)||0;shadow.push(item);shadowUsed.add(item.id);}
   }
-  const optionals={pc:[],sim:V14_DISCIPLINES[profile.discipline]?.optional||[],cinema:['subwoofer'],workspace:['dock','monitorarm','lighting'],photo:['tripod','gimbal','flash'],audio:['headphones','microphone']}[group]||[];
-  for(const type of optionals){ const left=cap-spent;if(left<45)break;if(selected.some(i=>i.type===type))continue;const item=chooseCandidateV14(group,[type],left,target,profile,used,selected);if(item&&item.priceEUR<=left*1.15){items.push({id:item.id,qty:1});selected.push(item);used.add(item.id);spent+=item.priceEUR;} }
-  const build={id:'preview',name:'preview',group,items,profile:{...profile},createdAt:Date.now(),updatedAt:Date.now()}; const m=calculateBuild(build);
-  return {tier,budget:cap,build,metrics:m,over:m.total>cap};
+  return reserve;
+}
+function improveBuildWithinBudgetV15(build,cap,target,profile){
+  let changed=true,loops=0;
+  while(changed&&loops++<18){
+    changed=false;
+    const current=buildItems(build),metrics=calculateBuild(build),remaining=cap-metrics.total;
+    if(remaining<8)break;
+    let best=null;
+    for(const row of current){
+      const old=row.item;
+      const share=ALLOC_V14[build.group]?.[old.type]||.18;
+      const typeCeiling=Math.max(Number(old.priceEUR),cap*Math.min(.58,share*1.55));
+      const selectedWithoutOld=current.filter(x=>x.item.id!==old.id).map(x=>x.item);
+      const usedWithoutOld=new Set(selectedWithoutOld.map(i=>i.id));
+      const rawPool=candidatePoolV15(build.group,[old.type],profile,usedWithoutOld,selectedWithoutOld).filter(i=>{
+        if(i.id===old.id||Number(i.priceEUR)>Number(old.priceEUR)+remaining+.01||Number(i.priceEUR)>typeCeiling+.01)return false;
+        return true;
+      });
+      const pool=rawPool.sort((a,b)=>{
+        const ga=(Number(a.score)-Number(old.score))*.72+(Number(a.upgrade)-Number(old.upgrade))*.28;
+        const gb=(Number(b.score)-Number(old.score))*.72+(Number(b.upgrade)-Number(old.upgrade))*.28;
+        return gb/Math.max(4,Number(b.priceEUR)-Number(old.priceEUR)+4)-ga/Math.max(4,Number(a.priceEUR)-Number(old.priceEUR)+4);
+      }).slice(0,54);
+      for(const cand of pool){
+        if(Number(cand.score)<=Number(old.score)&&Number(cand.upgrade)<=Number(old.upgrade))continue;
+        const temp=deepClone(build),entry=temp.items.find(x=>x.id===old.id);if(!entry)continue;entry.id=cand.id;
+        const tempRows=buildItems(temp),tempSelected=tempRows.map(x=>x.item);
+        if(!requiredRulesCompleteV15(build.group,tempSelected,profile))continue;
+        const comp=checkCompatibility(temp,tempRows);if(comp.issues.some(i=>i.level==='bad'))continue;
+        const delta=Number(cand.priceEUR)-Number(old.priceEUR);if(delta>remaining+.01)continue;
+        const gain=(Number(cand.score)-Number(old.score))*.72+(Number(cand.upgrade)-Number(old.upgrade))*.28;
+        const efficiency=gain/Math.max(4,delta+4);
+        const closeness=1-Math.min(1,Math.abs(Number(cand.score)-target)/100);
+        const rank=efficiency*12+gain+closeness*3;
+        if(!best||rank>best.rank)best={old,cand,rank};
+      }
+    }
+    if(best){const entry=build.items.find(x=>x.id===best.old.id);if(entry){entry.id=best.cand.id;changed=true;}}
+  }
+}
+function generatePlanV14(group,budgetEUR,tier,profile={}){
+  const ratios={economy:.65,balanced:.85,maximum:1},targets={economy:56,balanced:74,maximum:90};
+  const cap=Math.max(40,budgetEUR*(ratios[tier]||1)),target=targets[tier]||74;
+  const rules=requiredRulesV15(group,profile),used=new Set(),items=[],selected=[];let spent=0,minimumShortfall=0;
+  for(let index=0;index<rules.length;index++){
+    const rule=rules[index];if(ruleSatisfiedV15(group,rule,selected))continue;
+    const types=rule.split('|');
+    const remainingRules=rules.slice(index+1).filter(r=>!ruleSatisfiedV15(group,r,selected));
+    const reserve=reserveForRulesV15(group,remainingRules,profile,used,selected);
+    const available=Math.max(0,cap-spent-reserve);
+    const share=Math.max(...types.map(t=>ALLOC_V14[group]?.[t]||1/rules.length));
+    const desired=Math.min(available,Math.max(25,cap*share*1.18));
+    let item=chooseCandidateV14(group,types,desired,target,profile,used,selected);
+    if(group==='sim'&&types.includes('wheelbase')&&(cap<=950||tier==='economy')){
+      const bundleRules=remainingRules.filter(r=>!r.split('|').includes('wheel')&&!r.split('|').includes('pedals'));
+      const bundleReserve=reserveForRulesV15(group,bundleRules,profile,used,selected);
+      const bundleBudget=Math.max(0,cap-spent-bundleReserve);
+      const bundles=candidatePoolV15(group,types,profile,used,selected).filter(i=>i.compatibility?.includesWheel&&i.compatibility?.includesPedals&&Number(i.priceEUR)<=bundleBudget+.01);
+      bundles.sort((a,b)=>(candidateUtilityV14(b,target,profile.priority,profile.brand,bundleBudget)+16)-(candidateUtilityV14(a,target,profile.priority,profile.brand,bundleBudget)+16));
+      const bundle=bundles[0];
+      if(bundle){
+        const bundleRank=candidateUtilityV14(bundle,target,profile.priority,profile.brand,bundleBudget)+16;
+        const itemRank=item?candidateUtilityV14(item,target,profile.priority,profile.brand,desired): -Infinity;
+        if(bundleRank>=itemRank-2)item=bundle;
+      }
+    }
+    if(group==='sim'&&types.includes('wheelbase')&&cap>950&&tier!=='economy'&&item?.compatibility?.includesWheel&&item?.compatibility?.includesPedals){
+      const separate=candidatePoolV15(group,types,profile,used,selected).filter(i=>!(i.compatibility?.includesWheel&&i.compatibility?.includesPedals)&&Number(i.priceEUR)<=desired+.01);
+      separate.sort((a,b)=>candidateUtilityV14(b,target,profile.priority,profile.brand,desired)-candidateUtilityV14(a,target,profile.priority,profile.brand,desired));
+      if(separate[0])item=separate[0];
+    }
+    if(!item)item=cheapestCandidateV15(group,types,profile,used,selected);
+    if(item){
+      const price=Number(item.priceEUR)||0;
+      if(price>available+.01)minimumShortfall+=price-available;
+      items.push({id:item.id,qty:1});selected.push(item);used.add(item.id);spent+=price;
+    }
+  }
+  const essentialComplete=rules.every(rule=>ruleSatisfiedV15(group,rule,selected));
+  let optionals=essentialComplete?({pc:[],sim:V14_DISCIPLINES[profile.discipline]?.optional||[],cinema:['subwoofer'],workspace:['dock','monitorarm','lighting'],photo:['tripod','gimbal','flash'],audio:['headphones','microphone']}[group]||[]):[];
+  const optionalThresholds={
+    sim:{shifter:550,handbrake:800,dashboard:1000,accessory:650},
+    cinema:{subwoofer:850},
+    workspace:{dock:700,monitorarm:600,lighting:500},
+    photo:{tripod:450,gimbal:800,flash:650},
+    audio:{headphones:400,microphone:550}
+  };
+  if(optionalThresholds[group])optionals=optionals.filter(type=>cap>=(optionalThresholds[group][type]||0));
+  for(const type of optionals){
+    const left=cap-spent;if(left<12)break;if(selected.some(i=>i.type===type))continue;
+    const item=chooseCandidateV14(group,[type],left,target,profile,used,selected);
+    if(item&&Number(item.priceEUR)<=left+.01){items.push({id:item.id,qty:1});selected.push(item);used.add(item.id);spent+=Number(item.priceEUR)||0;}
+  }
+  const build={id:'preview',name:'preview',group,items,profile:{...profile,budgetEUR:cap},createdAt:Date.now(),updatedAt:Date.now()};
+  if(spent<=cap+.01)improveBuildWithinBudgetV15(build,cap,target,profile);
+  const finalSelected=buildItems(build).map(x=>x.item),complete=requiredRulesCompleteV15(group,finalSelected,profile);
+  const m=calculateBuild(build),remaining=cap-m.total,over=m.total>cap+.01;
+  return {tier,budget:cap,build,metrics:m,over,complete,remaining,utilization:Math.round(m.total/Math.max(1,cap)*100),shortfall:over?m.total-cap:Math.max(0,minimumShortfall)};
 }
 let wizardResultsV14=[];
 
@@ -267,17 +429,22 @@ function renderWizardV14(){
   const brands=[...new Set(allItems().filter(i=>i.group===w.group).map(i=>i.brand))].sort().slice(0,120);
   const results=wizardResultsV14.length?`<section class="wizard-results"><div class="panel-head"><div><h2>Три сценария</h2><p>Можно сохранить один вариант или сразу все три.</p></div><button class="secondary" data-action="create-all-wizard-builds">Сохранить все</button></div><div class="scenario-grid">${wizardResultsV14.map((r,i)=>wizardResultCardV14(r,i)).join('')}</div></section>`:'';
   $('#view-wizard').innerHTML=pageHead('Guided configuration','Умный мастер подбора','Ответьте на ключевые вопросы — SetupLab соберёт экономный, сбалансированный и максимальный варианты.')+`
-  <div class="wizard-layout"><form id="wizardForm" class="panel wizard-form"><div class="form-grid"><label><span>Направление</span><select name="group">${groupOptions}</select></label><label><span>Бюджет, ${currencySymbol()}</span><input name="budget" type="number" min="100" value="${displayBudget}" required></label><label><span>Уровень пользователя</span><select name="level"><option value="economy" ${w.level==='economy'?'selected':''}>Начальный</option><option value="balanced" ${w.level==='balanced'?'selected':''}>Опытный</option><option value="maximum" ${w.level==='maximum'?'selected':''}>Энтузиаст / Pro</option></select></label><label><span>Главный приоритет</span><select name="priority"><option value="balance" ${w.priority==='balance'?'selected':''}>Баланс</option><option value="performance" ${w.priority==='performance'?'selected':''}>Максимум возможностей</option><option value="value" ${w.priority==='value'?'selected':''}>Цена/возможности</option><option value="upgrade" ${w.priority==='upgrade'?'selected':''}>Апгрейдность</option></select></label><label><span>Предпочтительный бренд</span><select name="brand"><option value="any">Без привязки</option>${brands.map(b=>`<option ${w.brand===b?'selected':''}>${escapeHTML(b)}</option>`).join('')}</select></label><label><span>Страна покупки</span><select name="country"><option value="RU" ${w.country==='RU'?'selected':''}>Россия</option><option value="EU" ${w.country==='EU'?'selected':''}>Европа</option><option value="RS" ${w.country==='RS'?'selected':''}>Сербия</option><option value="other" ${w.country==='other'?'selected':''}>Другая</option></select></label><div class="full wizard-sim-fields"><label><span>Платформа</span><select name="platform"><option ${w.platform==='PC'?'selected':''}>PC</option><option ${w.platform==='Xbox'?'selected':''}>Xbox</option><option ${w.platform==='PlayStation'?'selected':''}>PlayStation</option></select></label><label><span>Дисциплина автосима</span><select name="discipline">${Object.entries(V14_DISCIPLINES).map(([id,d])=>`<option value="${id}" ${w.discipline===id?'selected':''}>${d.label}</option>`).join('')}</select></label><label><span>Установка</span><select name="mount"><option value="desk" ${w.mount==='desk'?'selected':''}>На стол</option><option value="compact" ${w.mount==='compact'?'selected':''}>Складная стойка</option><option value="cockpit" ${w.mount==='cockpit'?'selected':''}>Полноценный кокпит</option></select></label></div><div class="full actions"><button class="primary" type="submit">Собрать три варианта</button></div></div></form><aside class="panel wizard-side"><span class="eyebrow">Что учитывается</span><h2>Не просто подбор по цене</h2><div class="wizard-checks"><span>✓ обязательные компоненты</span><span>✓ совместимость и экосистемы</span><span>✓ запас для апгрейда</span><span>✓ цена одного балла</span><span>✓ платформа и дисциплина</span><span>✓ слабые места комплекта</span></div><p>Цены и баллы остаются редактируемыми. Мастер не отправляет данные на сервер.</p></aside></div>${results}`;
+  <div class="wizard-layout"><form id="wizardForm" class="panel wizard-form"><div class="form-grid"><label><span>Направление</span><select name="group">${groupOptions}</select></label><label><span>Бюджет, ${currencySymbol()}</span><input name="budget" type="number" min="100" value="${displayBudget}" required></label><label><span>Уровень пользователя</span><select name="level"><option value="economy" ${w.level==='economy'?'selected':''}>Начальный</option><option value="balanced" ${w.level==='balanced'?'selected':''}>Опытный</option><option value="maximum" ${w.level==='maximum'?'selected':''}>Энтузиаст / Pro</option></select></label><label><span>Главный приоритет</span><select name="priority"><option value="balance" ${w.priority==='balance'?'selected':''}>Баланс</option><option value="performance" ${w.priority==='performance'?'selected':''}>Максимум возможностей</option><option value="value" ${w.priority==='value'?'selected':''}>Цена/возможности</option><option value="upgrade" ${w.priority==='upgrade'?'selected':''}>Апгрейдность</option></select></label><label><span>Предпочтительный бренд</span><select name="brand"><option value="any">Без привязки</option>${brands.map(b=>`<option ${w.brand===b?'selected':''}>${escapeHTML(b)}</option>`).join('')}</select></label><label><span>Страна покупки</span><select name="country"><option value="RU" ${w.country==='RU'?'selected':''}>Россия</option><option value="EU" ${w.country==='EU'?'selected':''}>Европа</option><option value="RS" ${w.country==='RS'?'selected':''}>Сербия</option><option value="other" ${w.country==='other'?'selected':''}>Другая</option></select></label><div class="full wizard-sim-fields"><label><span>Платформа</span><select name="platform"><option ${w.platform==='PC'?'selected':''}>PC</option><option ${w.platform==='Xbox'?'selected':''}>Xbox</option><option ${w.platform==='PlayStation'?'selected':''}>PlayStation</option></select></label><label><span>Дисциплина автосима</span><select name="discipline">${Object.entries(V14_DISCIPLINES).map(([id,d])=>`<option value="${id}" ${w.discipline===id?'selected':''}>${d.label}</option>`).join('')}</select></label><label><span>Установка</span><select name="mount"><option value="desk" ${w.mount==='desk'?'selected':''}>На стол</option><option value="compact" ${w.mount==='compact'?'selected':''}>Складная стойка</option><option value="cockpit" ${w.mount==='cockpit'?'selected':''}>Полноценный кокпит</option></select></label></div><div class="full actions"><button class="primary" type="submit">Собрать три варианта</button></div></div></form><aside class="panel wizard-side"><span class="eyebrow">Что учитывается</span><h2>Строгий контроль бюджета</h2><div class="wizard-checks"><span>✓ обязательные компоненты</span><span>✓ совместимость и экосистемы</span><span>✓ запас для апгрейда</span><span>✓ цена одного балла</span><span>✓ жёсткий лимит сборки</span><span>✓ резерв на обязательные детали</span><span>✓ платформа и дисциплина</span><span>✓ слабые места комплекта</span></div><p>Каждый сценарий имеет собственный лимит: 65%, 85% и 100% указанного бюджета. Мастер резервирует деньги на обязательные компоненты и не сохраняет вариант с превышением.</p></aside></div>${results}`;
 }
-function wizardResultCardV14(r,index){ const names=buildItems(r.build).map(x=>`${x.item.brand} ${x.item.name}`); const labels={economy:'Экономный',balanced:'Сбалансированный',maximum:'Максимальный'};return `<article class="scenario-card ${r.tier}"><span class="scenario-label">${labels[r.tier]}</span><h3>${money(r.metrics.total)}</h3><div class="scenario-metrics"><span><b>${r.metrics.score}</b> баллов</span><span><b>${r.metrics.compatibility}%</b> совместимость</span><span><b>${r.metrics.upgrade}%</b> апгрейд</span></div><div class="scenario-items">${names.slice(0,8).map(n=>`<span>${escapeHTML(n)}</span>`).join('')}</div>${r.over?'<small class="over-budget">Минимальный совместимый комплект превышает целевой бюджет</small>':''}<button class="primary" data-action="create-wizard-build" data-index="${index}">Сохранить сборку</button></article>`; }
+function wizardResultCardV14(r,index){
+  const names=buildItems(r.build).map(x=>`${x.item.brand} ${x.item.name}`),labels={economy:'Экономный',balanced:'Сбалансированный',maximum:'Максимальный'};
+  const invalid=r.over||!r.complete;
+  const status=!r.complete?'Не удалось закрыть все обязательные позиции':r.over?`Не хватает ${money(r.shortfall)}`:`Остаток ${money(Math.max(0,r.remaining))}`;
+  return `<article class="scenario-card ${r.tier}"><span class="scenario-label">${labels[r.tier]}</span><h3>${money(r.metrics.total)}</h3><div class="scenario-budget"><div><span>Лимит</span><b>${money(r.budget)}</b></div><div><span>Использовано</span><b>${Math.min(999,r.utilization)}%</b></div></div><div class="budget-meter ${invalid?'over':''}"><i style="width:${Math.min(100,r.utilization)}%"></i></div><small class="budget-status ${invalid?'over-budget':''}">${status}</small><div class="scenario-metrics"><span><b>${r.metrics.score}</b> баллов</span><span><b>${r.metrics.compatibility}%</b> совместимость</span><span><b>${r.metrics.upgrade}%</b> апгрейд</span></div><div class="scenario-items">${names.slice(0,8).map(n=>`<span>${escapeHTML(n)}</span>`).join('')}</div>${invalid?'<small class="over-budget">Увеличьте бюджет, смените платформу или разрешите более простую комплектацию.</small>':''}<button class="primary" data-action="create-wizard-build" data-index="${index}" ${invalid?'disabled':''}>Сохранить сборку</button></article>`;
+}
 function submitWizardV14(form){
   const d=new FormData(form),group=String(d.get('group')),budgetEUR=currentRateToEURV14(d.get('budget'));
   state.wizard={group,budgetEUR:clamp(budgetEUR,100,100000),level:String(d.get('level')),country:String(d.get('country')),platform:String(d.get('platform')),discipline:String(d.get('discipline')),mount:String(d.get('mount')),brand:String(d.get('brand')),priority:String(d.get('priority'))};
-  const profile={platform:state.wizard.platform,discipline:state.wizard.discipline,mount:state.wizard.mount,brand:state.wizard.brand,priority:state.wizard.priority};
+  const profile={platform:state.wizard.platform,discipline:state.wizard.discipline,mount:state.wizard.mount,brand:state.wizard.brand,priority:state.wizard.priority,country:state.wizard.country};
   wizardResultsV14=['economy','balanced','maximum'].map(t=>generatePlanV14(group,state.wizard.budgetEUR,t,profile)); saveState(); renderWizardV14();
   setTimeout(()=>$('.wizard-results')?.scrollIntoView({behavior:'smooth',block:'start'}),50);
 }
-function saveWizardPlanV14(index){ const r=wizardResultsV14[index];if(!r)return; const labels={economy:'Экономный',balanced:'Сбалансированный',maximum:'Максимальный'}; const b={...deepClone(r.build),id:uid('build'),name:`${labels[r.tier]} · ${categoryName(r.build.group)}`,createdAt:Date.now(),updatedAt:Date.now()};state.builds.unshift(b);saveState();toast('Сборка сохранена',b.name); }
+function saveWizardPlanV14(index){ const r=wizardResultsV14[index];if(!r||r.over||!r.complete){toast('Сценарий не сохранён','Сначала нужен полный комплект внутри бюджета.','warn');return;} const labels={economy:'Экономный',balanced:'Сбалансированный',maximum:'Максимальный'}; const b={...deepClone(r.build),id:uid('build'),name:`${labels[r.tier]} · ${categoryName(r.build.group)}`,createdAt:Date.now(),updatedAt:Date.now()};state.builds.unshift(b);saveState();toast('Сборка сохранена',b.name); }
 
 function presetPlanV14(def){ return generatePlanV14(def.group,def.budgetEUR,def.level,{brand:def.brand||'any',priority:'balance',...(def.profile||{})}); }
 function renderPresetsV14(){
@@ -361,7 +528,7 @@ const renderDashboardV13=renderDashboard;
 renderDashboard=function(){ renderDashboardV13();const hero=$('#view-dashboard .hero');if(!hero)return;hero.insertAdjacentHTML('afterend',`<section class="module-launch-grid"><button data-action="go" data-view="wizard"><span>✦</span><div><b>Умный мастер</b><small>Три варианта под бюджет и цель</small></div></button><button data-action="go" data-view="simlab"><span>◉</span><div><b>Sim Racing Lab</b><small>Момент, экосистемы и кокпит</small></div></button><button data-action="go" data-view="presets"><span>▦</span><div><b>Готовые комплекты</b><small>Копируйте и изменяйте пресеты</small></div></button><button data-action="go" data-view="inventory"><span>◇</span><div><b>Мои устройства</b><small>Гарантия и история владения</small></div></button></section>`); };
 
 const renderSettingsV13=renderSettings;
-renderSettings=function(){ renderSettingsV13();const themes=$('#view-settings .theme-cards');if(themes)themes.insertAdjacentHTML('beforeend',`${themeCard('porsche','Porsche Motorsport')}${themeCard('amg','Mercedes AMG')}${themeCard('mclaren','McLaren')}${themeCard('brutalist','Brutalist')}${themeCard('industrial','Industrial')}${themeCard('oled','OLED Black')}${themeCard('blueprint','Blueprint')}${themeCard('terminal','Terminal')}`);const grid=$('#view-settings .settings-grid');if(grid)grid.insertAdjacentHTML('afterbegin',`<section class="setting-card"><h3>Инженерные модули v1.4</h3><p>Мастер, Sim Racing Lab, история цен, многокритериальная оценка, общие ссылки и учёт оборудования.</p><div class="setting-stack"><button class="secondary" data-action="go" data-view="wizard">Открыть мастер</button><button class="secondary" data-action="go" data-view="simlab">Открыть Sim Racing Lab</button><button class="secondary" data-action="go" data-view="inventory">Мои устройства (${state.inventory.length})</button></div></section>`); };
+renderSettings=function(){ renderSettingsV13();const themes=$('#view-settings .theme-cards');if(themes)themes.insertAdjacentHTML('beforeend',`${themeCard('porsche','Porsche Motorsport')}${themeCard('amg','Mercedes AMG')}${themeCard('mclaren','McLaren')}${themeCard('brutalist','Brutalist')}${themeCard('industrial','Industrial')}${themeCard('oled','OLED Black')}${themeCard('blueprint','Blueprint')}${themeCard('terminal','Terminal')}`);const grid=$('#view-settings .settings-grid');if(grid)grid.insertAdjacentHTML('afterbegin',`<section class="setting-card"><h3>Инженерные модули v1.5</h3><p>Мега-каталог на 2900 позиций, строгий бюджетный мастер, Sim Racing Lab, история цен, общие ссылки и учёт оборудования.</p><div class="setting-stack"><button class="secondary" data-action="go" data-view="wizard">Открыть мастер</button><button class="secondary" data-action="go" data-view="simlab">Открыть Sim Racing Lab</button><button class="secondary" data-action="go" data-view="inventory">Мои устройства (${state.inventory.length})</button></div></section>`); };
 
 const renderViewV13=renderView;
 renderView=function(view){ if(view==='wizard')renderWizardV14();else if(view==='simlab')renderSimLabV14();else if(view==='presets')renderPresetsV14();else if(view==='inventory')renderInventoryV14();else renderViewV13(view); };
@@ -375,7 +542,7 @@ function bindV14Events(){ if(v14EventsBound)return;v14EventsBound=true;
     if(a==='quick-lab')openQuickLabV14();
     else if(a==='go-modal'){closeModal();setActiveView(t.dataset.view);}
     else if(a==='create-wizard-build')saveWizardPlanV14(Number(t.dataset.index));
-    else if(a==='create-all-wizard-builds'){wizardResultsV14.forEach((_,i)=>saveWizardPlanV14(i));setActiveView('builds');}
+    else if(a==='create-all-wizard-builds'){wizardResultsV14.forEach((r,i)=>{if(!r.over&&r.complete)saveWizardPlanV14(i);});setActiveView('builds');}
     else if(a==='preset-group'){state.presetGroup=t.dataset.group;saveState();renderPresetsV14();}
     else if(a==='preview-preset')createPresetV14(t.dataset.id,true);
     else if(a==='create-preset')createPresetV14(t.dataset.id,false);

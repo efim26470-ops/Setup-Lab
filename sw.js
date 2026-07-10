@@ -1,5 +1,5 @@
-const CACHE='setuplab-shell-v1.4.0';
-const CORE=['./','./index.html','./styles.css?v=1.4.0','./app.js?v=1.4.0','./features.js?v=1.4.0','./manifest.webmanifest?v=1.4.0','./icons/icon.svg','./icons/icon-180.png','./icons/icon-192.png','./icons/icon-512.png'];
+const CACHE='setuplab-shell-v1.5.0';
+const CORE=['./','./index.html','./styles.css?v=1.5.0','./app.js?v=1.5.0','./features.js?v=1.5.0','./manifest.webmanifest?v=1.5.0','./icons/icon.svg','./icons/icon-180.png','./icons/icon-192.png','./icons/icon-512.png'];
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>Promise.all(CORE.map(url=>fetch(url,{cache:'reload'}).then(r=>{if(r.ok)return cache.put(url,r);}).catch(()=>null)))).then(()=>self.skipWaiting()));
 });

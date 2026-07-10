@@ -1,7 +1,7 @@
 'use strict';
 
 const STORAGE_KEY = 'setuplab.state.v1';
-const APP_VERSION = '1.4.0';
+const APP_VERSION = '1.5.0';
 const categoryIcons = { pc:'⌨', sim:'◉', cinema:'▰', workspace:'▦', photo:'◍', audio:'♫' };
 const typeLabels = {
   cpu:'Процессор', gpu:'Видеокарта', motherboard:'Материнская плата', ram:'Память', storage:'Накопитель', psu:'Блок питания', case:'Корпус', cooler:'Охлаждение',
@@ -59,6 +59,8 @@ const defaultState = {
   catalogGroup: 'pc',
   catalogSearch: '',
   catalogType: 'all',
+  catalogBudget: 'all',
+  catalogSort: 'relevance',
   builds: [],
   customItems: [],
   catalogOverrides: {},
@@ -98,6 +100,8 @@ function sanitizeState(input){
   clean.catalogGroup=['pc','sim','cinema','workspace','photo','audio'].includes(clean.catalogGroup)?clean.catalogGroup:'pc';
   clean.catalogSearch=typeof clean.catalogSearch==='string'?clean.catalogSearch:'';
   clean.catalogType=typeof clean.catalogType==='string'?clean.catalogType:'all';
+  clean.catalogBudget=['all','under100','100to300','300to700','700to1500','over1500'].includes(clean.catalogBudget)?clean.catalogBudget:'all';
+  clean.catalogSort=['relevance','priceAsc','priceDesc','scoreDesc'].includes(clean.catalogSort)?clean.catalogSort:'relevance';
   clean.builds=Array.isArray(clean.builds)?clean.builds.filter(Boolean).map(b=>({
     id:String(b.id||makeId('build')), name:String(b.name||'Без названия').slice(0,80), group:['pc','sim','cinema','workspace','photo','audio'].includes(b.group)?b.group:'pc',
     items:Array.isArray(b.items)?b.items.filter(x=>x&&x.id).map(x=>({id:String(x.id),qty:bound(Number(x.qty)||1,1,99)})):[], notes:typeof b.notes==='string'?b.notes:'',
@@ -135,12 +139,26 @@ function applyTheme(){
   const colors={light:'#f4f5f8',corsa:'#050505',graphite:'#111214',navy:'#07111f',titanium:'#d9dde3',mono:'#0b0b0b',dark:'#090a0d'};
   $('meta[name="theme-color"]').setAttribute('content',colors[state.theme]||colors.dark);
 }
+let catalogItemMap=new Map();
+let mergedItemsCache=null;
+function invalidateCatalogCache(){ mergedItemsCache=null; }
+function rebuildCatalogIndex(){
+  catalogItemMap=new Map((Array.isArray(catalog.items)?catalog.items:[]).filter(Boolean).map(item=>[item.id,item]));
+  invalidateCatalogCache();
+}
 function getItem(id){
-  const base = (Array.isArray(catalog.items)?catalog.items:[]).find(i => i.id === id) || (Array.isArray(state.customItems)?state.customItems:[]).find(i => i.id === id);
+  const base = catalogItemMap.get(id) || (Array.isArray(state.customItems)?state.customItems:[]).find(i => i.id === id);
   if (!base) return null;
   return { ...base, ...(state.catalogOverrides[id] || {}) };
 }
-function allItems(){ const base=Array.isArray(catalog.items)?catalog.items:[]; const custom=Array.isArray(state.customItems)?state.customItems:[]; const overrides=state.catalogOverrides&&typeof state.catalogOverrides==='object'?state.catalogOverrides:{}; return [...base,...custom].filter(Boolean).map(i=>({...i,...(overrides[i.id]||{})})); }
+function allItems(){
+  if(mergedItemsCache) return mergedItemsCache;
+  const base=Array.isArray(catalog.items)?catalog.items:[];
+  const custom=Array.isArray(state.customItems)?state.customItems:[];
+  const overrides=state.catalogOverrides&&typeof state.catalogOverrides==='object'?state.catalogOverrides:{};
+  mergedItemsCache=[...base,...custom].filter(Boolean).map(i=>({...i,...(overrides[i.id]||{})}));
+  return mergedItemsCache;
+}
 function getBuild(id){ return (Array.isArray(state.builds)?state.builds:[]).find(b => b.id === id); }
 function categoryName(group){ return catalog.categories[group]?.name || group; }
 function itemTypeName(type){ return typeLabels[type] || type; }
@@ -230,12 +248,22 @@ function buildItems(build){
   return (build?.items || []).map(entry => ({ entry, item:getItem(entry.id) })).filter(x=>x.item);
 }
 
-function completenessFor(group, items){
-  const present = new Set(items.map(i=>i.item.type));
-  const req = essentialTypes[group] || [];
+function completenessFor(group, items, profile={}){
+  const products=items.map(i=>i.item),present = new Set(products.map(i=>i.type));
+  let req = essentialTypes[group] || [];
+  if(group==='sim'&&profile?.mount==='desk') req=req.filter(rule=>!rule.split('|').includes('cockpit'));
   if (!req.length) return 1;
-  const hit = req.filter(rule => rule.split('|').some(t=>present.has(t))).length;
-  return hit / req.length;
+  const base=group==='sim'?products.find(i=>i.type==='wheelbase'):null;
+  const camera=group==='photo'?products.find(i=>i.type==='camera'):null;
+  const satisfied=rule=>{
+    const types=rule.split('|');
+    if(types.some(t=>present.has(t)))return true;
+    if(group==='sim'&&types.includes('wheel')&&base?.compatibility?.includesWheel)return true;
+    if(group==='sim'&&types.includes('pedals')&&base?.compatibility?.includesPedals)return true;
+    if(group==='photo'&&types.includes('lens')&&camera?.compatibility?.includesLens)return true;
+    return false;
+  };
+  return req.filter(satisfied).length / req.length;
 }
 
 function calculateBuild(build){
@@ -251,7 +279,7 @@ function calculateBuild(build){
     weightedUpgrade += Number(item.upgrade||0) * w;
     weight += w;
   }
-  const completeness = completenessFor(build.group, rows);
+  const completeness = completenessFor(build.group, rows, build.profile||{});
   const rawScore = weight ? weightedScore/weight : 0;
   const score = Math.round(rawScore * (.55 + .45*completeness));
   const upgrade = Math.round((weight?weightedUpgrade/weight:0) * (.7 + .3*completeness));
@@ -292,9 +320,10 @@ function checkCompatibility(build, rows){
   if(build.group==='sim'){
     oneOnly(['wheelbase','wheel','cockpit']);
     const base=byType('wheelbase')[0], wheel=byType('wheel')[0], cockpit=byType('cockpit')[0];
-    if(base&&wheel && base.compatibility?.ecosystem!==wheel.compatibility?.ecosystem) add('bad',`Рулевая база ${base.compatibility?.ecosystem} и руль ${wheel.compatibility?.ecosystem} относятся к разным экосистемам.`);
+    const ecoKey=v=>String(v||'').toLowerCase().replace(/racing|simsports|simulation|simulations|\s|[-_]/g,'');
+    if(base&&wheel){const a=ecoKey(base.compatibility?.ecosystem),b=ecoKey(wheel.compatibility?.ecosystem);if(a&&b&&a!=='universal'&&b!=='universal'&&a!==b)add('bad',`Рулевая база ${base.compatibility?.ecosystem} и руль ${wheel.compatibility?.ecosystem} относятся к разным экосистемам.`);}
     if(base&&cockpit&&Number(base.compatibility?.torqueNm)>Number(cockpit.compatibility?.maxTorqueNm)) add('bad',`Кокпит рассчитан до ${cockpit.compatibility?.maxTorqueNm} Н·м, а база выдаёт ${base.compatibility?.torqueNm} Н·м.`);
-    byType('pedals').forEach(p=>{ const eco=p.compatibility?.ecosystem; if(base&&eco&&!['Universal',base.compatibility?.ecosystem].includes(eco)&&p.compatibility?.connection!=='USB') add('warn','Педали могут потребовать отдельный адаптер.'); });
+    byType('pedals').forEach(p=>{ const eco=p.compatibility?.ecosystem,a=ecoKey(eco),b=ecoKey(base?.compatibility?.ecosystem); if(base&&eco&&a!=='universal'&&a!==b&&p.compatibility?.connection!=='USB') add('warn','Педали могут потребовать отдельный адаптер.'); });
   }
   if(build.group==='cinema'){
     const rec=byType('receiver')[0], speakers=byType('speakers')[0], source=byType('source')[0], display=byType('display')[0]||byType('projector')[0];
@@ -325,7 +354,7 @@ function checkCompatibility(build, rows){
     if(turntable?.compatibility?.needsPhono && !amp) add('warn','Проигрывателю нужен фонокорректор или усилитель с Phono-входом.');
   }
 
-  const completeness = completenessFor(build.group, rows);
+  const completeness = completenessFor(build.group, rows, build.profile||{});
   if(completeness < 1) add('warn',`Базовая комплектация заполнена на ${Math.round(completeness*100)}%.`);
   if(!issues.some(i=>i.level==='bad') && completeness===1) add('good','Критических конфликтов по сохранённым характеристикам не найдено.');
   const bad=issues.filter(i=>i.level==='bad').length, warn=issues.filter(i=>i.level==='warn').length;
@@ -352,13 +381,15 @@ async function init(){
   applyTheme();
   syncTopControls();
   try {
-    try { catalog=await fetchJSONWithTimeout(`./catalog.min.json?v=${APP_VERSION}`,7000); }
-    catch (_) { catalog=await fetchJSONWithTimeout(`./catalog.json?v=${APP_VERSION}`,5000); }
+    try { catalog=await fetchJSONWithTimeout(`./catalog.min.json?v=${APP_VERSION}`,15000); }
+    catch (_) { catalog=await fetchJSONWithTimeout(`./catalog.json?v=${APP_VERSION}`,12000); }
   } catch (err) {
     catalog=fallbackCatalog();
     setTimeout(()=>toast('Каталог временно недоступен','Интерфейс работает. Обновите страницу при стабильном соединении.','warn'),200);
   }
+  rebuildCatalogIndex();
   state=sanitizeState(state);
+  invalidateCatalogCache();
   seedDemoBuilds();
   renderAll();
   window.__SETUPLAB_READY__=true;
@@ -461,7 +492,11 @@ function renderCatalog(){
   const types=[...new Set(groupItems.map(i=>i.type))].sort((a,b)=>itemTypeName(a).localeCompare(itemTypeName(b),'ru'));
   const typeOptions=`<option value="all">Все типы</option>`+types.map(t=>`<option value="${t}" ${state.catalogType===t?'selected':''}>${escapeHTML(itemTypeName(t))}</option>`).join('');
   const q=state.catalogSearch.trim().toLowerCase();
-  const filtered=groupItems.filter(i=>(state.catalogType==='all'||i.type===state.catalogType)&&(!q||`${i.brand} ${i.name} ${i.description||''} ${Object.values(i.specs||{}).join(' ')}`.toLowerCase().includes(q)));
+  const budgetMatch=item=>{const p=Number(item.priceEUR)||0;return state.catalogBudget==='all'||(state.catalogBudget==='under100'&&p<100)||(state.catalogBudget==='100to300'&&p>=100&&p<300)||(state.catalogBudget==='300to700'&&p>=300&&p<700)||(state.catalogBudget==='700to1500'&&p>=700&&p<1500)||(state.catalogBudget==='over1500'&&p>=1500);};
+  const filtered=groupItems.filter(i=>(state.catalogType==='all'||i.type===state.catalogType)&&budgetMatch(i)&&(!q||`${i.brand} ${i.name} ${i.description||''} ${Object.values(i.specs||{}).join(' ')}`.toLowerCase().includes(q)));
+  if(state.catalogSort==='priceAsc')filtered.sort((a,b)=>Number(a.priceEUR)-Number(b.priceEUR));
+  else if(state.catalogSort==='priceDesc')filtered.sort((a,b)=>Number(b.priceEUR)-Number(a.priceEUR));
+  else if(state.catalogSort==='scoreDesc')filtered.sort((a,b)=>Number(b.score)-Number(a.score));
   if(!catalogVisibleCount) catalogVisibleCount=catalogPageSize();
   const shown=filtered.slice(0,catalogVisibleCount);
   const cards=shown.map(productCardHTML).join('');
@@ -469,10 +504,10 @@ function renderCatalog(){
   const more=shown.length<filtered.length?`<div class="catalog-pagination"><span>Показано ${shown.length} из ${filtered.length}</span><button class="secondary" data-action="load-more-catalog">Показать ещё ${Math.min(catalogPageSize(),filtered.length-shown.length)}</button></div>`:`<div class="catalog-pagination done"><span>Показаны все ${filtered.length} позиций</span></div>`;
   $('#view-catalog').innerHTML = pageHead('Каталог и магазины',`Каталог · ${items.length} позиций`,`В разделе «${categoryName(state.catalogGroup)}» найдено ${filtered.length}. Для стабильной работы iPhone карточки загружаются порциями.`,actions)+`
     <div class="catalog-notice">
-      <div><span class="notice-icon">◎</span><span><b>Стабильный каталог с ленивой загрузкой</b><small>Фотографии и карточки загружаются только рядом с экраном — это исключает переполнение памяти Safari.</small></span></div>
+      <div><span class="notice-icon">◎</span><span><b>Расширенный каталог с ленивой загрузкой</b><small>2900 позиций загружаются порциями: фотографии и карточки создаются только рядом с экраном, поэтому Safari не переполняет память.</small></span></div>
       <div class="notice-actions"><button class="ghost compact" data-action="annual-help">Расходы в год</button><button class="ghost compact" data-action="upgrade-help">Апгрейдность</button><button class="ghost compact" data-action="score-help" data-group="${state.catalogGroup}">Баллы</button></div>
     </div>
-    <div class="toolbar"><div class="segmented">${groups}</div><div class="search-field"><input id="catalogSearch" value="${escapeHTML(state.catalogSearch)}" placeholder="Поиск по модели, описанию и характеристикам"></div><select id="catalogType">${typeOptions}</select></div>
+    <div class="toolbar"><div class="segmented">${groups}</div><div class="search-field"><input id="catalogSearch" value="${escapeHTML(state.catalogSearch)}" placeholder="Поиск по модели, описанию и характеристикам"></div><select id="catalogType">${typeOptions}</select><select id="catalogBudget"><option value="all" ${state.catalogBudget==='all'?'selected':''}>Любая цена</option><option value="under100" ${state.catalogBudget==='under100'?'selected':''}>До 100 €</option><option value="100to300" ${state.catalogBudget==='100to300'?'selected':''}>100–300 €</option><option value="300to700" ${state.catalogBudget==='300to700'?'selected':''}>300–700 €</option><option value="700to1500" ${state.catalogBudget==='700to1500'?'selected':''}>700–1500 €</option><option value="over1500" ${state.catalogBudget==='over1500'?'selected':''}>От 1500 €</option></select><select id="catalogSort"><option value="relevance" ${state.catalogSort==='relevance'?'selected':''}>По каталогу</option><option value="priceAsc" ${state.catalogSort==='priceAsc'?'selected':''}>Сначала дешевле</option><option value="priceDesc" ${state.catalogSort==='priceDesc'?'selected':''}>Сначала дороже</option><option value="scoreDesc" ${state.catalogSort==='scoreDesc'?'selected':''}>Сначала высокий балл</option></select></div>
     ${cards?`<div class="catalog-grid">${cards}</div>${more}`:emptyHTML('Ничего не найдено','Измените поисковый запрос или добавьте собственную позицию.')}`;
   if(state.activeView==='catalog') hydrateImages();
 }
@@ -564,7 +599,7 @@ function bindEvents(){
     else if(action==='new-build-group') openNewBuild(target.dataset.group);
     else if(action==='open-build') openBuild(target.dataset.id);
     else if(action==='build-menu'){ event.stopPropagation(); openBuildMenu(target.dataset.id); }
-    else if(action==='catalog-group'){ state.catalogGroup=target.dataset.group; state.catalogType='all'; catalogVisibleCount=catalogPageSize(); saveState(); renderCatalog(); }
+    else if(action==='catalog-group'){ state.catalogGroup=target.dataset.group; state.catalogType='all'; state.catalogBudget='all'; state.catalogSort='relevance'; catalogVisibleCount=catalogPageSize(); saveState(); renderCatalog(); }
     else if(action==='product-detail') openProduct(target.dataset.id);
     else if(action==='score-help') openScoreHelp(target.dataset.group||state.catalogGroup);
     else if(action==='annual-help') openAnnualHelp(target.dataset.buildId||'',target.dataset.itemId||'');
@@ -607,6 +642,8 @@ function bindEvents(){
   document.addEventListener('change',event=>{
     const el=event.target;
     if(el.id==='catalogType'){ state.catalogType=el.value; catalogVisibleCount=catalogPageSize(); saveState(); renderCatalog(); }
+    if(el.id==='catalogBudget'){ state.catalogBudget=el.value; catalogVisibleCount=catalogPageSize(); saveState(); renderCatalog(); }
+    if(el.id==='catalogSort'){ state.catalogSort=el.value; catalogVisibleCount=catalogPageSize(); saveState(); renderCatalog(); }
     if(el.dataset.action==='compare-select'){
       const arr=[...state.compareIds]; arr[Number(el.dataset.index)]=el.value; state.compareIds=arr.filter(Boolean); saveState(); renderCompare();
     }
@@ -769,7 +806,7 @@ function parseSpecs(text){
 }
 function submitCustomItem(form){
   const d=new FormData(form); const item={id:uid('custom'),group:String(d.get('group')),type:String(d.get('type')),brand:String(d.get('brand')).trim(),name:String(d.get('name')).trim(),priceEUR:Number(d.get('priceEUR'))||0,score:clamp(Number(d.get('score'))||0,0,100),upgrade:clamp(Number(d.get('upgrade'))||0,0,100),futureAnnualEUR:Number(d.get('futureAnnualEUR'))||0,powerW:Number(d.get('powerW'))||0,description:String(d.get('description')||'').trim(),image:String(d.get('image')||'').trim(),purchase:{market:String(d.get('purchaseURL')||'').trim()},priceBasis:'estimate',priceChecked:new Date().toISOString().slice(0,10),specs:parseSpecs(d.get('specs')),compatibility:{},imageQuery:`${d.get('brand')} ${d.get('name')} product photo`,sourceNote:'Пользовательская позиция',updated:new Date().toISOString().slice(0,10)};
-  state.customItems.unshift(item); state.catalogGroup=item.group; saveState(); closeModal(); renderAll(); setActiveView('catalog'); toast('Позиция добавлена','Совместимость можно уточнить через импорт расширенного JSON.');
+  state.customItems.unshift(item); invalidateCatalogCache(); state.catalogGroup=item.group; saveState(); closeModal(); renderAll(); setActiveView('catalog'); toast('Позиция добавлена','Совместимость можно уточнить через импорт расширенного JSON.');
 }
 
 function openEditProduct(id){
@@ -779,7 +816,7 @@ function openEditProduct(id){
 function submitEditProduct(form){
   const d=new FormData(form), id=String(d.get('id'));
   state.catalogOverrides[id]={...(state.catalogOverrides[id]||{}),priceEUR:Number(d.get('priceEUR'))||0,score:clamp(Number(d.get('score'))||0,0,100),upgrade:clamp(Number(d.get('upgrade'))||0,0,100),futureAnnualEUR:Number(d.get('futureAnnualEUR'))||0,powerW:Number(d.get('powerW'))||0,description:String(d.get('description')||'').trim(),image:String(d.get('image')||'').trim(),purchase:{...(getItem(id)?.purchase||{}),market:String(d.get('purchaseURL')||'').trim()},priceBasis:'local',priceChecked:new Date().toISOString().slice(0,10),specs:parseSpecs(d.get('specs'))};
-  saveState(); closeModal(); renderAll(); toast('Данные обновлены','Изменения сохранены только на этом устройстве.');
+  invalidateCatalogCache(); saveState(); closeModal(); renderAll(); toast('Данные обновлены','Изменения сохранены только на этом устройстве.');
 }
 
 let imageSearchResults=[];
@@ -864,14 +901,14 @@ function exportData(){ downloadJSON({app:'SetupLab',version:APP_VERSION,exported
 function exportCatalog(){ downloadJSON({version:1,updated:new Date().toISOString().slice(0,10),currency:'EUR',categories:catalog.categories,items:allItems()},`setuplab-catalog-${new Date().toISOString().slice(0,10)}.json`); }
 function pickJSON(handler){ const input=document.createElement('input'); input.type='file'; input.accept='application/json,.json'; input.onchange=()=>{ const f=input.files?.[0]; if(f)handler(f); }; input.click(); }
 async function importDataFile(file){
-  try { const data=JSON.parse(await file.text()); const incoming=data.state||data; if(!Array.isArray(incoming.builds))throw new Error('Invalid backup'); state={...deepClone(defaultState),...incoming,rates:{...defaultState.rates,...(incoming.rates||{})}}; saveState(); applyTheme(); renderAll(); toast('Резервная копия восстановлена'); }
+  try { const data=JSON.parse(await file.text()); const incoming=data.state||data; if(!Array.isArray(incoming.builds))throw new Error('Invalid backup'); state={...deepClone(defaultState),...incoming,rates:{...defaultState.rates,...(incoming.rates||{})}}; state=sanitizeState(state); invalidateCatalogCache(); saveState(); applyTheme(); renderAll(); toast('Резервная копия восстановлена'); }
   catch { toast('Ошибка импорта','Файл не похож на резервную копию SetupLab.','bad'); }
 }
 async function importCatalogFile(file){
   try {
     const data=JSON.parse(await file.text()); if(!Array.isArray(data.items))throw new Error('Invalid catalog');
     const normalized=data.items.map((i,index)=>({id:i.id||uid(`import-${index}`),group:i.group||'pc',type:i.type||'custom',brand:i.brand||'Без бренда',name:i.name||`Позиция ${index+1}`,priceEUR:Number(i.priceEUR)||0,score:clamp(Number(i.score)||0,0,100),upgrade:clamp(Number(i.upgrade)||0,0,100),futureAnnualEUR:Number(i.futureAnnualEUR)||0,powerW:Number(i.powerW)||0,specs:i.specs||{},compatibility:i.compatibility||{},description:i.description||'',image:i.image||'',imageQuery:i.imageQuery||`${i.brand||''} ${i.name||''} product photo`,sourceNote:i.sourceNote||'Импортированная позиция',purchase:i.purchase||{},priceBasis:i.priceBasis||'estimate',priceChecked:i.priceChecked||i.updated||new Date().toISOString().slice(0,10),updated:i.updated||new Date().toISOString().slice(0,10)}));
-    const ids=new Set([...catalog.items.map(i=>i.id),...state.customItems.map(i=>i.id)]); normalized.forEach(i=>{ if(ids.has(i.id)) i.id=uid('import'); ids.add(i.id); }); state.customItems=[...normalized,...state.customItems]; saveState(); renderAll(); setActiveView('catalog'); toast('Каталог импортирован',`Добавлено позиций: ${normalized.length}`);
+    const ids=new Set([...catalog.items.map(i=>i.id),...state.customItems.map(i=>i.id)]); normalized.forEach(i=>{ if(ids.has(i.id)) i.id=uid('import'); ids.add(i.id); }); state.customItems=[...normalized,...state.customItems]; invalidateCatalogCache(); saveState(); renderAll(); setActiveView('catalog'); toast('Каталог импортирован',`Добавлено позиций: ${normalized.length}`);
   } catch { toast('Ошибка каталога','Ожидается JSON-объект с массивом items.','bad'); }
 }
 
