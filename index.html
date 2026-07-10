@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <meta name="theme-color" content="#090a0d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SetupLab">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="color-scheme" content="dark light">
+  <title>SetupLab — мастер конфигураций</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+
+  <div id="app" class="app-shell">
+    <header class="topbar glass">
+      <button class="brand" data-action="go" data-view="dashboard" aria-label="Открыть обзор">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span><strong>SetupLab</strong><small>configuration studio</small></span>
+      </button>
+      <div class="top-actions">
+        <button class="icon-button" id="quickTheme" aria-label="Сменить тему" title="Сменить тему">
+          <span class="icon-sun">◐</span>
+        </button>
+        <button class="primary compact" id="installButton">Установить</button>
+      </div>
+    </header>
+
+    <aside class="sidebar glass" aria-label="Навигация">
+      <nav class="nav-list">
+        <button class="nav-item active" data-action="go" data-view="dashboard"><span>⌂</span><b>Обзор</b></button>
+        <button class="nav-item" data-action="go" data-view="builds"><span>▤</span><b>Сборки</b></button>
+        <button class="nav-item" data-action="go" data-view="catalog"><span>◫</span><b>Каталог</b></button>
+        <button class="nav-item" data-action="go" data-view="compare"><span>⌁</span><b>Сравнение</b></button>
+        <button class="nav-item" data-action="go" data-view="settings"><span>⚙</span><b>Настройки</b></button>
+      </nav>
+      <div class="sidebar-foot">
+        <div class="sync-state"><span class="status-dot"></span><div><b>Локальный режим</b><small>Данные остаются на устройстве</small></div></div>
+      </div>
+    </aside>
+
+    <main class="content" id="mainContent">
+      <section class="view active" id="view-dashboard"></section>
+      <section class="view" id="view-builds"></section>
+      <section class="view" id="view-catalog"></section>
+      <section class="view" id="view-compare"></section>
+      <section class="view" id="view-settings"></section>
+    </main>
+
+    <nav class="bottom-nav glass" aria-label="Мобильная навигация">
+      <button class="active" data-action="go" data-view="dashboard"><span>⌂</span><small>Обзор</small></button>
+      <button data-action="go" data-view="builds"><span>▤</span><small>Сборки</small></button>
+      <button class="add-fab" id="mobileAddBuild" aria-label="Новая сборка">+</button>
+      <button data-action="go" data-view="catalog"><span>◫</span><small>Каталог</small></button>
+      <button data-action="go" data-view="compare"><span>⌁</span><small>Сравнить</small></button>
+    </nav>
+  </div>
+
+  <div class="toast-stack" id="toastStack" aria-live="polite"></div>
+  <div class="modal-root" id="modalRoot" aria-live="polite"></div>
+
+  <template id="modalTemplate">
+    <div class="modal-backdrop" data-action="close-modal">
+      <section class="modal-card glass" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <header><div><span class="eyebrow" id="modalEyebrow"></span><h2 id="modalTitle"></h2></div><button class="icon-button" data-action="close-modal" aria-label="Закрыть">×</button></header>
+        <div class="modal-body" id="modalBody"></div>
+      </section>
+    </div>
+  </template>
+
+  <noscript>Для работы SetupLab требуется JavaScript.</noscript>
+  <script src="app.js" defer></script>
+</body>
+</html>
