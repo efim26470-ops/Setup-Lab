@@ -1,7 +1,7 @@
 'use strict';
 
 const STORAGE_KEY = 'setuplab.state.v1';
-const APP_VERSION = '1.3.0';
+const APP_VERSION = '1.3.1';
 const categoryIcons = { pc:'⌨', sim:'◉', cinema:'▰', workspace:'▦', photo:'◍', audio:'♫' };
 const typeLabels = {
   cpu:'Процессор', gpu:'Видеокарта', motherboard:'Материнская плата', ram:'Память', storage:'Накопитель', psu:'Блок питания', case:'Корпус', cooler:'Охлаждение',
@@ -48,7 +48,7 @@ const officialDomains = {
 };
 
 const defaultState = {
-  version: 3,
+  version: 4,
   theme: 'dark',
   currency: 'RUB',
   rates: { ...verifiedRates },
@@ -83,19 +83,46 @@ const uid = (prefix='id') => `${prefix}-${Date.now().toString(36)}-${Math.random
 const clamp = (n,min,max) => Math.min(max,Math.max(min,n));
 const escapeHTML = (v='') => String(v).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 
+function sanitizeState(input){
+  const parsed = input && typeof input==='object' ? input : {};
+  const bound=(n,min,max)=>Math.min(max,Math.max(min,n));
+  const makeId=(prefix='id')=>`${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,8)}`;
+  const clean = { ...deepClone(defaultState), ...parsed };
+  const allowedThemes=['dark','light','corsa','graphite','navy','titanium','mono'];
+  const allowedViews=['dashboard','builds','catalog','compare','settings'];
+  const allowedCurrencies=Object.keys(currencyMeta);
+  clean.version=4;
+  clean.theme=allowedThemes.includes(clean.theme)?clean.theme:'dark';
+  clean.activeView=allowedViews.includes(clean.activeView)?clean.activeView:'dashboard';
+  clean.currency=allowedCurrencies.includes(clean.currency)?clean.currency:'RUB';
+  clean.catalogGroup=['pc','sim','cinema','workspace','photo','audio'].includes(clean.catalogGroup)?clean.catalogGroup:'pc';
+  clean.catalogSearch=typeof clean.catalogSearch==='string'?clean.catalogSearch:'';
+  clean.catalogType=typeof clean.catalogType==='string'?clean.catalogType:'all';
+  clean.builds=Array.isArray(clean.builds)?clean.builds.filter(Boolean).map(b=>({
+    id:String(b.id||makeId('build')), name:String(b.name||'Без названия').slice(0,80), group:['pc','sim','cinema','workspace','photo','audio'].includes(b.group)?b.group:'pc',
+    items:Array.isArray(b.items)?b.items.filter(x=>x&&x.id).map(x=>({id:String(x.id),qty:bound(Number(x.qty)||1,1,99)})):[], notes:typeof b.notes==='string'?b.notes:'',
+    createdAt:Number(b.createdAt)||Date.now(), updatedAt:Number(b.updatedAt)||Number(b.createdAt)||Date.now()
+  })):[];
+  clean.customItems=Array.isArray(clean.customItems)?clean.customItems.filter(i=>i&&i.id&&i.name):[];
+  clean.catalogOverrides=clean.catalogOverrides&&typeof clean.catalogOverrides==='object'&&!Array.isArray(clean.catalogOverrides)?clean.catalogOverrides:{};
+  clean.imageCache=clean.imageCache&&typeof clean.imageCache==='object'&&!Array.isArray(clean.imageCache)?clean.imageCache:{};
+  clean.compareIds=Array.isArray(clean.compareIds)?clean.compareIds.map(String).filter(id=>clean.builds.some(b=>b.id===id)).slice(0,3):[];
+  clean.rates={...verifiedRates,...(clean.rates&&typeof clean.rates==='object'?clean.rates:{})};
+  Object.keys(currencyMeta).forEach(code=>{ const n=Number(clean.rates[code]); clean.rates[code]=Number.isFinite(n)&&n>0?n:verifiedRates[code]; });
+  clean.electricityEUR=bound(Number(clean.electricityEUR)||.30,0,10);
+  clean.hoursPerDay=bound(Number(clean.hoursPerDay)||4,0,24);
+  clean.ratesUpdated=typeof clean.ratesUpdated==='string'?clean.ratesUpdated:verifiedRatesDate;
+  return clean;
+}
 function loadState(){
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return deepClone(defaultState);
-    const parsed = JSON.parse(raw);
-    const merged = { ...deepClone(defaultState), ...parsed, rates:{...defaultState.rates,...(parsed.rates||{})} };
-    if(Number(parsed.version||1)<3){
-      merged.version=3;
-      merged.rates={...verifiedRates};
-      merged.ratesUpdated=verifiedRatesDate;
-    }
-    return merged;
-  } catch { return deepClone(defaultState); }
+    if (!raw) return sanitizeState(defaultState);
+    return sanitizeState(JSON.parse(raw));
+  } catch {
+    try { localStorage.removeItem(STORAGE_KEY); } catch (_) {}
+    return sanitizeState(defaultState);
+  }
 }
 function saveState(){
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
@@ -109,21 +136,23 @@ function applyTheme(){
   $('meta[name="theme-color"]').setAttribute('content',colors[state.theme]||colors.dark);
 }
 function getItem(id){
-  const base = catalog.items.find(i => i.id === id) || state.customItems.find(i => i.id === id);
+  const base = (Array.isArray(catalog.items)?catalog.items:[]).find(i => i.id === id) || (Array.isArray(state.customItems)?state.customItems:[]).find(i => i.id === id);
   if (!base) return null;
   return { ...base, ...(state.catalogOverrides[id] || {}) };
 }
-function allItems(){ return [...catalog.items, ...state.customItems].map(i => ({...i,...(state.catalogOverrides[i.id]||{})})); }
-function getBuild(id){ return state.builds.find(b => b.id === id); }
+function allItems(){ const base=Array.isArray(catalog.items)?catalog.items:[]; const custom=Array.isArray(state.customItems)?state.customItems:[]; const overrides=state.catalogOverrides&&typeof state.catalogOverrides==='object'?state.catalogOverrides:{}; return [...base,...custom].filter(Boolean).map(i=>({...i,...(overrides[i.id]||{})})); }
+function getBuild(id){ return (Array.isArray(state.builds)?state.builds:[]).find(b => b.id === id); }
 function categoryName(group){ return catalog.categories[group]?.name || group; }
 function itemTypeName(type){ return typeLabels[type] || type; }
 function iconFor(group){ return categoryIcons[group] || '◇'; }
 function convertEUR(value){ return Number(value || 0) * (state.rates[state.currency] || 1); }
 function currencySymbol(){ return currencyMeta[state.currency]?.symbol || state.currency; }
 function money(valueEUR, compact=false){
-  const value = convertEUR(valueEUR);
-  const digits = state.currency==='RUB' || state.currency==='RSD' ? 0 : (value<100?2:0);
-  return new Intl.NumberFormat('ru-RU',{style:'currency',currency:state.currency,maximumFractionDigits:compact?0:digits,notation:compact&&Math.abs(value)>=100000?'compact':'standard'}).format(value);
+  const code=Object.prototype.hasOwnProperty.call(currencyMeta,state.currency)?state.currency:'RUB';
+  const value=Number(valueEUR||0)*(Number(state.rates[code])||1);
+  const digits=code==='RUB'||code==='RSD'?0:(Math.abs(value)<100?2:0);
+  try { return new Intl.NumberFormat('ru-RU',{style:'currency',currency:code,maximumFractionDigits:compact?0:digits,notation:compact&&Math.abs(value)>=100000?'compact':'standard'}).format(value); }
+  catch { return `${number(value,digits)} ${currencyMeta[code]?.symbol||code}`; }
 }
 function currencyOptions(selected=state.currency){
   return Object.entries(currencyMeta).map(([id,c])=>`<option value="${id}" ${selected===id?'selected':''}>${c.symbol} ${c.label}</option>`).join('');
@@ -303,21 +332,38 @@ function checkCompatibility(build, rows){
   return { percent:clamp(Math.round(100-bad*28-warn*7-(1-completeness)*18),0,100), issues };
 }
 
-async function init(){
-  applyTheme();
-  try {
-    const res = await fetch(`./catalog.json?v=${APP_VERSION}`,{cache:'no-store'});
+async function fetchJSONWithTimeout(url,timeout=9000){
+  const controller=typeof AbortController==='function'?new AbortController():null;
+  const timer=setTimeout(()=>controller?.abort(),timeout);
+  try{
+    const res=await fetch(url,{cache:'no-store',signal:controller?.signal});
     if(!res.ok) throw new Error(`HTTP ${res.status}`);
-    catalog = await res.json();
-  } catch (err) {
-    catalog = {categories:{pc:{name:'ПК'},sim:{name:'Автосим'},cinema:{name:'Домашний кинотеатр'},workspace:{name:'Рабочее место'},photo:{name:'Фотооборудование'},audio:{name:'Музыкальная система'}},items:[]};
-    toast('Каталог не загружен','Откройте проект через GitHub Pages или локальный HTTP-сервер. Пользовательские позиции доступны.','bad');
-  }
-  seedDemoBuilds();
+    const data=await res.json();
+    if(!data||!Array.isArray(data.items)||!data.categories) throw new Error('Некорректный каталог');
+    return data;
+  } finally { clearTimeout(timer); }
+}
+function fallbackCatalog(){
+  return {version:APP_VERSION,categories:{pc:{name:'ПК',accent:'#7c5cff'},sim:{name:'Автосим',accent:'#ff3b30'},cinema:{name:'Домашний кинотеатр',accent:'#0a84ff'},workspace:{name:'Рабочее место',accent:'#30d158'},photo:{name:'Фотооборудование',accent:'#ff9f0a'},audio:{name:'Музыкальная система',accent:'#bf5af2'}},items:[]};
+}
+async function init(){
   bindEvents();
-  renderAll();
-  registerServiceWorker();
   setupInstallPrompt();
+  applyTheme();
+  syncTopControls();
+  try {
+    try { catalog=await fetchJSONWithTimeout(`./catalog.min.json?v=${APP_VERSION}`,7000); }
+    catch (_) { catalog=await fetchJSONWithTimeout(`./catalog.json?v=${APP_VERSION}`,5000); }
+  } catch (err) {
+    catalog=fallbackCatalog();
+    setTimeout(()=>toast('Каталог временно недоступен','Интерфейс работает. Обновите страницу при стабильном соединении.','warn'),200);
+  }
+  state=sanitizeState(state);
+  seedDemoBuilds();
+  renderAll();
+  window.__SETUPLAB_READY__=true;
+  clearTimeout(window.__SETUPLAB_BOOT_WATCHDOG__);
+  registerServiceWorker();
 }
 
 function seedDemoBuilds(){
@@ -333,15 +379,17 @@ function seedDemoBuilds(){
   saveState();
 }
 
+function renderView(view){
+  if(view==='dashboard') renderDashboard();
+  else if(view==='builds') renderBuilds();
+  else if(view==='catalog') renderCatalog();
+  else if(view==='compare') renderCompare();
+  else if(view==='settings') renderSettings();
+}
 function renderAll(){
-  renderDashboard();
-  renderBuilds();
-  renderCompare();
-  renderSettings();
-  const catalogView=$('#view-catalog');
-  if(state.activeView==='catalog') renderCatalog();
-  else if(catalogView) catalogView.innerHTML='';
-  setActiveView(state.activeView,false);
+  const view=['dashboard','builds','catalog','compare','settings'].includes(state.activeView)?state.activeView:'dashboard';
+  renderView(view);
+  setActiveView(view,false,false);
   syncTopControls();
 }
 
@@ -350,13 +398,15 @@ function pageHead(eyebrow,title,description,actions=''){
 }
 
 function renderDashboard(){
-  const metrics = state.builds.map(b=>calculateBuild(b));
+  const builds=Array.isArray(state.builds)?state.builds:[];
+  const metrics = builds.map(b=>calculateBuild(b));
   const totalPortfolio = metrics.reduce((s,m)=>s+m.total,0);
   const avgScore = metrics.length ? Math.round(metrics.reduce((s,m)=>s+m.score,0)/metrics.length) : 0;
   const avgCompatibility = metrics.length ? Math.round(metrics.reduce((s,m)=>s+m.compatibility,0)/metrics.length) : 0;
   const bestValue = metrics.filter(m=>m.score).sort((a,b)=>a.pricePerPoint-b.pricePerPoint)[0];
-  const recent = [...state.builds].sort((a,b)=>(b.updatedAt||b.createdAt)-(a.updatedAt||a.createdAt)).slice(0,4);
-  const categories = Object.entries(catalog.categories).map(([id,c])=>{ const count=allItems().filter(i=>i.group===id).length; return `<button class="category-chip" data-action="new-build-group" data-group="${id}"><span>${iconFor(id)}</span><b>${escapeHTML(c.name)}</b><small>${count} позиций</small></button>`; }).join('');
+  const recent = [...builds].sort((a,b)=>(b.updatedAt||b.createdAt)-(a.updatedAt||a.createdAt)).slice(0,4);
+  const groupCounts=allItems().reduce((a,i)=>{a[i.group]=(a[i.group]||0)+1;return a;},{});
+  const categories = Object.entries(catalog.categories||{}).map(([id,c])=>{ const count=groupCounts[id]||0; return `<button class="category-chip" data-action="new-build-group" data-group="${id}"><span>${iconFor(id)}</span><b>${escapeHTML(c.name)}</b><small>${count} позиций</small></button>`; }).join('');
   $('#view-dashboard').innerHTML = `
     <section class="hero glass">
       <div class="hero-copy">
@@ -368,7 +418,7 @@ function renderDashboard(){
       <div class="hero-visual" aria-hidden="true"><div class="orbit"><span class="orbit-node">${iconFor('pc')}</span><span class="orbit-node">${iconFor('sim')}</span><span class="orbit-node">${iconFor('photo')}</span><span class="orbit-node">${iconFor('audio')}</span></div></div>
     </section>
     <div class="stats-grid">
-      <article class="stat-card"><small>Сохранено вариантов</small><strong>${state.builds.length}</strong><div class="trend">Локально и без аккаунта</div></article>
+      <article class="stat-card"><small>Сохранено вариантов</small><strong>${builds.length}</strong><div class="trend">Локально и без аккаунта</div></article>
       <article class="stat-card"><small>Стоимость портфеля</small><strong>${money(totalPortfolio,true)}</strong><div class="trend">По текущим ценам каталога</div></article>
       <article class="stat-card"><small>Средний балл</small><strong>${avgScore}/100</strong><div class="trend">С учётом полноты сборки</div></article>
       <article class="stat-card"><small>Совместимость</small><strong>${avgCompatibility}%</strong><div class="trend">Лучшее значение: ${bestValue?money(bestValue.pricePerPoint)+'/балл':'—'}</div></article>
@@ -486,19 +536,22 @@ function renderSettings(){
 }
 function themeCard(id,label){ return `<button class="theme-card ${state.theme===id?'active':''}" data-action="set-theme" data-theme="${id}"><span class="theme-preview ${id}"></span><b>${label}</b></button>`; }
 
-function setActiveView(view,save=true){
+function setActiveView(view,save=true,render=true){
   if(!document.getElementById(`view-${view}`)) view='dashboard';
-  state.activeView=view; if(save) saveState();
-  if(view==='catalog' && !$('#view-catalog').innerHTML.trim()) renderCatalog();
+  state.activeView=view;
+  if(save) saveState();
+  if(render) renderView(view);
   $$('.view').forEach(v=>v.classList.toggle('active',v.id===`view-${view}`));
   $$('[data-action="go"]').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
   $$('.bottom-nav button[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
   if(view==='catalog') hydrateImages();
   if(view==='compare') requestAnimationFrame(drawCompareChart);
-  window.scrollTo({top:0,behavior:'smooth'});
+  try { window.scrollTo({top:0,behavior:'auto'}); } catch (_) { window.scrollTo(0,0); }
 }
 
+let eventsBound=false;
 function bindEvents(){
+  if(eventsBound) return; eventsBound=true;
   document.addEventListener('click', async event=>{
     const target=event.target.closest('[data-action],#installButton,#quickTheme,#mobileAddBuild');
     if(!target) return;
@@ -839,7 +892,7 @@ async function submitRemoteCatalog(form){
 
 function resetApp(){
   if(!confirm('Удалить все локальные сборки, пользовательский каталог и настройки SetupLab?'))return;
-  localStorage.removeItem(STORAGE_KEY); state=deepClone(defaultState); applyTheme(); seedDemoBuilds(); renderAll(); toast('Локальные данные сброшены');
+  localStorage.removeItem(STORAGE_KEY); state=sanitizeState(defaultState); applyTheme(); seedDemoBuilds(); renderAll(); toast('Локальные данные сброшены');
 }
 
 function exportComparisonReport(){
@@ -891,7 +944,11 @@ function showInstallHelp(){
   openModal('Установка SetupLab','PWA',body);
 }
 function registerServiceWorker(){
-  if('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register(`./sw.js?v=${APP_VERSION}`,{updateViaCache:'none'}).then(reg=>reg.update()).catch(()=>{});
+  if(!('serviceWorker' in navigator)||!location.protocol.startsWith('http')) return;
+  navigator.serviceWorker.register(`./sw.js?v=${APP_VERSION}`,{updateViaCache:'none'}).then(reg=>{
+    if(reg.waiting) reg.waiting.postMessage({type:'SKIP_WAITING'});
+    reg.update().catch(()=>{});
+  }).catch(()=>{});
 }
 
 init();

@@ -10,10 +10,10 @@
   <meta name="format-detection" content="telephone=no">
   <meta name="color-scheme" content="dark light">
   <title>SetupLab — мастер конфигураций</title>
-  <link rel="manifest" href="manifest.webmanifest?v=1.3.0">
+  <link rel="manifest" href="manifest.webmanifest?v=1.3.1">
   <link rel="apple-touch-icon" href="icons/icon-180.png">
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=1.3.0">
+  <link rel="stylesheet" href="styles.css?v=1.3.1">
 </head>
 <body>
   <div class="ambient ambient-a"></div>
@@ -48,7 +48,13 @@
     </aside>
 
     <main class="content" id="mainContent">
-      <section class="view active" id="view-dashboard"></section>
+      <section class="view active" id="view-dashboard">
+        <div class="boot-screen" id="bootScreen" role="status" aria-live="polite">
+          <span class="boot-logo"><i></i><i></i><i></i></span>
+          <div><b>Запускаем SetupLab</b><small>Подготавливаем локальные данные и каталог…</small></div>
+          <span class="boot-spinner" aria-hidden="true"></span>
+        </div>
+      </section>
       <section class="view" id="view-builds"></section>
       <section class="view" id="view-catalog"></section>
       <section class="view" id="view-compare"></section>
@@ -77,6 +83,31 @@
   </template>
 
   <noscript>Для работы SetupLab требуется JavaScript.</noscript>
-  <script src="app.js?v=1.3.0" defer></script>
+<script>
+  (function(){
+    function recovery(message){
+      if(window.__SETUPLAB_READY__ || window.__SETUPLAB_RECOVERY_SHOWN__) return;
+      window.__SETUPLAB_RECOVERY_SHOWN__=true;
+      var host=document.getElementById('view-dashboard');
+      if(!host) return;
+      host.classList.add('active');
+      host.innerHTML='<section class="boot-recovery"><span class="boot-recovery-icon">!</span><h1>SetupLab не завершил запуск</h1><p>'+String(message||'Safari остановил загрузку данных приложения.')+'</p><div class="actions"><button class="primary" id="bootRetry">Повторить запуск</button><button class="secondary" id="bootRepair">Восстановить локально</button></div><small>Восстановление очищает только технический кэш. Сборки удаляются лишь при повреждении их локального формата.</small></section>';
+      var retry=document.getElementById('bootRetry');
+      if(retry) retry.onclick=function(){location.reload();};
+      var repair=document.getElementById('bootRepair');
+      if(repair) repair.onclick=async function(){
+        try{ if('caches' in window){var keys=await caches.keys();await Promise.all(keys.filter(function(k){return k.indexOf('setuplab')===0;}).map(function(k){return caches.delete(k);}));} }catch(e){}
+        try{ if('serviceWorker' in navigator){var regs=await navigator.serviceWorker.getRegistrations();await Promise.all(regs.map(function(r){return r.unregister();}));} }catch(e){}
+        try{ var raw=localStorage.getItem('setuplab.state.v1'); if(raw){JSON.parse(raw);} }catch(e){try{localStorage.removeItem('setuplab.state.v1');}catch(_){} }
+        location.replace(location.pathname+'?repair=1&v=1.3.1');
+      };
+    }
+    window.__SETUPLAB_SHOW_RECOVERY__=recovery;
+    window.addEventListener('error',function(e){recovery(e && e.message ? 'Ошибка запуска: '+e.message : 'Ошибка запуска приложения.');});
+    window.addEventListener('unhandledrejection',function(){recovery('Не удалось завершить загрузку данных.');});
+    window.__SETUPLAB_BOOT_WATCHDOG__=setTimeout(function(){recovery('Загрузка заняла слишком много времени. Проверьте соединение или восстановите технический кэш.');},15000);
+  })();
+  </script>
+  <script src="app.js?v=1.3.1" defer></script>
 </body>
 </html>

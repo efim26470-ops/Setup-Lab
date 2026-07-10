@@ -786,3 +786,27 @@ html[data-theme="titanium"] .brand-mark i { background:#16191e; }
     contain-intrinsic-size:420px;
   }
 }
+
+/* v1.3.1 — iPhone boot reliability */
+.boot-screen{
+  min-height:clamp(360px,64vh,700px);display:flex;align-items:center;justify-content:center;gap:14px;
+  color:var(--muted);padding:30px;text-align:left
+}
+.boot-screen b{display:block;color:var(--text);font-size:17px;margin-bottom:4px}.boot-screen small{display:block;font-size:12px}
+.boot-logo{width:48px;height:48px;border-radius:15px;border:1px solid var(--line);background:var(--panel-solid);display:grid;place-content:center;gap:5px;box-shadow:var(--shadow)}
+.boot-logo i{display:block;width:23px;height:3px;border-radius:4px;background:var(--text);position:relative}.boot-logo i:after{content:"";position:absolute;width:7px;height:7px;border-radius:50%;background:var(--accent);top:50%;transform:translateY(-50%)}
+.boot-logo i:nth-child(1):after{left:3px}.boot-logo i:nth-child(2):after{right:3px}.boot-logo i:nth-child(3):after{left:9px}
+.boot-spinner{width:20px;height:20px;border:2px solid var(--line-strong);border-top-color:var(--accent);border-radius:50%;animation:bootSpin .8s linear infinite}
+@keyframes bootSpin{to{transform:rotate(360deg)}}
+.boot-recovery{max-width:620px;margin:clamp(50px,12vh,140px) auto;padding:28px;border:1px solid var(--line);border-radius:24px;background:var(--panel-solid);box-shadow:var(--shadow);text-align:center}
+.boot-recovery-icon{display:grid;place-items:center;width:46px;height:46px;margin:0 auto 16px;border-radius:14px;background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn);font-weight:900;font-size:22px}.boot-recovery h1{font-size:27px}.boot-recovery p,.boot-recovery small{color:var(--muted);line-height:1.55}.boot-recovery .actions{justify-content:center;margin:20px 0 14px}
+@media(max-width:780px){
+  body{background:linear-gradient(160deg,var(--bg),var(--bg-2));background-attachment:scroll}
+  .ambient{display:none!important}
+  .glass{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:var(--panel-solid)}
+  .view{animation:none}
+  .content{min-height:calc(100dvh - 170px)}
+  .boot-screen{min-height:calc(100dvh - 190px);padding:24px 14px;flex-wrap:wrap;text-align:center}
+  .boot-screen>div{width:100%;order:3}.boot-spinner{position:absolute;margin-top:110px}
+  .boot-recovery{margin:34px 0;padding:22px 18px}.boot-recovery .actions{display:grid}.boot-recovery .actions>*{width:100%}
+}
