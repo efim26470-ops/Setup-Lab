@@ -1,11 +1,11 @@
 'use strict';
 
 const STORAGE_KEY = 'setuplab.state.v1';
-const APP_VERSION = '1.3.1';
+const APP_VERSION = '1.3.2';
 const categoryIcons = { pc:'⌨', sim:'◉', cinema:'▰', workspace:'▦', photo:'◍', audio:'♫' };
 const typeLabels = {
   cpu:'Процессор', gpu:'Видеокарта', motherboard:'Материнская плата', ram:'Память', storage:'Накопитель', psu:'Блок питания', case:'Корпус', cooler:'Охлаждение',
-  wheelbase:'Рулевая база', wheel:'Руль', pedals:'Педали', cockpit:'Кокпит', shifter:'Шифтер', handbrake:'Ручной тормоз', dashboard:'Телеметрия и панели',
+  wheelbase:'Рулевая база', wheel:'Руль', pedals:'Педали', cockpit:'Кокпит', shifter:'Шифтер', handbrake:'Ручной тормоз', dashboard:'Телеметрия и панели', accessory:'Аксессуар и крепление',
   display:'Телевизор', projector:'Проектор', receiver:'AV-ресивер', speakers:'Акустика', soundbar:'Саундбар', subwoofer:'Сабвуфер', source:'Источник', screen:'Экран',
   monitor:'Монитор', desk:'Стол', chair:'Кресло', keyboard:'Клавиатура', mouse:'Мышь', dock:'Док-станция', lighting:'Свет', monitorarm:'Кронштейн', webcam:'Веб-камера',
   camera:'Камера', lens:'Объектив', gimbal:'Стабилизатор', flash:'Вспышка', tripod:'Штатив',
@@ -21,7 +21,7 @@ const essentialTypes = {
 };
 const typeWeights = {
   cpu:1.25,gpu:1.5,motherboard:.8,ram:.75,storage:.65,psu:.55,case:.45,cooler:.55,
-  wheelbase:1.5,wheel:.9,pedals:1.2,cockpit:1.0,shifter:.45,handbrake:.4,dashboard:.35,
+  wheelbase:1.5,wheel:.9,pedals:1.2,cockpit:1.0,shifter:.45,handbrake:.4,dashboard:.35,accessory:.18,
   display:1.4,projector:1.4,receiver:1.1,speakers:1.3,soundbar:1.1,subwoofer:.8,source:.5,screen:.55,
   monitor:1.4,desk:1.0,chair:1.2,keyboard:.55,mouse:.55,dock:.7,lighting:.45,monitorarm:.4,webcam:.45,
   camera:1.5,lens:1.5,gimbal:.7,flash:.55,tripod:.5,

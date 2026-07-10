@@ -1,5 +1,5 @@
 {
-  "version": "1.3.1",
+  "version": "1.3.2",
   "updated": "2026-07-10",
   "currency": "EUR",
   "categories": {
@@ -3646,15 +3646,16 @@
       "group": "sim",
       "type": "wheelbase",
       "brand": "MOZA Racing",
-      "name": "R12 Direct Drive",
-      "priceEUR": 610,
-      "score": 90,
-      "upgrade": 90,
+      "name": "R12 V2 Direct Drive",
+      "priceEUR": 419,
+      "score": 92,
+      "upgrade": 95,
       "futureAnnualEUR": 12,
-      "powerW": 120,
+      "powerW": 240,
       "specs": {
         "Момент": "12 Н·м",
-        "Тип": "Direct Drive",
+        "Энкодер": "21 бит",
+        "Привод": "Direct Drive",
         "Экосистема": "MOZA"
       },
       "compatibility": {
@@ -3663,14 +3664,16 @@
       },
       "imageQuery": "MOZA Racing R12 Direct Drive product photo",
       "updated": "2026-07-10",
-      "sourceNote": "Стартовая оценка. Цена и характеристики редактируются пользователем.",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
       "purchase": {
-        "market": "https://market.yandex.ru/search?text=MOZA+Racing+R12+Direct+Drive",
-        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+R12+Direct+Drive"
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+R12+V2+Direct+Drive",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+R12+V2+Direct+Drive",
+        "official": "https://eu.mozaracing.com/products/r12-wheelbase"
       },
-      "priceBasis": "estimate",
+      "priceBasis": "market",
       "priceChecked": "2026-07-10",
-      "description": "MOZA Racing R12 Direct Drive — рулевая база прямого привода с ключевыми параметрами: 12 Н·м; Direct Drive. Модель флагманского класса с оценкой 90/100 и запасом апгрейда 90%."
+      "description": "MOZA R12 V2 — база Direct Drive на 12 Н·м с 21-битным энкодером, NexGen 4.0 и поддержкой iRacing 360 Hz. Универсальный вариант для GT, формул, ралли и длительных заездов.",
+      "priceReferenceUrl": "https://eu.mozaracing.com/products/r12-wheelbase"
     },
     {
       "id": "sim-wheelbase-moza-racing-r16-v2-direct-drive",
@@ -3801,15 +3804,16 @@
       "group": "sim",
       "type": "wheelbase",
       "brand": "MOZA Racing",
-      "name": "R9 Direct Drive",
-      "priceEUR": 349,
-      "score": 82,
-      "upgrade": 88,
+      "name": "R9 V3 Direct Drive",
+      "priceEUR": 319,
+      "score": 88,
+      "upgrade": 94,
       "futureAnnualEUR": 10,
-      "powerW": 75,
+      "powerW": 180,
       "specs": {
         "Момент": "9 Н·м",
-        "Тип": "Direct Drive",
+        "Энкодер": "21 бит",
+        "Привод": "Direct Drive",
         "Экосистема": "MOZA"
       },
       "compatibility": {
@@ -3818,15 +3822,16 @@
       },
       "imageQuery": "MOZA Racing R9 Direct Drive product photo",
       "updated": "2026-07-10",
-      "sourceNote": "Рыночный ориентир на 10.07.2026; ранее 470 EUR. Проверяйте актуальное предложение по ссылкам магазина.",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
       "purchase": {
-        "market": "https://market.yandex.ru/search?text=MOZA+Racing+R9+Direct+Drive",
-        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+R9+Direct+Drive"
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+R9+V3+Direct+Drive",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+R9+V3+Direct+Drive",
+        "official": "https://eu.mozaracing.com/products/r9-wheelbase"
       },
       "priceBasis": "market",
       "priceChecked": "2026-07-10",
-      "priceReferenceUrl": "https://www.idealo.de/preisvergleich/OffersOfProduct/206144362_-r9-v3-wheel-base-moza-racing.html",
-      "description": "MOZA Racing R9 Direct Drive — рулевая база прямого привода с ключевыми параметрами: 9 Н·м; Direct Drive. Модель высокого класса с оценкой 82/100 и запасом апгрейда 88%."
+      "priceReferenceUrl": "https://eu.mozaracing.com/products/r9-wheelbase",
+      "description": "MOZA R9 V3 — компактная рулевая база Direct Drive на 9 Н·м с 21-битным энкодером и актуальной проводной экосистемой. Подходит для серьёзного домашнего автосима и кокпитов среднего класса."
     },
     {
       "id": "sim-wheelbase-simagic-alpha-15-nm",
@@ -4198,7 +4203,7 @@
       "type": "wheel",
       "brand": "MOZA Racing",
       "name": "CS V2P Steering Wheel",
-      "priceEUR": 300,
+      "priceEUR": 249,
       "score": 82,
       "upgrade": 88,
       "futureAnnualEUR": 0,
@@ -4213,14 +4218,16 @@
       },
       "imageQuery": "MOZA Racing CS V2P Steering Wheel product photo",
       "updated": "2026-07-10",
-      "sourceNote": "Официальный каталог производителя. Цена — редактируемая ориентировочная оценка.",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
       "purchase": {
         "market": "https://market.yandex.ru/search?text=MOZA+Racing+CS+V2P+Steering+Wheel",
-        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+CS+V2P+Steering+Wheel"
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+CS+V2P+Steering+Wheel",
+        "official": "https://eu.mozaracing.com/products/cs-v2p-wheel"
       },
-      "priceBasis": "estimate",
+      "priceBasis": "market",
       "priceChecked": "2026-07-10",
-      "description": "MOZA Racing CS V2P Steering Wheel — руль для симрейсинга с ключевыми параметрами: 330 мм; MOZA. Модель высокого класса с оценкой 82/100 и запасом апгрейда 88%."
+      "description": "MOZA Racing CS V2P Steering Wheel — руль для симрейсинга с ключевыми параметрами: 330 мм; MOZA. Модель высокого класса с оценкой 82/100 и запасом апгрейда 88%.",
+      "priceReferenceUrl": "https://eu.mozaracing.com/products/cs-v2p-wheel"
     },
     {
       "id": "sim-wheel-moza-racing-fsr2-formula-wheel",
@@ -4228,7 +4235,7 @@
       "type": "wheel",
       "brand": "MOZA Racing",
       "name": "FSR2 Formula Wheel",
-      "priceEUR": 650,
+      "priceEUR": 699,
       "score": 97,
       "upgrade": 92,
       "futureAnnualEUR": 0,
@@ -4243,14 +4250,16 @@
       },
       "imageQuery": "MOZA Racing FSR2 Formula Wheel product photo",
       "updated": "2026-07-10",
-      "sourceNote": "Официальный каталог производителя. Цена — редактируемая ориентировочная оценка.",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
       "purchase": {
         "market": "https://market.yandex.ru/search?text=MOZA+Racing+FSR2+Formula+Wheel",
-        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+FSR2+Formula+Wheel"
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+FSR2+Formula+Wheel",
+        "official": "https://eu.mozaracing.com/products/fsr2-formula-wheel"
       },
-      "priceBasis": "estimate",
+      "priceBasis": "market",
       "priceChecked": "2026-07-10",
-      "description": "MOZA Racing FSR2 Formula Wheel — руль для симрейсинга с ключевыми параметрами: 280 мм; MOZA. Модель флагманского класса с оценкой 97/100 и запасом апгрейда 92%."
+      "description": "MOZA Racing FSR2 Formula Wheel — руль для симрейсинга с ключевыми параметрами: 280 мм; MOZA. Модель флагманского класса с оценкой 97/100 и запасом апгрейда 92%.",
+      "priceReferenceUrl": "https://eu.mozaracing.com/products/fsr2-formula-wheel"
     },
     {
       "id": "sim-wheel-moza-racing-gs-v2p-gt-wheel",
@@ -4318,7 +4327,7 @@
       "type": "wheel",
       "brand": "MOZA Racing",
       "name": "RS V2 Steering Wheel",
-      "priceEUR": 450,
+      "priceEUR": 399,
       "score": 88,
       "upgrade": 87,
       "futureAnnualEUR": 0,
@@ -4333,14 +4342,16 @@
       },
       "imageQuery": "MOZA Racing RS V2 Steering Wheel product photo",
       "updated": "2026-07-10",
-      "sourceNote": "Официальный каталог производителя. Цена — редактируемая ориентировочная оценка.",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
       "purchase": {
         "market": "https://market.yandex.ru/search?text=MOZA+Racing+RS+V2+Steering+Wheel",
-        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+RS+V2+Steering+Wheel"
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+RS+V2+Steering+Wheel",
+        "official": "https://eu.mozaracing.com/products/rs-v2-wheel"
       },
-      "priceBasis": "estimate",
+      "priceBasis": "market",
       "priceChecked": "2026-07-10",
-      "description": "MOZA Racing RS V2 Steering Wheel — руль для симрейсинга с ключевыми параметрами: 330 мм; MOZA. Модель высокого класса с оценкой 88/100 и запасом апгрейда 87%."
+      "description": "MOZA Racing RS V2 Steering Wheel — руль для симрейсинга с ключевыми параметрами: 330 мм; MOZA. Модель высокого класса с оценкой 88/100 и запасом апгрейда 87%.",
+      "priceReferenceUrl": "https://eu.mozaracing.com/products/rs-v2-wheel"
     },
     {
       "id": "sim-wheel-moza-racing-vision-gs-wheel",
@@ -4348,7 +4359,7 @@
       "type": "wheel",
       "brand": "MOZA Racing",
       "name": "Vision GS Wheel",
-      "priceEUR": 720,
+      "priceEUR": 769,
       "score": 96,
       "upgrade": 90,
       "futureAnnualEUR": 0,
@@ -4363,14 +4374,16 @@
       },
       "imageQuery": "MOZA Racing Vision GS Wheel product photo",
       "updated": "2026-07-10",
-      "sourceNote": "Официальный каталог производителя. Цена — редактируемая ориентировочная оценка.",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
       "purchase": {
         "market": "https://market.yandex.ru/search?text=MOZA+Racing+Vision+GS+Wheel",
-        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+Vision+GS+Wheel"
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+Vision+GS+Wheel",
+        "official": "https://eu.mozaracing.com/products/vision-gs-wheel"
       },
-      "priceBasis": "estimate",
+      "priceBasis": "market",
       "priceChecked": "2026-07-10",
-      "description": "MOZA Racing Vision GS Wheel — руль для симрейсинга с ключевыми параметрами: 310 мм; MOZA. Модель флагманского класса с оценкой 96/100 и запасом апгрейда 90%."
+      "description": "MOZA Racing Vision GS Wheel — руль для симрейсинга с ключевыми параметрами: 310 мм; MOZA. Модель флагманского класса с оценкой 96/100 и запасом апгрейда 90%.",
+      "priceReferenceUrl": "https://eu.mozaracing.com/products/vision-gs-wheel"
     },
     {
       "id": "sim-wheel-simagic-fx-pro-formula-wheel",
@@ -4745,7 +4758,7 @@
       "type": "pedals",
       "brand": "MOZA Racing",
       "name": "CRP2 Load Cell Pedals",
-      "priceEUR": 460,
+      "priceEUR": 399,
       "score": 90,
       "upgrade": 88,
       "futureAnnualEUR": 15,
@@ -4761,14 +4774,16 @@
       },
       "imageQuery": "MOZA Racing CRP2 Load Cell Pedals product photo",
       "updated": "2026-07-10",
-      "sourceNote": "Стартовая оценка. Цена и характеристики редактируются пользователем.",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
       "purchase": {
         "market": "https://market.yandex.ru/search?text=MOZA+Racing+CRP2+Load+Cell+Pedals",
-        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+CRP2+Load+Cell+Pedals"
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+CRP2+Load+Cell+Pedals",
+        "official": "https://eu.mozaracing.com/products/crp2-pedals"
       },
-      "priceBasis": "estimate",
+      "priceBasis": "market",
       "priceChecked": "2026-07-10",
-      "description": "MOZA Racing CRP2 Load Cell Pedals — педальный комплект с ключевыми параметрами: Load Cell; 2. Модель флагманского класса с оценкой 90/100 и запасом апгрейда 88%."
+      "description": "MOZA Racing CRP2 Load Cell Pedals — педальный комплект с ключевыми параметрами: Load Cell; 2. Модель флагманского класса с оценкой 90/100 и запасом апгрейда 88%.",
+      "priceReferenceUrl": "https://eu.mozaracing.com/products/crp2-pedals"
     },
     {
       "id": "sim-pedals-moza-racing-crp2-pedals-clutch",
@@ -4776,7 +4791,7 @@
       "type": "pedals",
       "brand": "MOZA Racing",
       "name": "CRP2 Pedals + Clutch",
-      "priceEUR": 520,
+      "priceEUR": 508,
       "score": 91,
       "upgrade": 91,
       "futureAnnualEUR": 0,
@@ -4792,24 +4807,26 @@
       },
       "imageQuery": "MOZA Racing CRP2 Pedals + Clutch product photo",
       "updated": "2026-07-10",
-      "sourceNote": "Официальный каталог производителя. Цена — редактируемая ориентировочная оценка.",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
       "purchase": {
         "market": "https://market.yandex.ru/search?text=MOZA+Racing+CRP2+Pedals+%2B+Clutch",
-        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+CRP2+Pedals+%2B+Clutch"
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+CRP2+Pedals+%2B+Clutch",
+        "official": "https://eu.mozaracing.com/products/crp2-pedals"
       },
-      "priceBasis": "estimate",
+      "priceBasis": "market",
       "priceChecked": "2026-07-10",
-      "description": "MOZA Racing CRP2 Pedals + Clutch — педальный комплект с ключевыми параметрами: Load Cell; USB / экосистема. Модель флагманского класса с оценкой 91/100 и запасом апгрейда 91%."
+      "description": "MOZA Racing CRP2 Pedals + Clutch — педальный комплект с ключевыми параметрами: Load Cell; USB / экосистема. Модель флагманского класса с оценкой 91/100 и запасом апгрейда 91%.",
+      "priceReferenceUrl": "https://eu.mozaracing.com/products/crp2-pedals"
     },
     {
       "id": "sim-pedals-moza-racing-mbooster-active-pedal-set",
       "group": "sim",
       "type": "pedals",
       "brand": "MOZA Racing",
-      "name": "mBooster Active Pedal Set",
-      "priceEUR": 1180,
-      "score": 98,
-      "upgrade": 94,
+      "name": "mBooster Active Pedal",
+      "priceEUR": 799,
+      "score": 99,
+      "upgrade": 95,
       "futureAnnualEUR": 0,
       "powerW": 4,
       "specs": {
@@ -4823,14 +4840,16 @@
       },
       "imageQuery": "MOZA Racing mBooster Active Pedal Set product photo",
       "updated": "2026-07-10",
-      "sourceNote": "Официальный каталог производителя. Цена — редактируемая ориентировочная оценка.",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
       "purchase": {
-        "market": "https://market.yandex.ru/search?text=MOZA+Racing+mBooster+Active+Pedal+Set",
-        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+mBooster+Active+Pedal+Set"
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+mBooster+Active+Pedal",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+mBooster+Active+Pedal",
+        "official": "https://eu.mozaracing.com/products/mbooster-active-pedals"
       },
-      "priceBasis": "estimate",
+      "priceBasis": "market",
       "priceChecked": "2026-07-10",
-      "description": "MOZA Racing mBooster Active Pedal Set — педальный комплект с ключевыми параметрами: Active Force; USB / экосистема. Модель флагманского класса с оценкой 98/100 и запасом апгрейда 94%."
+      "description": "MOZA Racing mBooster Active Pedal Set — педальный комплект с ключевыми параметрами: Active Force; USB / экосистема. Модель флагманского класса с оценкой 98/100 и запасом апгрейда 94%.",
+      "priceReferenceUrl": "https://eu.mozaracing.com/products/mbooster-active-pedals"
     },
     {
       "id": "sim-pedals-moza-racing-sr-p-pedals-clutch",
@@ -4838,7 +4857,7 @@
       "type": "pedals",
       "brand": "MOZA Racing",
       "name": "SR-P Pedals + Clutch",
-      "priceEUR": 220,
+      "priceEUR": 189,
       "score": 72,
       "upgrade": 83,
       "futureAnnualEUR": 0,
@@ -4854,14 +4873,16 @@
       },
       "imageQuery": "MOZA Racing SR-P Pedals + Clutch product photo",
       "updated": "2026-07-10",
-      "sourceNote": "Официальный каталог производителя. Цена — редактируемая ориентировочная оценка.",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
       "purchase": {
         "market": "https://market.yandex.ru/search?text=MOZA+Racing+SR-P+Pedals+%2B+Clutch",
-        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+SR-P+Pedals+%2B+Clutch"
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+SR-P+Pedals+%2B+Clutch",
+        "official": "https://eu.mozaracing.com/products/srp-pedals"
       },
-      "priceBasis": "estimate",
+      "priceBasis": "market",
       "priceChecked": "2026-07-10",
-      "description": "MOZA Racing SR-P Pedals + Clutch — педальный комплект с ключевыми параметрами: Load Cell; USB / экосистема. Модель среднего класса с оценкой 72/100 и запасом апгрейда 83%."
+      "description": "MOZA Racing SR-P Pedals + Clutch — педальный комплект с ключевыми параметрами: Load Cell; USB / экосистема. Модель среднего класса с оценкой 72/100 и запасом апгрейда 83%.",
+      "priceReferenceUrl": "https://eu.mozaracing.com/products/srp-pedals"
     },
     {
       "id": "sim-pedals-simagic-p1000-modular-pedals",
@@ -5504,7 +5525,7 @@
       "type": "shifter",
       "brand": "MOZA Racing",
       "name": "HGP Shifter",
-      "priceEUR": 160,
+      "priceEUR": 159,
       "score": 78,
       "upgrade": 80,
       "futureAnnualEUR": 5,
@@ -5519,14 +5540,16 @@
       },
       "imageQuery": "MOZA Racing HGP Shifter product photo",
       "updated": "2026-07-10",
-      "sourceNote": "Стартовая оценка. Цена и характеристики редактируются пользователем.",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
       "purchase": {
         "market": "https://market.yandex.ru/search?text=MOZA+Racing+HGP+Shifter",
-        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+HGP+Shifter"
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+HGP+Shifter",
+        "official": "https://eu.mozaracing.com/products/hgp-shifter"
       },
-      "priceBasis": "estimate",
+      "priceBasis": "market",
       "priceChecked": "2026-07-10",
-      "description": "MOZA Racing HGP Shifter — симрейсинговый шифтер с ключевыми параметрами: 7 + R; USB / MOZA. Модель высокого класса с оценкой 78/100 и запасом апгрейда 80%."
+      "description": "MOZA Racing HGP Shifter — симрейсинговый шифтер с ключевыми параметрами: 7 + R; USB / MOZA. Модель высокого класса с оценкой 78/100 и запасом апгрейда 80%.",
+      "priceReferenceUrl": "https://eu.mozaracing.com/products/hgp-shifter"
     },
     {
       "id": "sim-shifter-shh-thorn-shifter",
@@ -5689,7 +5712,7 @@
       "type": "handbrake",
       "brand": "MOZA Racing",
       "name": "HBP Handbrake",
-      "priceEUR": 110,
+      "priceEUR": 109,
       "score": 78,
       "upgrade": 85,
       "futureAnnualEUR": 0,
@@ -5705,14 +5728,16 @@
       },
       "imageQuery": "MOZA Racing HBP Handbrake product photo",
       "updated": "2026-07-10",
-      "sourceNote": "Официальный каталог производителя. Цена — редактируемая ориентировочная оценка.",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
       "purchase": {
         "market": "https://market.yandex.ru/search?text=MOZA+Racing+HBP+Handbrake",
-        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+HBP+Handbrake"
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+HBP+Handbrake",
+        "official": "https://eu.mozaracing.com/products/hbp-handbrake"
       },
-      "priceBasis": "estimate",
+      "priceBasis": "market",
       "priceChecked": "2026-07-10",
-      "description": "MOZA Racing HBP Handbrake — симрейсинговый ручной тормоз с ключевыми параметрами: Hall / Load Cell; USB / экосистема. Модель высокого класса с оценкой 78/100 и запасом апгрейда 85%."
+      "description": "MOZA Racing HBP Handbrake — симрейсинговый ручной тормоз с ключевыми параметрами: Hall / Load Cell; USB / экосистема. Модель высокого класса с оценкой 78/100 и запасом апгрейда 85%.",
+      "priceReferenceUrl": "https://eu.mozaracing.com/products/hbp-handbrake"
     },
     {
       "id": "sim-handbrake-simagic-tb-1-handbrake",
@@ -17927,7 +17952,7 @@
       "type": "wheel",
       "brand": "MOZA Racing",
       "name": "ESX Steering Wheel",
-      "priceEUR": 159,
+      "priceEUR": 139,
       "score": 57,
       "upgrade": 72,
       "futureAnnualEUR": 0,
@@ -17942,10 +17967,16 @@
       },
       "imageQuery": "MOZA Racing ESX Steering Wheel product photo",
       "updated": "2026-07-10",
-      "priceBasis": "estimate",
+      "priceBasis": "market",
       "priceChecked": "2026-07-10",
-      "sourceNote": "Ориентировочная цена каталога. Перед покупкой проверьте актуальное предложение и совместимость.",
-      "description": "MOZA Racing ESX Steering Wheel — руль для симрейсинга с ключевыми параметрами: 280 мм; GT. Модель начального класса с оценкой 57/100 и запасом апгрейда 72%."
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "description": "MOZA Racing ESX Steering Wheel — руль для симрейсинга с ключевыми параметрами: 280 мм; GT. Модель начального класса с оценкой 57/100 и запасом апгрейда 72%.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+ESX+Steering+Wheel",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+ESX+Steering+Wheel",
+        "official": "https://eu.mozaracing.com/products/esx-steering-wheel"
+      },
+      "priceReferenceUrl": "https://eu.mozaracing.com/products/esx-steering-wheel"
     },
     {
       "id": "v13-sim-wheel-thrustmaster-hypercar-wheel-add-on",
@@ -18306,10 +18337,16 @@
       },
       "imageQuery": "MOZA Racing SGP Sequential Shifter product photo",
       "updated": "2026-07-10",
-      "priceBasis": "estimate",
+      "priceBasis": "market",
       "priceChecked": "2026-07-10",
-      "sourceNote": "Ориентировочная цена каталога. Перед покупкой проверьте актуальное предложение и совместимость.",
-      "description": "MOZA Racing SGP Sequential Shifter — симрейсинговый шифтер с ключевыми параметрами: Sequential; Металл. Модель среднего класса с оценкой 63/100 и запасом апгрейда 72%."
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "description": "MOZA Racing SGP Sequential Shifter — симрейсинговый шифтер с ключевыми параметрами: Sequential; Металл. Модель среднего класса с оценкой 63/100 и запасом апгрейда 72%.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+SGP+Sequential+Shifter",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+SGP+Sequential+Shifter",
+        "official": "https://eu.mozaracing.com/products/sgp-shifter"
+      },
+      "priceReferenceUrl": "https://eu.mozaracing.com/products/sgp-shifter"
     },
     {
       "id": "v13-sim-handbrake-vnm-simulation-handbrake-v1-5",
@@ -18447,7 +18484,7 @@
       "type": "dashboard",
       "brand": "MOZA Racing",
       "name": "Multi-function Stalks",
-      "priceEUR": 199,
+      "priceEUR": 215,
       "score": 66,
       "upgrade": 76,
       "futureAnnualEUR": 0,
@@ -18462,10 +18499,16 @@
       },
       "imageQuery": "MOZA Racing Multi-function Stalks product photo",
       "updated": "2026-07-10",
-      "priceBasis": "estimate",
+      "priceBasis": "market",
       "priceChecked": "2026-07-10",
-      "sourceNote": "Ориентировочная цена каталога. Перед покупкой проверьте актуальное предложение и совместимость.",
-      "description": "MOZA Racing Multi-function Stalks — панель телеметрии и управления с ключевыми параметрами: Повороты / свет / дворники; MOZA. Модель среднего класса с оценкой 66/100 и запасом апгрейда 76%."
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "description": "MOZA Racing Multi-function Stalks — панель телеметрии и управления с ключевыми параметрами: Повороты / свет / дворники; MOZA. Модель среднего класса с оценкой 66/100 и запасом апгрейда 76%.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+Multi-function+Stalks",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+Multi-function+Stalks",
+        "official": "https://eu.mozaracing.com/search?q=Multi-function+Stalks"
+      },
+      "priceReferenceUrl": "https://eu.mozaracing.com/search?q=Multi-function+Stalks"
     },
     {
       "id": "v13-cinema-display-lg-oled-evo-c5-42",
@@ -21445,8 +21488,1081 @@
       "priceChecked": "2026-07-10",
       "sourceNote": "Ориентировочная цена каталога. Перед покупкой проверьте актуальное предложение и совместимость.",
       "description": "Bluesound Node Icon — источник сигнала с ключевыми параметрами: Dual-Mono ESS; 5″. Модель высокого класса с оценкой 84/100 и запасом апгрейда 86%."
+    },
+    {
+      "id": "v132-sim-wheelbase-moza-r21-ultra",
+      "group": "sim",
+      "type": "wheelbase",
+      "brand": "MOZA Racing",
+      "name": "R21 Ultra Direct Drive",
+      "priceEUR": 799,
+      "score": 98,
+      "upgrade": 96,
+      "futureAnnualEUR": 0,
+      "powerW": 360,
+      "specs": {
+        "Момент": "21 Н·м sustained",
+        "Энкодер": "21 бит",
+        "Мощность": "360 Вт",
+        "Привод": "Direct Drive"
+      },
+      "compatibility": {
+        "ecosystem": "MOZA",
+        "torqueNm": 21
+      },
+      "imageQuery": "MOZA Racing R21 Ultra Direct Drive official product photo",
+      "updated": "2026-07-10",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+R21+Ultra+Direct+Drive",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+R21+Ultra+Direct+Drive",
+        "official": "https://eu.mozaracing.com/products/r21-ultra"
+      },
+      "priceBasis": "market",
+      "priceChecked": "2026-07-10",
+      "priceReferenceUrl": "https://eu.mozaracing.com/products/r21-ultra",
+      "description": "MOZA R21 Ultra — профессиональная рулевая база Direct Drive. Выдаёт стабильные 21 Н·м, использует плоскообмоточный мотор без коггинга и 21-битный энкодер. Оценка 98/100; апгрейдность 96% благодаря совместимости с экосистемой MOZA и возможности расширения конфигурации."
+    },
+    {
+      "id": "v132-sim-wheelbase-moza-r25-ultra",
+      "group": "sim",
+      "type": "wheelbase",
+      "brand": "MOZA Racing",
+      "name": "R25 Ultra True Torque",
+      "priceEUR": 999,
+      "score": 100,
+      "upgrade": 97,
+      "futureAnnualEUR": 0,
+      "powerW": 378,
+      "specs": {
+        "Момент": "25 Н·м sustained",
+        "Датчик": "True Torque 2 кГц",
+        "Энкодер": "21 бит",
+        "Мощность": "378 Вт"
+      },
+      "compatibility": {
+        "ecosystem": "MOZA",
+        "torqueNm": 25
+      },
+      "imageQuery": "MOZA Racing R25 Ultra True Torque official product photo",
+      "updated": "2026-07-10",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+R25+Ultra+True+Torque",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+R25+Ultra+True+Torque",
+        "official": "https://eu.mozaracing.com/products/r25-ultra"
+      },
+      "priceBasis": "market",
+      "priceChecked": "2026-07-10",
+      "priceReferenceUrl": "https://eu.mozaracing.com/products/r25-ultra",
+      "description": "MOZA R25 Ultra — флагманская рулевая база Direct Drive. Стабильные 25 Н·м, встроенный датчик реального момента и высокочастотное измерение обеспечивают точную и повторяемую обратную связь. Оценка 100/100; апгрейдность 97% благодаря совместимости с экосистемой MOZA и возможности расширения конфигурации."
+    },
+    {
+      "id": "v132-sim-wheel-moza-ks-pro",
+      "group": "sim",
+      "type": "wheel",
+      "brand": "MOZA Racing",
+      "name": "KS Pro Steering Wheel",
+      "priceEUR": 349,
+      "score": 94,
+      "upgrade": 96,
+      "futureAnnualEUR": 0,
+      "powerW": 4,
+      "specs": {
+        "Диаметр": "300 мм",
+        "Дисплей": "2,99″ HD",
+        "Формат": "GT / Formula",
+        "Подсветка": "RGB telemetry"
+      },
+      "compatibility": {
+        "ecosystem": "MOZA"
+      },
+      "imageQuery": "MOZA Racing KS Pro Steering Wheel official product photo",
+      "updated": "2026-07-10",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+KS+Pro+Steering+Wheel",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+KS+Pro+Steering+Wheel",
+        "official": "https://eu.mozaracing.com/products/ks-pro-wheel"
+      },
+      "priceBasis": "market",
+      "priceChecked": "2026-07-10",
+      "priceReferenceUrl": "https://eu.mozaracing.com/products/ks-pro-wheel",
+      "description": "MOZA KS Pro — профессиональный GT/Formula-руль. Лёгкий 300-мм корпус, настраиваемый экран, магнитные лепестки, RGB-индикация флагов и оборотов. Оценка 94/100; апгрейдность 96% благодаря совместимости с экосистемой MOZA и возможности расширения конфигурации."
+    },
+    {
+      "id": "v132-sim-wheel-moza-cs-pro",
+      "group": "sim",
+      "type": "wheel",
+      "brand": "MOZA Racing",
+      "name": "CS Pro Steering Wheel",
+      "priceEUR": 349,
+      "score": 93,
+      "upgrade": 96,
+      "futureAnnualEUR": 0,
+      "powerW": 4,
+      "specs": {
+        "Диаметр": "325 мм",
+        "Дисплей": "2,99″ HD",
+        "Обод": "Microfiber leather",
+        "Лепестки": "Dual clutch"
+      },
+      "compatibility": {
+        "ecosystem": "MOZA"
+      },
+      "imageQuery": "MOZA Racing CS Pro Steering Wheel official product photo",
+      "updated": "2026-07-10",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+CS+Pro+Steering+Wheel",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+CS+Pro+Steering+Wheel",
+        "official": "https://eu.mozaracing.com/products/cs-pro-wheel"
+      },
+      "priceBasis": "market",
+      "priceChecked": "2026-07-10",
+      "priceReferenceUrl": "https://eu.mozaracing.com/products/cs-pro-wheel",
+      "description": "MOZA CS Pro — полноразмерный руль для GT, туринга и ралли. Получил настраиваемый дисплей, развитую RGB-телеметрию и возможность расширения до шести лепестков. Оценка 93/100; апгрейдность 96% благодаря совместимости с экосистемой MOZA и возможности расширения конфигурации."
+    },
+    {
+      "id": "v132-sim-wheel-moza-porsche-mission-r",
+      "group": "sim",
+      "type": "wheel",
+      "brand": "MOZA Racing",
+      "name": "Porsche Mission R Steering Wheel",
+      "priceEUR": 1399,
+      "score": 100,
+      "upgrade": 95,
+      "futureAnnualEUR": 0,
+      "powerW": 6,
+      "specs": {
+        "Диаметр": "320 мм",
+        "Дисплей": "5,4″ flexible OLED",
+        "Рама": "CNC aluminum",
+        "Лицензия": "Porsche"
+      },
+      "compatibility": {
+        "ecosystem": "MOZA"
+      },
+      "imageQuery": "MOZA Racing Porsche Mission R Steering Wheel official product photo",
+      "updated": "2026-07-10",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+Porsche+Mission+R+Steering+Wheel",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+Porsche+Mission+R+Steering+Wheel",
+        "official": "https://eu.mozaracing.com/products/porsche-mission-r-wheel"
+      },
+      "priceBasis": "market",
+      "priceChecked": "2026-07-10",
+      "priceReferenceUrl": "https://eu.mozaracing.com/products/porsche-mission-r-wheel",
+      "description": "MOZA Porsche Mission R — лицензионная реплика гоночного руля Porsche. Создан по исходным CAD-данным, оснащён изогнутым OLED-дисплеем и алюминиевыми dual-clutch лепестками. Оценка 100/100; апгрейдность 95% благодаря совместимости с экосистемой MOZA и возможности расширения конфигурации."
+    },
+    {
+      "id": "v132-sim-wheel-moza-essenza-scv12",
+      "group": "sim",
+      "type": "wheel",
+      "brand": "MOZA Racing",
+      "name": "Lamborghini Essenza SCV12 Wheel",
+      "priceEUR": 1399,
+      "score": 100,
+      "upgrade": 94,
+      "futureAnnualEUR": 0,
+      "powerW": 6,
+      "specs": {
+        "Диаметр": "310 мм",
+        "Дисплей": "4,3″ touch",
+        "Входы": "72",
+        "Лицензия": "Lamborghini"
+      },
+      "compatibility": {
+        "ecosystem": "MOZA"
+      },
+      "imageQuery": "MOZA Racing Lamborghini Essenza SCV12 Wheel official product photo",
+      "updated": "2026-07-10",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+Lamborghini+Essenza+SCV12+Wheel",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+Lamborghini+Essenza+SCV12+Wheel",
+        "official": "https://eu.mozaracing.com/products/lamborghini-essenza-scv12-wheel"
+      },
+      "priceBasis": "market",
+      "priceChecked": "2026-07-10",
+      "priceReferenceUrl": "https://eu.mozaracing.com/products/lamborghini-essenza-scv12-wheel",
+      "description": "MOZA Essenza SCV12 — лицензионный гиперкар-руль Lamborghini. Карбоновая лицевая панель, сенсорный дисплей и 72 программируемых сигнала ориентированы на максимальную аутентичность. Оценка 100/100; апгрейдность 94% благодаря совместимости с экосистемой MOZA и возможности расширения конфигурации."
+    },
+    {
+      "id": "v132-sim-wheel-moza-revuelto",
+      "group": "sim",
+      "type": "wheel",
+      "brand": "MOZA Racing",
+      "name": "Lamborghini Revuelto Wheel",
+      "priceEUR": 429,
+      "score": 92,
+      "upgrade": 94,
+      "futureAnnualEUR": 0,
+      "powerW": 3,
+      "specs": {
+        "Диаметр": "340 мм",
+        "Рама": "Die-cast aluminum",
+        "Входы": "34",
+        "Лицензия": "Lamborghini"
+      },
+      "compatibility": {
+        "ecosystem": "MOZA"
+      },
+      "imageQuery": "MOZA Racing Lamborghini Revuelto Wheel official product photo",
+      "updated": "2026-07-10",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+Lamborghini+Revuelto+Wheel",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+Lamborghini+Revuelto+Wheel",
+        "official": "https://eu.mozaracing.com/products/revuelto-sim-wheel"
+      },
+      "priceBasis": "market",
+      "priceChecked": "2026-07-10",
+      "priceReferenceUrl": "https://eu.mozaracing.com/products/revuelto-sim-wheel",
+      "description": "MOZA Lamborghini Revuelto — лицензионная реплика дорожного гиперкара. Полноразмерный 340-мм руль с алюминиевой рамой, магнитными лепестками и оригинальной геометрией по CAD-данным Lamborghini. Оценка 92/100; апгрейдность 94% благодаря совместимости с экосистемой MOZA и возможности расширения конфигурации."
+    },
+    {
+      "id": "v132-sim-wheel-moza-tsw",
+      "group": "sim",
+      "type": "wheel",
+      "brand": "MOZA Racing",
+      "name": "TSW Truck Wheel",
+      "priceEUR": 249,
+      "score": 82,
+      "upgrade": 93,
+      "futureAnnualEUR": 0,
+      "powerW": 3,
+      "specs": {
+        "Диаметр": "400 мм",
+        "Назначение": "Truck sim",
+        "Кнопки": "14 RGB",
+        "Материал": "Aluminum + microfiber"
+      },
+      "compatibility": {
+        "ecosystem": "MOZA"
+      },
+      "imageQuery": "MOZA Racing TSW Truck Wheel official product photo",
+      "updated": "2026-07-10",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+TSW+Truck+Wheel",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+TSW+Truck+Wheel",
+        "official": "https://eu.mozaracing.com/products/tsw-truck-wheel"
+      },
+      "priceBasis": "market",
+      "priceChecked": "2026-07-10",
+      "priceReferenceUrl": "https://eu.mozaracing.com/products/tsw-truck-wheel",
+      "description": "MOZA TSW — специализированный руль для грузовых симуляторов. Реалистичный диаметр 400 мм, грузовая раскладка органов управления и работа с MOZA либо сторонними базами через Hub Kit. Оценка 82/100; апгрейдность 93% благодаря совместимости с экосистемой MOZA и возможности расширения конфигурации."
+    },
+    {
+      "id": "v132-sim-wheel-moza-es",
+      "group": "sim",
+      "type": "wheel",
+      "brand": "MOZA Racing",
+      "name": "ES Steering Wheel",
+      "priceEUR": 149,
+      "score": 72,
+      "upgrade": 91,
+      "futureAnnualEUR": 0,
+      "powerW": 2,
+      "specs": {
+        "Диаметр": "280 мм",
+        "Кнопки": "22",
+        "Индикация": "10 RGB LED",
+        "Материал": "Aluminum + PU"
+      },
+      "compatibility": {
+        "ecosystem": "MOZA"
+      },
+      "imageQuery": "MOZA Racing ES Steering Wheel official product photo",
+      "updated": "2026-07-10",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+ES+Steering+Wheel",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+ES+Steering+Wheel",
+        "official": "https://eu.mozaracing.com/search?q=ES+Steering+Wheel"
+      },
+      "priceBasis": "market",
+      "priceChecked": "2026-07-10",
+      "priceReferenceUrl": "https://eu.mozaracing.com/search?q=ES+Steering+Wheel",
+      "description": "MOZA ES — универсальный начальный руль для базы MOZA. Компактный 280-мм обод, 22 кнопки и сменные модификации обода делают его практичным выбором для R3 и R5. Оценка 72/100; апгрейдность 91% благодаря совместимости с экосистемой MOZA и возможности расширения конфигурации."
+    },
+    {
+      "id": "v132-sim-pedals-moza-srp2",
+      "group": "sim",
+      "type": "pedals",
+      "brand": "MOZA Racing",
+      "name": "SRP2 Pedals",
+      "priceEUR": 159,
+      "score": 84,
+      "upgrade": 94,
+      "futureAnnualEUR": 0,
+      "powerW": 0,
+      "specs": {
+        "Комплект": "Газ + тормоз",
+        "Load Cell": "100 кг",
+        "Датчик": "15 бит",
+        "Настройка": "Tool-free"
+      },
+      "compatibility": {
+        "ecosystem": "MOZA"
+      },
+      "imageQuery": "MOZA Racing SRP2 Pedals official product photo",
+      "updated": "2026-07-10",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+SRP2+Pedals",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+SRP2+Pedals",
+        "official": "https://eu.mozaracing.com/products/srp2-pedals"
+      },
+      "priceBasis": "market",
+      "priceChecked": "2026-07-10",
+      "priceReferenceUrl": "https://eu.mozaracing.com/products/srp2-pedals",
+      "description": "MOZA SRP2 — двухпедальный комплект с тензодатчиком. Сочетает 100-кг load cell, 15-битный угловой датчик и широкий диапазон механической настройки. Оценка 84/100; апгрейдность 94% благодаря совместимости с экосистемой MOZA и возможности расширения конфигурации."
+    },
+    {
+      "id": "v132-sim-pedals-moza-srp2-clutch",
+      "group": "sim",
+      "type": "pedals",
+      "brand": "MOZA Racing",
+      "name": "SRP2 Clutch Pedal",
+      "priceEUR": 49.9,
+      "score": 67,
+      "upgrade": 92,
+      "futureAnnualEUR": 0,
+      "powerW": 0,
+      "specs": {
+        "Тип": "Педаль сцепления",
+        "Материал": "High-strength steel",
+        "Настройка": "Tool-free",
+        "Совместимость": "SRP2"
+      },
+      "compatibility": {
+        "ecosystem": "MOZA"
+      },
+      "imageQuery": "MOZA Racing SRP2 Clutch Pedal official product photo",
+      "updated": "2026-07-10",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+SRP2+Clutch+Pedal",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+SRP2+Clutch+Pedal",
+        "official": "https://eu.mozaracing.com/products/srp2-clutch"
+      },
+      "priceBasis": "market",
+      "priceChecked": "2026-07-10",
+      "priceReferenceUrl": "https://eu.mozaracing.com/products/srp2-clutch",
+      "description": "MOZA SRP2 Clutch — дополнительная педаль сцепления. Расширяет двухпедальный комплект SRP2 до полноценной трёхпедальной конфигурации. Оценка 67/100; апгрейдность 92% благодаря совместимости с экосистемой MOZA и возможности расширения конфигурации."
+    },
+    {
+      "id": "v132-sim-pedals-moza-crp2-clutch",
+      "group": "sim",
+      "type": "pedals",
+      "brand": "MOZA Racing",
+      "name": "CRP2 Load Cell Clutch Pedal",
+      "priceEUR": 109,
+      "score": 82,
+      "upgrade": 93,
+      "futureAnnualEUR": 0,
+      "powerW": 0,
+      "specs": {
+        "Тип": "Педаль сцепления",
+        "Серия": "CRP2",
+        "Материал": "Aluminum + carbon",
+        "Монтаж": "Обычный / inverted"
+      },
+      "compatibility": {
+        "ecosystem": "MOZA"
+      },
+      "imageQuery": "MOZA Racing CRP2 Load Cell Clutch Pedal official product photo",
+      "updated": "2026-07-10",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+CRP2+Load+Cell+Clutch+Pedal",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+CRP2+Load+Cell+Clutch+Pedal",
+        "official": "https://eu.mozaracing.com/search?q=CRP2+Load+Cell+Clutch+Pedal"
+      },
+      "priceBasis": "market",
+      "priceChecked": "2026-07-10",
+      "priceReferenceUrl": "https://eu.mozaracing.com/search?q=CRP2+Load+Cell+Clutch+Pedal",
+      "description": "MOZA CRP2 Clutch — дополнительная премиальная педаль сцепления. Предназначена для расширения CRP2 и сохраняет материалы и диапазон регулировок основной серии. Оценка 82/100; апгрейдность 93% благодаря совместимости с экосистемой MOZA и возможности расширения конфигурации."
+    },
+    {
+      "id": "v132-sim-pedals-moza-srp-lite-clutch",
+      "group": "sim",
+      "type": "pedals",
+      "brand": "MOZA Racing",
+      "name": "SR-P Lite Clutch Pedal",
+      "priceEUR": 42.9,
+      "score": 58,
+      "upgrade": 88,
+      "futureAnnualEUR": 0,
+      "powerW": 0,
+      "specs": {
+        "Тип": "Педаль сцепления",
+        "Датчик": "Hall",
+        "Материал": "Steel",
+        "Совместимость": "SR-P Lite"
+      },
+      "compatibility": {
+        "ecosystem": "MOZA"
+      },
+      "imageQuery": "MOZA Racing SR-P Lite Clutch Pedal official product photo",
+      "updated": "2026-07-10",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+SR-P+Lite+Clutch+Pedal",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+SR-P+Lite+Clutch+Pedal",
+        "official": "https://eu.mozaracing.com/search?q=SR-P+Lite+Clutch+Pedal"
+      },
+      "priceBasis": "market",
+      "priceChecked": "2026-07-10",
+      "priceReferenceUrl": "https://eu.mozaracing.com/search?q=SR-P+Lite+Clutch+Pedal",
+      "description": "MOZA SR-P Lite Clutch — бюджетная дополнительная педаль сцепления. Подходит к комплектам R3/R5 и превращает стандартные SR-P Lite в трёхпедальную систему. Оценка 58/100; апгрейдность 88% благодаря совместимости с экосистемой MOZA и возможности расширения конфигурации."
+    },
+    {
+      "id": "v132-sim-pedals-moza-mbooster-crp2",
+      "group": "sim",
+      "type": "pedals",
+      "brand": "MOZA Racing",
+      "name": "mBooster Pedal Set with CRP2 Throttle",
+      "priceEUR": 999,
+      "score": 100,
+      "upgrade": 96,
+      "futureAnnualEUR": 0,
+      "powerW": 90,
+      "specs": {
+        "Комплект": "Active brake + CRP2 throttle",
+        "Load Cell": "Dual 200 кг",
+        "Материал": "Aluminum + carbon",
+        "Feedback": "Active force"
+      },
+      "compatibility": {
+        "ecosystem": "MOZA"
+      },
+      "imageQuery": "MOZA Racing mBooster Pedal Set with CRP2 Throttle official product photo",
+      "updated": "2026-07-10",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+mBooster+Pedal+Set+with+CRP2+Throttle",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+mBooster+Pedal+Set+with+CRP2+Throttle",
+        "official": "https://eu.mozaracing.com/search?q=mBooster+Active+Pedal+Set+with+CRP2+Throttle"
+      },
+      "priceBasis": "market",
+      "priceChecked": "2026-07-10",
+      "priceReferenceUrl": "https://eu.mozaracing.com/search?q=mBooster+Active+Pedal+Set+with+CRP2+Throttle",
+      "description": "MOZA mBooster + CRP2 — активный премиальный педальный комплект. Электромеханическая активная педаль воспроизводит ABS, упор тормоза и регулируемое усилие, а CRP2 используется как газ. Оценка 100/100; апгрейдность 96% благодаря совместимости с экосистемой MOZA и возможности расширения конфигурации."
+    },
+    {
+      "id": "v132-sim-shifter-moza-active-knob",
+      "group": "sim",
+      "type": "shifter",
+      "brand": "MOZA Racing",
+      "name": "Active Shifter Knob",
+      "priceEUR": 47,
+      "score": 78,
+      "upgrade": 90,
+      "futureAnnualEUR": 0,
+      "powerW": 3,
+      "specs": {
+        "Тип": "Активная рукоять",
+        "Совместимость": "HGP Shifter",
+        "Feedback": "Vibration + sound",
+        "Режимы": "Настраиваемые"
+      },
+      "compatibility": {
+        "ecosystem": "MOZA"
+      },
+      "imageQuery": "MOZA Racing Active Shifter Knob official product photo",
+      "updated": "2026-07-10",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+Active+Shifter+Knob",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+Active+Shifter+Knob",
+        "official": "https://eu.mozaracing.com/search?q=Active+Shifter+Knob"
+      },
+      "priceBasis": "market",
+      "priceChecked": "2026-07-10",
+      "priceReferenceUrl": "https://eu.mozaracing.com/search?q=Active+Shifter+Knob",
+      "description": "MOZA Active Shifter Knob — активная рукоять для H-pattern шифтера. Добавляет тактильную и звуковую обратную связь переключения передач к MOZA HGP. Оценка 78/100; апгрейдность 90% благодаря совместимости с экосистемой MOZA и возможности расширения конфигурации."
+    },
+    {
+      "id": "v132-sim-accessory-moza-srp2-bracket",
+      "group": "sim",
+      "type": "accessory",
+      "brand": "MOZA Racing",
+      "name": "SRP2 Rear Support Bracket",
+      "priceEUR": 35,
+      "score": 55,
+      "upgrade": 94,
+      "futureAnnualEUR": 0,
+      "powerW": 0,
+      "specs": {
+        "Назначение": "Усиление педалей",
+        "Совместимость": "SRP2",
+        "Материал": "Steel"
+      },
+      "compatibility": {
+        "ecosystem": "MOZA"
+      },
+      "imageQuery": "MOZA Racing SRP2 Rear Support Bracket official product photo",
+      "updated": "2026-07-10",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+SRP2+Rear+Support+Bracket",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+SRP2+Rear+Support+Bracket",
+        "official": "https://eu.mozaracing.com/products/srp2-rear-support-bracket"
+      },
+      "priceBasis": "market",
+      "priceChecked": "2026-07-10",
+      "priceReferenceUrl": "https://eu.mozaracing.com/products/srp2-rear-support-bracket",
+      "description": "MOZA SRP2 Rear Support Bracket — аксессуар для расширения автосимулятора. Жёсткая задняя опора снижает прогиб педалей SRP2 при высоком усилии тормоза. Оценка 55/100; апгрейдность 94%."
+    },
+    {
+      "id": "v132-sim-accessory-moza-universal-plate",
+      "group": "sim",
+      "type": "accessory",
+      "brand": "MOZA Racing",
+      "name": "Universal Mounting Plate",
+      "priceEUR": 35,
+      "score": 58,
+      "upgrade": 95,
+      "futureAnnualEUR": 0,
+      "powerW": 0,
+      "specs": {
+        "Назначение": "Монтаж",
+        "Совместимость": "MOZA ecosystem",
+        "Материал": "Steel"
+      },
+      "compatibility": {
+        "ecosystem": "MOZA"
+      },
+      "imageQuery": "MOZA Racing Universal Mounting Plate official product photo",
+      "updated": "2026-07-10",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+Universal+Mounting+Plate",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+Universal+Mounting+Plate",
+        "official": "https://eu.mozaracing.com/search?q=Universal+Mounting+Plate"
+      },
+      "priceBasis": "market",
+      "priceChecked": "2026-07-10",
+      "priceReferenceUrl": "https://eu.mozaracing.com/search?q=Universal+Mounting+Plate",
+      "description": "MOZA Universal Mounting Plate — аксессуар для расширения автосимулятора. Универсальная монтажная пластина упрощает установку периферии MOZA на стол или профильный кокпит. Оценка 58/100; апгрейдность 95%."
+    },
+    {
+      "id": "v132-sim-accessory-moza-srp-lite-kit",
+      "group": "sim",
+      "type": "accessory",
+      "brand": "MOZA Racing",
+      "name": "Performance Kit for SR-P Lite",
+      "priceEUR": 35,
+      "score": 65,
+      "upgrade": 90,
+      "futureAnnualEUR": 0,
+      "powerW": 0,
+      "specs": {
+        "Назначение": "Тюнинг тормоза",
+        "Совместимость": "SR-P Lite",
+        "Регулировка": "Elastomer + spring"
+      },
+      "compatibility": {
+        "ecosystem": "MOZA"
+      },
+      "imageQuery": "MOZA Racing Performance Kit for SR-P Lite official product photo",
+      "updated": "2026-07-10",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+Performance+Kit+for+SR-P+Lite",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+Performance+Kit+for+SR-P+Lite",
+        "official": "https://eu.mozaracing.com/search?q=Performance+Kit+for+SR-P+Lite"
+      },
+      "priceBasis": "market",
+      "priceChecked": "2026-07-10",
+      "priceReferenceUrl": "https://eu.mozaracing.com/search?q=Performance+Kit+for+SR-P+Lite",
+      "description": "MOZA Performance Kit for SR-P Lite — аксессуар для расширения автосимулятора. Комплект делает педаль тормоза SR-P Lite прогрессивнее и ближе по ощущению к load-cell решениям. Оценка 65/100; апгрейдность 90%."
+    },
+    {
+      "id": "v132-sim-accessory-moza-es-formula-mod",
+      "group": "sim",
+      "type": "accessory",
+      "brand": "MOZA Racing",
+      "name": "ES Formula Wheel Mod",
+      "priceEUR": 45,
+      "score": 70,
+      "upgrade": 93,
+      "futureAnnualEUR": 0,
+      "powerW": 0,
+      "specs": {
+        "Диаметр": "280 мм",
+        "Формат": "Formula",
+        "Совместимость": "ES / ESX"
+      },
+      "compatibility": {
+        "ecosystem": "MOZA"
+      },
+      "imageQuery": "MOZA Racing ES Formula Wheel Mod official product photo",
+      "updated": "2026-07-10",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+ES+Formula+Wheel+Mod",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+ES+Formula+Wheel+Mod",
+        "official": "https://eu.mozaracing.com/products/esx-formula-mod"
+      },
+      "priceBasis": "market",
+      "priceChecked": "2026-07-10",
+      "priceReferenceUrl": "https://eu.mozaracing.com/products/esx-formula-mod",
+      "description": "MOZA ES Formula Wheel Mod — аксессуар для расширения автосимулятора. Сменный формульный обод превращает ES или ESX в компактный руль для формул и прототипов. Оценка 70/100; апгрейдность 93%."
+    },
+    {
+      "id": "v132-sim-accessory-moza-srp-kit",
+      "group": "sim",
+      "type": "accessory",
+      "brand": "MOZA Racing",
+      "name": "SR-P Accessory Kit",
+      "priceEUR": 15.9,
+      "score": 48,
+      "upgrade": 88,
+      "futureAnnualEUR": 0,
+      "powerW": 0,
+      "specs": {
+        "Назначение": "Настройка педалей",
+        "Совместимость": "SR-P",
+        "Тип": "Springs / elastomers"
+      },
+      "compatibility": {
+        "ecosystem": "MOZA"
+      },
+      "imageQuery": "MOZA Racing SR-P Accessory Kit official product photo",
+      "updated": "2026-07-10",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+SR-P+Accessory+Kit",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+SR-P+Accessory+Kit",
+        "official": "https://eu.mozaracing.com/search?q=SR-P+Accessory+Kit"
+      },
+      "priceBasis": "market",
+      "priceChecked": "2026-07-10",
+      "priceReferenceUrl": "https://eu.mozaracing.com/search?q=SR-P+Accessory+Kit",
+      "description": "MOZA SR-P Accessory Kit — аксессуар для расширения автосимулятора. Набор расходных элементов расширяет диапазон жёсткости и хода педалей SR-P. Оценка 48/100; апгрейдность 88%."
+    },
+    {
+      "id": "v132-sim-accessory-moza-brake-kit",
+      "group": "sim",
+      "type": "accessory",
+      "brand": "MOZA Racing",
+      "name": "Brake Performance Kit for CRP2 & SRP2",
+      "priceEUR": 21.9,
+      "score": 72,
+      "upgrade": 94,
+      "futureAnnualEUR": 0,
+      "powerW": 0,
+      "specs": {
+        "Назначение": "Настройка тормоза",
+        "Совместимость": "CRP2 / SRP2",
+        "Варианты": "1000+ combinations"
+      },
+      "compatibility": {
+        "ecosystem": "MOZA"
+      },
+      "imageQuery": "MOZA Racing Brake Performance Kit for CRP2 & SRP2 official product photo",
+      "updated": "2026-07-10",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+Brake+Performance+Kit+for+CRP2+%26+SRP2",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+Brake+Performance+Kit+for+CRP2+%26+SRP2",
+        "official": "https://eu.mozaracing.com/search?q=Brake+Performance+Kit+for+CRP2+SRP2"
+      },
+      "priceBasis": "market",
+      "priceChecked": "2026-07-10",
+      "priceReferenceUrl": "https://eu.mozaracing.com/search?q=Brake+Performance+Kit+for+CRP2+SRP2",
+      "description": "MOZA Brake Performance Kit for CRP2 & SRP2 — аксессуар для расширения автосимулятора. Набор пружин и эластомеров позволяет тонко подобрать усилие и прогрессию педали тормоза. Оценка 72/100; апгрейдность 94%."
+    },
+    {
+      "id": "v132-sim-accessory-moza-esx-round-mod",
+      "group": "sim",
+      "type": "accessory",
+      "brand": "MOZA Racing",
+      "name": "12-inch Round Wheel Mod for ESX",
+      "priceEUR": 65,
+      "score": 66,
+      "upgrade": 91,
+      "futureAnnualEUR": 0,
+      "powerW": 0,
+      "specs": {
+        "Диаметр": "12″",
+        "Формат": "Round",
+        "Совместимость": "ES / ESX"
+      },
+      "compatibility": {
+        "ecosystem": "MOZA"
+      },
+      "imageQuery": "MOZA Racing 12-inch Round Wheel Mod for ESX official product photo",
+      "updated": "2026-07-10",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+12-inch+Round+Wheel+Mod+for+ESX",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+12-inch+Round+Wheel+Mod+for+ESX",
+        "official": "https://eu.mozaracing.com/search?q=12-inch+Round+Wheel+Mod+for+ESX"
+      },
+      "priceBasis": "market",
+      "priceChecked": "2026-07-10",
+      "priceReferenceUrl": "https://eu.mozaracing.com/search?q=12-inch+Round+Wheel+Mod+for+ESX",
+      "description": "MOZA 12-inch Round Wheel Mod for ESX — аксессуар для расширения автосимулятора. Увеличенный круглый обод удобен для ралли, дрифта, дорожных автомобилей и грузовых симуляторов. Оценка 66/100; апгрейдность 91%."
+    },
+    {
+      "id": "v132-sim-accessory-moza-qr70",
+      "group": "sim",
+      "type": "accessory",
+      "brand": "MOZA Racing",
+      "name": "70mm Quick Release Adapter",
+      "priceEUR": 55,
+      "score": 70,
+      "upgrade": 96,
+      "futureAnnualEUR": 0,
+      "powerW": 0,
+      "specs": {
+        "Стандарт": "6×70 мм",
+        "Материал": "Aviation aluminum",
+        "Совместимость": "All MOZA bases"
+      },
+      "compatibility": {
+        "ecosystem": "MOZA"
+      },
+      "imageQuery": "MOZA Racing 70mm Quick Release Adapter official product photo",
+      "updated": "2026-07-10",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+70mm+Quick+Release+Adapter",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+70mm+Quick+Release+Adapter",
+        "official": "https://eu.mozaracing.com/products/moza-qr"
+      },
+      "priceBasis": "market",
+      "priceChecked": "2026-07-10",
+      "priceReferenceUrl": "https://eu.mozaracing.com/products/moza-qr",
+      "description": "MOZA 70mm Quick Release Adapter — аксессуар для расширения автосимулятора. Адаптер позволяет устанавливать сторонние рулевые ободы стандарта 70 мм на базы MOZA. Оценка 70/100; апгрейдность 96%."
+    },
+    {
+      "id": "v132-sim-accessory-moza-crp2-throttle-plate",
+      "group": "sim",
+      "type": "accessory",
+      "brand": "MOZA Racing",
+      "name": "CRP2 Full Length Throttle Plate",
+      "priceEUR": 32,
+      "score": 50,
+      "upgrade": 90,
+      "futureAnnualEUR": 0,
+      "powerW": 0,
+      "specs": {
+        "Назначение": "Площадка газа",
+        "Совместимость": "CRP2",
+        "Формат": "Full length"
+      },
+      "compatibility": {
+        "ecosystem": "MOZA"
+      },
+      "imageQuery": "MOZA Racing CRP2 Full Length Throttle Plate official product photo",
+      "updated": "2026-07-10",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+CRP2+Full+Length+Throttle+Plate",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+CRP2+Full+Length+Throttle+Plate",
+        "official": "https://eu.mozaracing.com/search?q=CRP2+Full+Length+Throttle+Replacement+Plate"
+      },
+      "priceBasis": "market",
+      "priceChecked": "2026-07-10",
+      "priceReferenceUrl": "https://eu.mozaracing.com/search?q=CRP2+Full+Length+Throttle+Replacement+Plate",
+      "description": "MOZA CRP2 Full Length Throttle Plate — аксессуар для расширения автосимулятора. Удлинённая площадка газа улучшает контроль перегазовки и технику heel-and-toe. Оценка 50/100; апгрейдность 90%."
+    },
+    {
+      "id": "v132-sim-accessory-moza-truck-clamp",
+      "group": "sim",
+      "type": "accessory",
+      "brand": "MOZA Racing",
+      "name": "Clamp for Truck Wheel",
+      "priceEUR": 55,
+      "score": 61,
+      "upgrade": 92,
+      "futureAnnualEUR": 0,
+      "powerW": 0,
+      "specs": {
+        "Угол": "0–75°",
+        "Толщина стола": "3–70 мм",
+        "Совместимость": "TSW Truck Wheel"
+      },
+      "compatibility": {
+        "ecosystem": "MOZA"
+      },
+      "imageQuery": "MOZA Racing Clamp for Truck Wheel official product photo",
+      "updated": "2026-07-10",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+Clamp+for+Truck+Wheel",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+Clamp+for+Truck+Wheel",
+        "official": "https://eu.mozaracing.com/search?q=Clamp+for+Truck+Wheel"
+      },
+      "priceBasis": "market",
+      "priceChecked": "2026-07-10",
+      "priceReferenceUrl": "https://eu.mozaracing.com/search?q=Clamp+for+Truck+Wheel",
+      "description": "MOZA Clamp for Truck Wheel — аксессуар для расширения автосимулятора. Наклонный зажим позволяет установить TSW в реалистичном грузовом положении на стол или профильный риг. Оценка 61/100; апгрейдность 92%."
+    },
+    {
+      "id": "v132-sim-accessory-moza-table-clamp",
+      "group": "sim",
+      "type": "accessory",
+      "brand": "MOZA Racing",
+      "name": "Table Clamp",
+      "priceEUR": 45,
+      "score": 58,
+      "upgrade": 94,
+      "futureAnnualEUR": 0,
+      "powerW": 0,
+      "specs": {
+        "Назначение": "Крепление к столу",
+        "Совместимость": "R5 / R9 / R12",
+        "Материал": "Steel"
+      },
+      "compatibility": {
+        "ecosystem": "MOZA"
+      },
+      "imageQuery": "MOZA Racing Table Clamp official product photo",
+      "updated": "2026-07-10",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+Table+Clamp",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+Table+Clamp",
+        "official": "https://eu.mozaracing.com/search?q=Table+Clamp"
+      },
+      "priceBasis": "market",
+      "priceChecked": "2026-07-10",
+      "priceReferenceUrl": "https://eu.mozaracing.com/search?q=Table+Clamp",
+      "description": "MOZA Table Clamp — аксессуар для расширения автосимулятора. Усиленный настольный зажим подходит для компактной установки баз MOZA без полноценного кокпита. Оценка 58/100; апгрейдность 94%."
+    },
+    {
+      "id": "v132-sim-accessory-moza-hub-kit",
+      "group": "sim",
+      "type": "accessory",
+      "brand": "MOZA Racing",
+      "name": "Universal Hub Kit",
+      "priceEUR": 49,
+      "score": 77,
+      "upgrade": 98,
+      "futureAnnualEUR": 0,
+      "powerW": 0,
+      "specs": {
+        "Назначение": "Подключение к PC",
+        "Совместимость": "MOZA wheels / third-party bases",
+        "Интерфейс": "USB"
+      },
+      "compatibility": {
+        "ecosystem": "MOZA"
+      },
+      "imageQuery": "MOZA Racing Universal Hub Kit official product photo",
+      "updated": "2026-07-10",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+Universal+Hub+Kit",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+Universal+Hub+Kit",
+        "official": "https://eu.mozaracing.com/search?q=MOZA+Universal+Hub+Kit"
+      },
+      "priceBasis": "market",
+      "priceChecked": "2026-07-10",
+      "priceReferenceUrl": "https://eu.mozaracing.com/search?q=MOZA+Universal+Hub+Kit",
+      "description": "MOZA Universal Hub Kit — аксессуар для расширения автосимулятора. Hub Kit открывает часть рулей и аксессуаров MOZA для использования со сторонними базами через прямое подключение к ПК. Оценка 77/100; апгрейдность 98%."
+    },
+    {
+      "id": "v132-sim-accessory-moza-stalk-adapter",
+      "group": "sim",
+      "type": "accessory",
+      "brand": "MOZA Racing",
+      "name": "Multi-function Stalks Adapter Plate",
+      "priceEUR": 23,
+      "score": 46,
+      "upgrade": 89,
+      "futureAnnualEUR": 0,
+      "powerW": 0,
+      "specs": {
+        "Назначение": "Монтаж подрулевых переключателей",
+        "Совместимость": "Multi-function Stalks",
+        "Материал": "Metal"
+      },
+      "compatibility": {
+        "ecosystem": "MOZA"
+      },
+      "imageQuery": "MOZA Racing Multi-function Stalks Adapter Plate official product photo",
+      "updated": "2026-07-10",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+Multi-function+Stalks+Adapter+Plate",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+Multi-function+Stalks+Adapter+Plate",
+        "official": "https://eu.mozaracing.com/search?q=Multi-function+Stalks+Adapter+Plate"
+      },
+      "priceBasis": "market",
+      "priceChecked": "2026-07-10",
+      "priceReferenceUrl": "https://eu.mozaracing.com/search?q=Multi-function+Stalks+Adapter+Plate",
+      "description": "MOZA Multi-function Stalks Adapter Plate — аксессуар для расширения автосимулятора. Пластина обеспечивает корректную установку подрулевых переключателей рядом с базой и грузовым рулём. Оценка 46/100; апгрейдность 89%."
+    },
+    {
+      "id": "v132-sim-accessory-moza-extension-rod",
+      "group": "sim",
+      "type": "accessory",
+      "brand": "MOZA Racing",
+      "name": "Base Extension Rod",
+      "priceEUR": 119,
+      "score": 75,
+      "upgrade": 96,
+      "futureAnnualEUR": 0,
+      "powerW": 0,
+      "specs": {
+        "Назначение": "Удлинение рулевой колонки",
+        "Совместимость": "R3–R21",
+        "Материал": "CNC aluminum"
+      },
+      "compatibility": {
+        "ecosystem": "MOZA"
+      },
+      "imageQuery": "MOZA Racing Base Extension Rod official product photo",
+      "updated": "2026-07-10",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+Base+Extension+Rod",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+Base+Extension+Rod",
+        "official": "https://eu.mozaracing.com/products/extension-rod"
+      },
+      "priceBasis": "market",
+      "priceChecked": "2026-07-10",
+      "priceReferenceUrl": "https://eu.mozaracing.com/products/extension-rod",
+      "description": "MOZA Base Extension Rod — аксессуар для расширения автосимулятора. Удлинитель помогает вынести руль за монитор и сохранить штатный быстросъём MOZA. Оценка 75/100; апгрейдность 96%."
+    },
+    {
+      "id": "v132-sim-accessory-moza-estop",
+      "group": "sim",
+      "type": "accessory",
+      "brand": "MOZA Racing",
+      "name": "E-Stop Switch",
+      "priceEUR": 39,
+      "score": 70,
+      "upgrade": 95,
+      "futureAnnualEUR": 0,
+      "powerW": 0,
+      "specs": {
+        "Назначение": "Аварийная остановка",
+        "Совместимость": "High-torque MOZA bases",
+        "Тип": "Physical switch"
+      },
+      "compatibility": {
+        "ecosystem": "MOZA"
+      },
+      "imageQuery": "MOZA Racing E-Stop Switch official product photo",
+      "updated": "2026-07-10",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+E-Stop+Switch",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+E-Stop+Switch",
+        "official": "https://eu.mozaracing.com/search?q=E-Stop+Switch"
+      },
+      "priceBasis": "market",
+      "priceChecked": "2026-07-10",
+      "priceReferenceUrl": "https://eu.mozaracing.com/search?q=E-Stop+Switch",
+      "description": "MOZA E-Stop Switch — аксессуар для расширения автосимулятора. Физическая кнопка мгновенно отключает усилие мощной Direct Drive базы и повышает безопасность кокпита. Оценка 70/100; апгрейдность 95%."
+    },
+    {
+      "id": "v132-sim-accessory-moza-mbooster-extension",
+      "group": "sim",
+      "type": "accessory",
+      "brand": "MOZA Racing",
+      "name": "mBooster Base Extension Plate",
+      "priceEUR": 41,
+      "score": 52,
+      "upgrade": 92,
+      "futureAnnualEUR": 0,
+      "powerW": 0,
+      "specs": {
+        "Назначение": "Расширение основания",
+        "Совместимость": "mBooster",
+        "Материал": "Metal"
+      },
+      "compatibility": {
+        "ecosystem": "MOZA"
+      },
+      "imageQuery": "MOZA Racing mBooster Base Extension Plate official product photo",
+      "updated": "2026-07-10",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+mBooster+Base+Extension+Plate",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+mBooster+Base+Extension+Plate",
+        "official": "https://eu.mozaracing.com/search?q=mBooster+Base+Extension+Plate"
+      },
+      "priceBasis": "market",
+      "priceChecked": "2026-07-10",
+      "priceReferenceUrl": "https://eu.mozaracing.com/search?q=mBooster+Base+Extension+Plate",
+      "description": "MOZA mBooster Base Extension Plate — аксессуар для расширения автосимулятора. Боковая секция основания помогает собирать более широкую многопедальную конфигурацию mBooster. Оценка 52/100; апгрейдность 92%."
+    },
+    {
+      "id": "v132-sim-accessory-moza-mbooster-plate",
+      "group": "sim",
+      "type": "accessory",
+      "brand": "MOZA Racing",
+      "name": "mBooster Base Plate",
+      "priceEUR": 109,
+      "score": 72,
+      "upgrade": 94,
+      "futureAnnualEUR": 0,
+      "powerW": 0,
+      "specs": {
+        "Назначение": "Основание педалей",
+        "Совместимость": "mBooster / CRP2",
+        "Материал": "Rigid metal"
+      },
+      "compatibility": {
+        "ecosystem": "MOZA"
+      },
+      "imageQuery": "MOZA Racing mBooster Base Plate official product photo",
+      "updated": "2026-07-10",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+mBooster+Base+Plate",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+mBooster+Base+Plate",
+        "official": "https://eu.mozaracing.com/search?q=mBooster+Base+Plate"
+      },
+      "priceBasis": "market",
+      "priceChecked": "2026-07-10",
+      "priceReferenceUrl": "https://eu.mozaracing.com/search?q=mBooster+Base+Plate",
+      "description": "MOZA mBooster Base Plate — аксессуар для расширения автосимулятора. Жёсткая базовая плита объединяет активные педали и CRP2 в устойчивый модуль для кокпита. Оценка 72/100; апгрейдность 94%."
+    },
+    {
+      "id": "v132-sim-accessory-moza-paddles-kit",
+      "group": "sim",
+      "type": "accessory",
+      "brand": "MOZA Racing",
+      "name": "Paddles Add-on Kit",
+      "priceEUR": 49,
+      "score": 68,
+      "upgrade": 93,
+      "futureAnnualEUR": 0,
+      "powerW": 0,
+      "specs": {
+        "Назначение": "Дополнительные лепестки",
+        "Совместимость": "CS Pro",
+        "Конфигурация": "До 6 лепестков"
+      },
+      "compatibility": {
+        "ecosystem": "MOZA"
+      },
+      "imageQuery": "MOZA Racing Paddles Add-on Kit official product photo",
+      "updated": "2026-07-10",
+      "sourceNote": "Характеристики и цена сверены с официальным магазином MOZA Racing EU; стоимость и наличие могут меняться.",
+      "purchase": {
+        "market": "https://market.yandex.ru/search?text=MOZA+Racing+Paddles+Add-on+Kit",
+        "ozon": "https://www.ozon.ru/search/?text=MOZA+Racing+Paddles+Add-on+Kit",
+        "official": "https://eu.mozaracing.com/search?q=MOZA+Paddles+Add-on+Kit"
+      },
+      "priceBasis": "market",
+      "priceChecked": "2026-07-10",
+      "priceReferenceUrl": "https://eu.mozaracing.com/search?q=MOZA+Paddles+Add-on+Kit",
+      "description": "MOZA Paddles Add-on Kit — аксессуар для расширения автосимулятора. Комплект добавляет вспомогательные лепестки для DRS, KERS и дополнительных функций на CS Pro. Оценка 68/100; апгрейдность 93%."
     }
   ],
-  "catalogNote": "Цены в EUR: часть популярных позиций сверена с рыночными предложениями 10.07.2026; остальные являются редактируемыми ориентирами. Ссылки ведут на поиск товара в российских магазинах и на официальный источник.",
-  "description": "Расширенный офлайн-каталог SetupLab с постраничной загрузкой для iOS."
+  "catalogNote": "Цены MOZA Racing в этом обновлении сверены по официальному магазину EU 10.07.2026. Российские ссылки ведут на поиск точной модели; наличие и конечная цена зависят от продавца.",
+  "description": "Расширенный каталог SetupLab: 764 позиции, включая актуальную линейку MOZA Racing для автосима."
 }

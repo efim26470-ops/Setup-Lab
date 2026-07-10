@@ -10,10 +10,10 @@
   <meta name="format-detection" content="telephone=no">
   <meta name="color-scheme" content="dark light">
   <title>SetupLab — мастер конфигураций</title>
-  <link rel="manifest" href="manifest.webmanifest?v=1.3.1">
+  <link rel="manifest" href="manifest.webmanifest?v=1.3.2">
   <link rel="apple-touch-icon" href="icons/icon-180.png">
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=1.3.1">
+  <link rel="stylesheet" href="styles.css?v=1.3.2">
 </head>
 <body>
   <div class="ambient ambient-a"></div>
@@ -99,7 +99,7 @@
         try{ if('caches' in window){var keys=await caches.keys();await Promise.all(keys.filter(function(k){return k.indexOf('setuplab')===0;}).map(function(k){return caches.delete(k);}));} }catch(e){}
         try{ if('serviceWorker' in navigator){var regs=await navigator.serviceWorker.getRegistrations();await Promise.all(regs.map(function(r){return r.unregister();}));} }catch(e){}
         try{ var raw=localStorage.getItem('setuplab.state.v1'); if(raw){JSON.parse(raw);} }catch(e){try{localStorage.removeItem('setuplab.state.v1');}catch(_){} }
-        location.replace(location.pathname+'?repair=1&v=1.3.1');
+        location.replace(location.pathname+'?repair=1&v=1.3.2');
       };
     }
     window.__SETUPLAB_SHOW_RECOVERY__=recovery;
@@ -108,6 +108,6 @@
     window.__SETUPLAB_BOOT_WATCHDOG__=setTimeout(function(){recovery('Загрузка заняла слишком много времени. Проверьте соединение или восстановите технический кэш.');},15000);
   })();
   </script>
-  <script src="app.js?v=1.3.1" defer></script>
+  <script src="app.js?v=1.3.2" defer></script>
 </body>
 </html>
