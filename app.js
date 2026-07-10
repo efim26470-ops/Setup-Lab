@@ -1,7 +1,7 @@
 'use strict';
 
 const STORAGE_KEY = 'setuplab.state.v1';
-const APP_VERSION = '1.2.0';
+const APP_VERSION = '1.3.0';
 const categoryIcons = { pc:'⌨', sim:'◉', cinema:'▰', workspace:'▦', photo:'◍', audio:'♫' };
 const typeLabels = {
   cpu:'Процессор', gpu:'Видеокарта', motherboard:'Материнская плата', ram:'Память', storage:'Накопитель', psu:'Блок питания', case:'Корпус', cooler:'Охлаждение',
@@ -40,15 +40,15 @@ const verifiedRates = { EUR:1, USD:1.1435, RUB:86.5906, GBP:.8518, CNY:7.7712, R
 const verifiedRatesDate = '10.07.2026';
 const officialDomains = {
   'AMD':'amd.com','Intel':'intel.com','NVIDIA':'nvidia.com','ASUS':'asus.com','ASRock':'asrock.com','MSI':'msi.com','Gigabyte':'gigabyte.com','Corsair':'corsair.com','Kingston':'kingston.com','Crucial':'crucial.com','G.Skill':'gskill.com','TeamGroup':'teamgroupinc.com','Samsung':'samsung.com','WD':'westerndigital.com','SanDisk':'sandisk.com','Seagate':'seagate.com','Solidigm':'solidigm.com','Seasonic':'seasonic.com','Cooler Master':'coolermaster.com','be quiet!':'bequiet.com','Fractal Design':'fractal-design.com','HYTE':'hyte.com','NZXT':'nzxt.com','Lian Li':'lian-li.com','Noctua':'noctua.at','ARCTIC':'arctic.de','DeepCool':'deepcool.com','Thermalright':'thermalright.com',
-  'MOZA Racing':'mozaracing.com','Fanatec':'fanatec.com','Simagic':'simagic.com','Simucube':'simucube.com','Asetek SimSports':'aseteksimsports.com','Heusinkveld':'heusinkveld.com','VRS':'virtualracingschool.com','Thrustmaster':'thrustmaster.com','Logitech':'logitech.com','Playseat':'playseat.com','Next Level Racing':'nextlevelracing.com','Sim-Lab':'sim-lab.eu','Trak Racer':'trakracer.com','GT Omega':'gtomega.com','RSeat':'rseat.net','SHH':'shiftershh.com','Apex Sim Racing':'apexsimracing.com',
-  'LG':'lg.com','Sony':'sony.com','Samsung':'samsung.com','Panasonic':'panasonic.com','Philips':'philips.com','Hisense':'hisense.com','TCL':'tcl.com','Epson':'epson.com','JVC':'jvc.com','BenQ':'benq.com','Formovie':'formovie.com','Denon':'denon.com','Marantz':'marantz.com','Onkyo':'onkyo.com','Anthem':'anthemav.com','Yamaha':'yamaha.com','KEF':'kef.com','Focal':'focal.com','DALI':'dali-speakers.com','Bowers & Wilkins':'bowerswilkins.com','Q Acoustics':'qacoustics.com','Klipsch':'klipsch.com','Polk Audio':'polkaudio.com','SVS':'svsound.com','REL':'rel.net','Sonos':'sonos.com','Bose':'bose.com','Sennheiser':'sennheiser.com','Kaleidescape':'kaleidescape.com','Magnetar':'magnetar-audio.com','Zidoo':'zidoo.tv','Elite Screens':'elitescreens.com','Screen Innovations':'screeninnovations.com','Stewart Filmscreen':'stewartfilmscreen.com','Vividstorm':'vividstormscreen.com',
+  'MOZA Racing':'mozaracing.com','Fanatec':'fanatec.com','Simagic':'simagic.com','Simucube':'simucube.com','Asetek SimSports':'aseteksimsports.com','Heusinkveld':'heusinkveld.com','VRS':'virtualracingschool.com','Thrustmaster':'thrustmaster.com','Logitech':'logitech.com','Playseat':'playseat.com','Next Level Racing':'nextlevelracing.com','Sim-Lab':'sim-lab.eu','Trak Racer':'trakracer.com','GT Omega':'gtomega.com','RSeat':'rseat.net','SHH':'shiftershh.com','Apex Sim Racing':'apexsimracing.com','Cube Controls':'cubecontrols.com','VNM':'vnmsimulation.com','SimHub':'simhubdash.com',
+  'LG':'lg.com','Sony':'sony.com','Samsung':'samsung.com','Panasonic':'panasonic.com','Philips':'philips.com','Hisense':'hisense.com','TCL':'tcl.com','Epson':'epson.com','JVC':'jvc.com','BenQ':'benq.com','Formovie':'formovie.com','Denon':'denon.com','Marantz':'marantz.com','Onkyo':'onkyo.com','Anthem':'anthemav.com','Yamaha':'yamaha.com','KEF':'kef.com','Focal':'focal.com','DALI':'dali-speakers.com','Bowers & Wilkins':'bowerswilkins.com','Q Acoustics':'qacoustics.com','Klipsch':'klipsch.com','Polk Audio':'polkaudio.com','SVS':'svsound.com','REL':'rel.net','Sonos':'sonos.com','Bose':'bose.com','Sennheiser':'sennheiser.com','Kaleidescape':'kaleidescape.com','Magnetar':'magnetar-audio.com','Zidoo':'zidoo.tv','Elite Screens':'elitescreens.com','Screen Innovations':'screeninnovations.com','Stewart Filmscreen':'stewartfilmscreen.com','Vividstorm':'vividstormscreen.com','XGIMI':'xgimi.com','Valerion':'valerion.com',
   'Apple':'apple.com','Dell':'dell.com','Eizo':'eizo.com','IKEA':'ikea.com','Herman Miller':'hermanmiller.com','Steelcase':'steelcase.com','Haworth':'haworth.com','Humanscale':'humanscale.com','FlexiSpot':'flexispot.com','Branch':'branchfurniture.com','USM':'usm.com','Grovemade':'grovemade.com','Secretlab':'secretlab.co','Ergotron':'ergotron.com','CBS':'colebrookbossonsaunders.com','Keychron':'keychron.com','Wooting':'wooting.io','HHKB':'hhkeyboard.us','NuPhy':'nuphy.com','Razer':'razer.com','Microsoft':'microsoft.com','Anker':'anker.com','CalDigit':'caldigit.com','OWC':'owc.com','Kensington':'kensington.com','Elgato':'elgato.com','Dyson':'dyson.com','Philips Hue':'philips-hue.com','OBSBOT':'obsbot.com','Insta360':'insta360.com','Contour Design':'contourdesign.com',
   'Canon':'canon.com','Nikon':'nikon.com','Fujifilm':'fujifilm.com','Leica':'leica-camera.com','OM System':'omsystem.com','Sigma':'sigma-global.com','Tamron':'tamron.com','DJI':'dji.com','Zhiyun':'zhiyun-tech.com','Godox':'godox.com','Profoto':'profoto.com','Manfrotto':'manfrotto.com','Gitzo':'gitzo.com','Peak Design':'peakdesign.com','SmallRig':'smallrig.com','Leofoto':'leofoto.com','Lexar':'lexar.com','Angelbird':'angelbird.com','ProGrade':'progradedigital.com',
   'Cambridge Audio':'cambridgeaudio.com','Hegel':'hegel.com','NAD':'nadelectronics.com','Naim':'naimaudio.com','Rotel':'rotel.com','Monitor Audio':'monitoraudio.com','Wharfedale':'wharfedale.co.uk','Arendal Sound':'arendalsound.com','Audeze':'audeze.com','Beyerdynamic':'beyerdynamic.com','HiFiMAN':'hifiman.com','Meze Audio':'mezeaudio.com','Technics':'technics.com','Rega':'rega.co.uk','Pro-Ject':'project-audio.com','Bluesound':'bluesound.com','Eversolo':'eversolo.com','Matrix Audio':'matrix-digi.com','WiiM':'wiimhome.com','Genelec':'genelec.com','Neumann':'neumann.com','ADAM Audio':'adam-audio.com','Kali Audio':'kaliaudio.com','Focusrite':'focusrite.com','Universal Audio':'uaudio.com','RME':'rme-audio.de','MOTU':'motu.com','Audient':'audient.com','Shure':'shure.com','Rode':'rode.com','Audio-Technica':'audio-technica.com','Electro-Voice':'electrovoice.com','JBL':'jbl.com'
 };
 
 const defaultState = {
-  version: 2,
+  version: 3,
   theme: 'dark',
   currency: 'RUB',
   rates: { ...verifiedRates },
@@ -73,9 +73,12 @@ let imageQueue = [];
 let imageQueueBusy = 0;
 let imageObserver = null;
 const IMAGE_CONCURRENCY = 2;
+let catalogVisibleCount = 0;
+const catalogPageSize = () => window.innerWidth <= 780 ? 18 : 36;
 
 const $ = (sel, root=document) => root.querySelector(sel);
 const $$ = (sel, root=document) => [...root.querySelectorAll(sel)];
+function deepClone(value){ return typeof structuredClone === 'function' ? structuredClone(value) : JSON.parse(JSON.stringify(value)); }
 const uid = (prefix='id') => `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,8)}`;
 const clamp = (n,min,max) => Math.min(max,Math.max(min,n));
 const escapeHTML = (v='') => String(v).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
@@ -83,25 +86,27 @@ const escapeHTML = (v='') => String(v).replace(/[&<>'"]/g, c => ({'&':'&amp;','<
 function loadState(){
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return structuredClone(defaultState);
+    if (!raw) return deepClone(defaultState);
     const parsed = JSON.parse(raw);
-    const merged = { ...structuredClone(defaultState), ...parsed, rates:{...defaultState.rates,...(parsed.rates||{})} };
-    if(Number(parsed.version||1)<2){
-      merged.version=2;
+    const merged = { ...deepClone(defaultState), ...parsed, rates:{...defaultState.rates,...(parsed.rates||{})} };
+    if(Number(parsed.version||1)<3){
+      merged.version=3;
       merged.rates={...verifiedRates};
       merged.ratesUpdated=verifiedRatesDate;
     }
     return merged;
-  } catch { return structuredClone(defaultState); }
+  } catch { return deepClone(defaultState); }
 }
 function saveState(){
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
   catch { toast('Не удалось сохранить','Проверьте настройки хранилища Safari.','bad'); }
 }
 function applyTheme(){
+  const allowed=['dark','light','corsa','graphite','navy','titanium','mono'];
+  if(!allowed.includes(state.theme)) state.theme='dark';
   document.documentElement.dataset.theme = state.theme;
-  const themeColor = state.theme === 'light' ? '#f4f5f8' : state.theme === 'corsa' ? '#050505' : '#090a0d';
-  $('meta[name="theme-color"]').setAttribute('content',themeColor);
+  const colors={light:'#f4f5f8',corsa:'#050505',graphite:'#111214',navy:'#07111f',titanium:'#d9dde3',mono:'#0b0b0b',dark:'#090a0d'};
+  $('meta[name="theme-color"]').setAttribute('content',colors[state.theme]||colors.dark);
 }
 function getItem(id){
   const base = catalog.items.find(i => i.id === id) || state.customItems.find(i => i.id === id);
@@ -176,26 +181,20 @@ function itemImage(item){
   if (item.image) return { url:item.image, credit:item.imageCredit || 'Пользовательское изображение', kind:'custom' };
   const cached = state.imageCache[item.id];
   if(cached) return { url:cached.thumbnail || cached.url, credit:[cached.creator,cached.license].filter(Boolean).join(' · '), landing:cached.landing, kind:'cached' };
-  return { url:bingImageURL(item), credit:'Веб-фото', kind:'auto' };
+  return { url:fallbackImageURL(item), remote:bingImageURL(item), credit:'Фото загружается при просмотре', kind:'lazy' };
 }
 function handleProductImageError(img){
   if(!img) return;
-  const auto=img.dataset.autoSrc;
   const fallback=img.dataset.fallbackSrc;
-  if(auto && img.dataset.triedAuto!=='1'){
-    img.dataset.triedAuto='1';
-    img.src=auto;
-    return;
-  }
-  if(fallback && img.dataset.triedFallback!=='1'){
+  if(fallback && !img.src.endsWith(fallback.replace('./','')) && img.dataset.triedFallback!=='1'){
     img.dataset.triedFallback='1';
-    img.closest('.product-image, .detail-image')?.classList.add('using-fallback');
+    img.closest('.product-image, .detail-image, .component-thumb')?.classList.add('using-fallback');
     const credit=img.parentElement?.querySelector('.image-credit');
-    if(credit) credit.textContent='Офлайн-иллюстрация';
+    if(credit) credit.textContent='Локальная иллюстрация';
     img.src=fallback;
     return;
   }
-  img.remove();
+  img.removeAttribute('data-remote-src');
 }
 window.handleProductImageError=handleProductImageError;
 function buildItems(build){
@@ -232,6 +231,8 @@ function calculateBuild(build){
   return {
     total, score, upgrade, power,
     annual: annual + energyAnnual,
+    recurringAnnual: annual,
+    energyAnnual,
     threeYear: total + (annual+energyAnnual)*3,
     pricePerPoint: score ? total/score : 0,
     completeness: Math.round(completeness*100),
@@ -333,7 +334,15 @@ function seedDemoBuilds(){
 }
 
 function renderAll(){
-  renderDashboard(); renderBuilds(); renderCatalog(); renderCompare(); renderSettings(); setActiveView(state.activeView,false); syncTopControls();
+  renderDashboard();
+  renderBuilds();
+  renderCompare();
+  renderSettings();
+  const catalogView=$('#view-catalog');
+  if(state.activeView==='catalog') renderCatalog();
+  else if(catalogView) catalogView.innerHTML='';
+  setActiveView(state.activeView,false);
+  syncTopControls();
 }
 
 function pageHead(eyebrow,title,description,actions=''){
@@ -395,21 +404,26 @@ function renderBuilds(){
 }
 
 function renderCatalog(){
-  const groups=Object.entries(catalog.categories).map(([id,c])=>{ const count=allItems().filter(i=>i.group===id).length; return `<button class="${state.catalogGroup===id?'active':''}" data-action="catalog-group" data-group="${id}"><span>${escapeHTML(c.name)}</span><small>${count}</small></button>`; }).join('');
-  const groupItems=allItems().filter(i=>i.group===state.catalogGroup);
-  const types=[...new Set(groupItems.map(i=>i.type))];
+  const items=allItems();
+  const counts=items.reduce((acc,item)=>{acc[item.group]=(acc[item.group]||0)+1;return acc;},{});
+  const groups=Object.entries(catalog.categories).map(([id,c])=>`<button class="${state.catalogGroup===id?'active':''}" data-action="catalog-group" data-group="${id}"><span>${escapeHTML(c.name)}</span><small>${counts[id]||0}</small></button>`).join('');
+  const groupItems=items.filter(i=>i.group===state.catalogGroup);
+  const types=[...new Set(groupItems.map(i=>i.type))].sort((a,b)=>itemTypeName(a).localeCompare(itemTypeName(b),'ru'));
   const typeOptions=`<option value="all">Все типы</option>`+types.map(t=>`<option value="${t}" ${state.catalogType===t?'selected':''}>${escapeHTML(itemTypeName(t))}</option>`).join('');
   const q=state.catalogSearch.trim().toLowerCase();
-  const visible=groupItems.filter(i=>(state.catalogType==='all'||i.type===state.catalogType)&&(!q||`${i.brand} ${i.name} ${Object.values(i.specs||{}).join(' ')}`.toLowerCase().includes(q)));
-  const cards=visible.map(productCardHTML).join('');
+  const filtered=groupItems.filter(i=>(state.catalogType==='all'||i.type===state.catalogType)&&(!q||`${i.brand} ${i.name} ${i.description||''} ${Object.values(i.specs||{}).join(' ')}`.toLowerCase().includes(q)));
+  if(!catalogVisibleCount) catalogVisibleCount=catalogPageSize();
+  const shown=filtered.slice(0,catalogVisibleCount);
+  const cards=shown.map(productCardHTML).join('');
   const actions=`<button class="secondary" data-action="remote-catalog">Каталог по URL</button><button class="secondary" data-action="import-catalog">Импорт JSON</button><button class="primary" data-action="custom-item">＋ Своя позиция</button>`;
-  $('#view-catalog').innerHTML = pageHead('Каталог и магазины',`Каталог · ${allItems().length} позиций`,`В разделе «${categoryName(state.catalogGroup)}» показано ${visible.length} из ${groupItems.length}. Валюта: ${state.currency}; курсы обновлены ${state.ratesUpdated||verifiedRatesDate}.`,actions)+`
+  const more=shown.length<filtered.length?`<div class="catalog-pagination"><span>Показано ${shown.length} из ${filtered.length}</span><button class="secondary" data-action="load-more-catalog">Показать ещё ${Math.min(catalogPageSize(),filtered.length-shown.length)}</button></div>`:`<div class="catalog-pagination done"><span>Показаны все ${filtered.length} позиций</span></div>`;
+  $('#view-catalog').innerHTML = pageHead('Каталог и магазины',`Каталог · ${items.length} позиций`,`В разделе «${categoryName(state.catalogGroup)}» найдено ${filtered.length}. Для стабильной работы iPhone карточки загружаются порциями.`,actions)+`
     <div class="catalog-notice">
-      <div><span class="notice-icon">₽</span><span><b>Ссылки на покупку для каждой позиции</b><small>Яндекс Маркет, Ozon, DNS и поиск на официальном сайте. Финальная цена и наличие проверяются в магазине.</small></span></div>
-      <button class="ghost compact" data-action="score-help" data-group="${state.catalogGroup}">Что означают баллы?</button>
+      <div><span class="notice-icon">◎</span><span><b>Стабильный каталог с ленивой загрузкой</b><small>Фотографии и карточки загружаются только рядом с экраном — это исключает переполнение памяти Safari.</small></span></div>
+      <div class="notice-actions"><button class="ghost compact" data-action="annual-help">Расходы в год</button><button class="ghost compact" data-action="upgrade-help">Апгрейдность</button><button class="ghost compact" data-action="score-help" data-group="${state.catalogGroup}">Баллы</button></div>
     </div>
-    <div class="toolbar"><div class="segmented">${groups}</div><div class="search-field"><input id="catalogSearch" value="${escapeHTML(state.catalogSearch)}" placeholder="Поиск по модели и характеристикам"></div><select id="catalogType">${typeOptions}</select></div>
-    ${cards?`<div class="catalog-grid">${cards}</div>`:emptyHTML('Ничего не найдено','Измените поисковый запрос или добавьте собственную позицию.')}`;
+    <div class="toolbar"><div class="segmented">${groups}</div><div class="search-field"><input id="catalogSearch" value="${escapeHTML(state.catalogSearch)}" placeholder="Поиск по модели, описанию и характеристикам"></div><select id="catalogType">${typeOptions}</select></div>
+    ${cards?`<div class="catalog-grid">${cards}</div>${more}`:emptyHTML('Ничего не найдено','Измените поисковый запрос или добавьте собственную позицию.')}`;
   if(state.activeView==='catalog') hydrateImages();
 }
 
@@ -419,17 +433,17 @@ function productCardHTML(item){
   const price=priceState(item), links=purchaseLinks(item), primary=links[0];
   return `<article class="catalog-card" data-product-id="${item.id}" style="--card-accent:${categoryAccent(item.group)}">
     <div class="product-image" data-item-image="${item.id}"><div class="product-placeholder">${iconFor(item.group)}</div>${img?imageHTML(img,item):''}<span class="price-status ${price.className}">${price.label}</span></div>
-    <div class="catalog-card-body"><div class="card-kicker"><div class="product-brand">${escapeHTML(item.brand)}</div><button class="score-info-mini" data-action="score-help" data-group="${item.group}" aria-label="Объяснение баллов">?</button></div><h3>${escapeHTML(item.name)}</h3><div class="spec-pills">${specs}</div>
+    <div class="catalog-card-body"><div class="card-kicker"><div class="product-brand">${escapeHTML(item.brand)}</div><button class="score-info-mini" data-action="score-help" data-group="${item.group}" aria-label="Объяснение баллов">?</button></div><h3>${escapeHTML(item.name)}</h3><p class="product-description">${escapeHTML(item.description||'Описание будет добавлено в следующем обновлении каталога.')}</p><div class="spec-pills">${specs}</div>
       <div class="product-foot"><div class="product-price"><b>${money(item.priceEUR)}</b><small>${escapeHTML(itemTypeName(item.type))}${price.date?` · ${escapeHTML(price.date)}`:''}</small></div><button class="score-ring" data-action="score-help" data-group="${item.group}" style="--p:${clamp(item.score||0,0,100)}" title="${escapeHTML(scoreBand(item.score))}: ${item.score||0}/100"><b>${item.score||0}</b></button></div>
       <div class="score-caption"><span>${escapeHTML(scoreBand(item.score))}</span><span>балл внутри типа</span></div>
       <div class="card-actions card-actions-store"><button class="secondary" data-action="add-item" data-id="${item.id}">Добавить</button><a class="shop-button" href="${escapeHTML(primary.url)}" target="_blank" rel="noopener noreferrer">Купить</a><button class="icon-button" data-action="product-detail" data-id="${item.id}" aria-label="Подробнее">›</button></div>
     </div></article>`;
 }
 function imageHTML(img,item){
-  const auto=bingImageURL(item);
   const fallback=fallbackImageURL(item);
-  const isAuto=img.kind==='auto' || img.url===auto;
-  return `<img src="${escapeHTML(img.url)}" alt="${escapeHTML(item.brand+' '+item.name)}" loading="lazy" decoding="async" referrerpolicy="no-referrer" data-auto-src="${isAuto?'':escapeHTML(auto)}" data-fallback-src="${escapeHTML(fallback)}" data-tried-auto="${isAuto?'1':'0'}" onerror="handleProductImageError(this)">${img.credit?`<span class="image-credit">${escapeHTML(img.credit)}</span>`:''}`;
+  const remote=img.kind==='lazy'?(img.remote||bingImageURL(item)):'';
+  const initial=img.kind==='lazy'?fallback:img.url;
+  return `<img src="${escapeHTML(initial)}" alt="${escapeHTML(item.brand+' '+item.name)}" loading="lazy" decoding="async" referrerpolicy="no-referrer" ${remote?`data-remote-src="${escapeHTML(remote)}"`:''} data-fallback-src="${escapeHTML(fallback)}" onerror="handleProductImageError(this)">${img.credit?`<span class="image-credit">${escapeHTML(img.credit)}</span>`:''}`;
 }
 
 function renderCompare(){
@@ -454,7 +468,7 @@ function renderSettings(){
   $('#view-settings').innerHTML = pageHead('Персонализация','Настройки','Темы, валюта, энергозатраты, резервные копии и параметры каталога.')+`
     <div class="settings-grid">
       <section class="setting-card"><h3>Визуальная тема</h3><p>Каждая тема меняет фон, акценты, стеклянные поверхности и системный цвет PWA.</p><div class="theme-cards">
-        ${themeCard('dark','Тёмная')}${themeCard('light','Светлая')}${themeCard('corsa','Assetto Corsa')}
+        ${themeCard('dark','Тёмная')}${themeCard('light','Светлая')}${themeCard('graphite','Graphite')}${themeCard('navy','Midnight Navy')}${themeCard('titanium','Titanium')}${themeCard('mono','Monochrome')}${themeCard('corsa','Assetto Corsa')}
       </div></section>
       <section class="setting-card"><h3>Валюта и стоимость энергии</h3><p>База хранится в EUR, а интерфейс мгновенно пересчитывает суммы. Проверенные курсы зафиксированы на ${state.ratesUpdated||verifiedRatesDate} и остаются редактируемыми.</p><div class="setting-stack form-grid">
         <label><span>Валюта интерфейса</span><select id="settingCurrency">${currencyOptions()}</select></label>
@@ -463,7 +477,7 @@ function renderSettings(){
         <label class="full"><span>Среднее использование в день, часов</span><input id="settingHours" type="number" min="0" max="24" step="0.5" value="${state.hoursPerDay}"></label>
         <div class="full actions"><button type="button" class="secondary" data-action="restore-rates">Восстановить проверенные курсы</button><small class="muted">Курс RUB — официальный ориентир Банка России; USD/CNY — референсные курсы ECB.</small></div>
       </div></section>
-      <section class="setting-card"><h3>Система баллов</h3><p>Баллы нужны для сравнения вариантов внутри одного направления. Это прозрачная модель SetupLab, а не универсальный лабораторный бенчмарк.</p><div class="setting-stack"><button class="secondary" data-action="score-help">Открыть подробное объяснение</button><div class="score-scale"><span>0–39<br><b>Начальный</b></span><span>40–59<br><b>Базовый</b></span><span>60–74<br><b>Сильный</b></span><span>75–89<br><b>Высокий</b></span><span>90–100<br><b>Флагман</b></span></div></div></section>
+      <section class="setting-card"><h3>Расходы и апгрейд</h3><p>Откройте методики расчёта и проверьте, какие параметры используются для долгосрочной оценки.</p><div class="setting-stack"><button class="secondary" data-action="annual-help">Как считаются расходы в год</button><button class="secondary" data-action="upgrade-help">Как считается апгрейдность</button></div></section><section class="setting-card"><h3>Система баллов</h3><p>Баллы нужны для сравнения вариантов внутри одного направления. Это прозрачная модель SetupLab, а не универсальный лабораторный бенчмарк.</p><div class="setting-stack"><button class="secondary" data-action="score-help">Открыть подробное объяснение</button><div class="score-scale"><span>0–39<br><b>Начальный</b></span><span>40–59<br><b>Базовый</b></span><span>60–74<br><b>Сильный</b></span><span>75–89<br><b>Высокий</b></span><span>90–100<br><b>Флагман</b></span></div></div></section>
       <section class="setting-card"><h3>Данные приложения</h3><p>Резервная копия содержит сборки, пользовательские позиции, исправления каталога и кэш изображений.</p><div class="setting-stack"><button class="secondary" data-action="export-data">Скачать резервную копию</button><button class="secondary" data-action="import-data">Импортировать копию</button><button class="ghost" data-action="clear-image-cache">Очистить кэш фотографий</button></div></section>
       <section class="setting-card"><h3>Каталог проекта</h3><p>Файл catalog.json можно редактировать прямо в репозитории. Дополнительно поддерживается импорт собственного JSON без пересборки приложения.</p><div class="setting-stack"><button class="secondary" data-action="export-catalog">Скачать текущий каталог</button><button class="secondary" data-action="remote-catalog">Подключить JSON по URL</button><button class="secondary" data-action="import-catalog">Импортировать catalog.json</button><button class="primary" data-action="custom-item">Добавить свою позицию</button></div></section>
       <section class="setting-card"><h3>Установка на iPhone</h3><p>Откройте сайт в Safari, нажмите «Поделиться», затем «На экран Домой». SetupLab запустится без адресной строки и будет работать офлайн.</p><div class="setting-stack"><button class="secondary" data-action="install-help">Показать инструкцию</button></div></section>
@@ -475,6 +489,7 @@ function themeCard(id,label){ return `<button class="theme-card ${state.theme===
 function setActiveView(view,save=true){
   if(!document.getElementById(`view-${view}`)) view='dashboard';
   state.activeView=view; if(save) saveState();
+  if(view==='catalog' && !$('#view-catalog').innerHTML.trim()) renderCatalog();
   $$('.view').forEach(v=>v.classList.toggle('active',v.id===`view-${view}`));
   $$('[data-action="go"]').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
   $$('.bottom-nav button[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
@@ -496,9 +511,12 @@ function bindEvents(){
     else if(action==='new-build-group') openNewBuild(target.dataset.group);
     else if(action==='open-build') openBuild(target.dataset.id);
     else if(action==='build-menu'){ event.stopPropagation(); openBuildMenu(target.dataset.id); }
-    else if(action==='catalog-group'){ state.catalogGroup=target.dataset.group; state.catalogType='all'; saveState(); renderCatalog(); }
+    else if(action==='catalog-group'){ state.catalogGroup=target.dataset.group; state.catalogType='all'; catalogVisibleCount=catalogPageSize(); saveState(); renderCatalog(); }
     else if(action==='product-detail') openProduct(target.dataset.id);
     else if(action==='score-help') openScoreHelp(target.dataset.group||state.catalogGroup);
+    else if(action==='annual-help') openAnnualHelp(target.dataset.buildId||'',target.dataset.itemId||'');
+    else if(action==='upgrade-help') openUpgradeHelp(target.dataset.buildId||'',target.dataset.itemId||'');
+    else if(action==='load-more-catalog'){ catalogVisibleCount+=catalogPageSize(); renderCatalog(); }
     else if(action==='add-item') openAddItem(target.dataset.id);
     else if(action==='custom-item') openCustomItem();
     else if(action==='close-modal' && (target===event.target || target.closest('.icon-button'))) closeModal();
@@ -524,13 +542,18 @@ function bindEvents(){
 
   document.addEventListener('input',event=>{
     if(event.target.id==='catalogSearch'){
-      state.catalogSearch=event.target.value; saveState();
-      clearTimeout(event.target._timer); event.target._timer=setTimeout(renderCatalog,180);
+      state.catalogSearch=event.target.value; catalogVisibleCount=catalogPageSize();
+      clearTimeout(window._catalogSearchTimer);
+      window._catalogSearchTimer=setTimeout(()=>{
+        renderCatalog();
+        const input=$('#catalogSearch');
+        if(input){ input.focus({preventScroll:true}); const end=input.value.length; input.setSelectionRange?.(end,end); }
+      },220);
     }
   });
   document.addEventListener('change',event=>{
     const el=event.target;
-    if(el.id==='catalogType'){ state.catalogType=el.value; saveState(); renderCatalog(); }
+    if(el.id==='catalogType'){ state.catalogType=el.value; catalogVisibleCount=catalogPageSize(); saveState(); renderCatalog(); }
     if(el.dataset.action==='compare-select'){
       const arr=[...state.compareIds]; arr[Number(el.dataset.index)]=el.value; state.compareIds=arr.filter(Boolean); saveState(); renderCompare();
     }
@@ -583,14 +606,15 @@ function submitNewBuild(form){
 function openBuild(id){
   const build=getBuild(id); if(!build)return;
   const m=calculateBuild(build);
-  const components=buildItems(build).map(({entry,item})=>`<div class="component-row"><span class="component-thumb">${itemImage(item)?`<img src="${escapeHTML(itemImage(item).url)}" alt="">`:iconFor(item.group)}</span><span><strong>${escapeHTML(item.brand+' '+item.name)}</strong><small>${escapeHTML(itemTypeName(item.type))} · ${money(item.priceEUR)} × ${entry.qty||1}</small></span><span class="qty">×${entry.qty||1}</span><button class="remove-button" data-action="remove-build-item" data-build-id="${build.id}" data-item-id="${item.id}">×</button></div>`).join('');
+  const components=buildItems(build).map(({entry,item})=>`<div class="component-row"><span class="component-thumb">${itemImage(item)?imageHTML(itemImage(item),item):iconFor(item.group)}</span><span><strong>${escapeHTML(item.brand+' '+item.name)}</strong><small>${escapeHTML(itemTypeName(item.type))} · ${money(item.priceEUR)} × ${entry.qty||1}</small></span><span class="qty">×${entry.qty||1}</span><button class="remove-button" data-action="remove-build-item" data-build-id="${build.id}" data-item-id="${item.id}">×</button></div>`).join('');
   const issues=m.issues.map(i=>`<div class="issue ${i.level}"><span class="dot"></span><span>${escapeHTML(i.text)}</span></div>`).join('');
   openModal(build.name,categoryName(build.group),`
     <div class="actions" style="margin-bottom:14px"><button class="primary" data-action="go" data-view="catalog" onclick="document.getElementById('modalRoot').innerHTML='';document.body.style.overflow=''">＋ Добавить компонент</button><button class="secondary" data-action="edit-build" data-id="${build.id}">Редактировать</button><button class="ghost" data-action="duplicate-build" data-id="${build.id}">Копия</button></div>
-    <div class="metric-grid"><article class="metric-card"><small>Стоимость</small><b>${money(m.total)}</b></article><article class="metric-card"><small>Баллы</small><b>${m.score}/100</b><div class="progress"><i style="--value:${m.score}%"></i></div></article><article class="metric-card"><small>Совместимость</small><b>${m.compatibility}%</b><div class="progress"><i style="--value:${m.compatibility}%"></i></div></article><article class="metric-card"><small>Апгрейд</small><b>${m.upgrade}%</b><div class="progress"><i style="--value:${m.upgrade}%"></i></div></article><article class="metric-card"><small>Цена балла</small><b>${money(m.pricePerPoint)}</b></article><article class="metric-card"><small>Расходы/год</small><b>${money(m.annual)}</b></article><article class="metric-card"><small>Полная стоимость 3 года</small><b>${money(m.threeYear)}</b></article><article class="metric-card"><small>Потребление</small><b>${number(m.power)} Вт</b></article></div>
+    <div class="metric-grid"><article class="metric-card"><small>Стоимость</small><b>${money(m.total)}</b></article><article class="metric-card"><small>Баллы</small><b>${m.score}/100</b><div class="progress"><i style="--value:${m.score}%"></i></div></article><article class="metric-card"><small>Совместимость</small><b>${m.compatibility}%</b><div class="progress"><i style="--value:${m.compatibility}%"></i></div></article><article class="metric-card metric-clickable" data-action="upgrade-help" data-build-id="${build.id}"><small>Апгрейдность</small><b>${m.upgrade}%</b><div class="progress"><i style="--value:${m.upgrade}%"></i></div><span>Открыть методику</span></article><article class="metric-card"><small>Цена балла</small><b>${money(m.pricePerPoint)}</b></article><article class="metric-card metric-clickable" data-action="annual-help" data-build-id="${build.id}"><small>Расходы/год</small><b>${money(m.annual)}</b><span>Энергия + обслуживание</span></article><article class="metric-card"><small>Полная стоимость 3 года</small><b>${money(m.threeYear)}</b></article><article class="metric-card"><small>Потребление</small><b>${number(m.power)} Вт</b></article></div>
     <div class="section-grid build-detail-grid"><section><div class="panel-head" style="margin-top:18px"><div><h3>Компоненты</h3><p>${m.count} позиций</p></div></div>${components?`<div class="component-list">${components}</div>`:emptyHTML('Сборка пустая','Добавьте компоненты из каталога.')}</section><section><div class="panel-head" style="margin-top:18px"><div><h3>Проверка</h3><p>На основе характеристик каталога</p></div></div><div class="issue-list">${issues}</div></section></div>
     ${build.notes?`<section class="panel" style="margin-top:16px"><h3>Заметка</h3><p class="muted" style="margin:0;white-space:pre-wrap">${escapeHTML(build.notes)}</p></section>`:''}
   `,true);
+  hydrateImages();
 }
 
 function openEditBuild(id){
@@ -606,7 +630,7 @@ function openBuildMenu(id){
   openModal(b.name,'Действия',`<div class="setting-stack"><button class="secondary" data-action="open-build" data-id="${id}">Открыть</button><button class="secondary" data-action="duplicate-build" data-id="${id}">Создать копию</button><button class="secondary" data-action="edit-build" data-id="${id}">Переименовать и заметки</button><button class="ghost" data-action="delete-build" data-id="${id}">Удалить</button></div>`);
 }
 function duplicateBuild(id){
-  const b=getBuild(id); if(!b)return; const copy={...structuredClone(b),id:uid('build'),name:`${b.name} — копия`,createdAt:Date.now(),updatedAt:Date.now()}; state.builds.unshift(copy); saveState(); closeModal(); renderAll(); toast('Копия создана');
+  const b=getBuild(id); if(!b)return; const copy={...deepClone(b),id:uid('build'),name:`${b.name} — копия`,createdAt:Date.now(),updatedAt:Date.now()}; state.builds.unshift(copy); saveState(); closeModal(); renderAll(); toast('Копия создана');
 }
 function deleteBuild(id){
   const b=getBuild(id); if(!b)return;
@@ -634,15 +658,38 @@ function openScoreHelp(group='pc'){
     </div>`,true);
 }
 
+function upgradeBand(score){
+  const s=Number(score)||0;
+  if(s>=85)return 'Отличный запас'; if(s>=70)return 'Хороший запас'; if(s>=50)return 'Средний запас'; return 'Ограниченный запас';
+}
+function openUpgradeHelp(buildId='',itemId=''){
+  const build=buildId?getBuild(buildId):null;
+  const item=itemId?getItem(itemId):null;
+  const score=build?calculateBuild(build).upgrade:Number(item?.upgrade||0);
+  const title=build?build.name:item?`${item.brand} ${item.name}`:'Система SetupLab';
+  openModal('Что означает апгрейдность',title,`<div class="score-explainer"><section class="score-hero"><span class="score-ring score-ring-large" style="--p:${score}"><b>${score}</b></span><div><h3>${upgradeBand(score)}</h3><p>Апгрейдность показывает, насколько легко сохранить основу комплекта и улучшать её частями, не заменяя всё сразу.</p></div></section><div class="upgrade-factor-grid"><div><b>Платформа</b><small>Актуальность сокета, стандарта, байонета или экосистемы.</small></div><div><b>Модульность</b><small>Можно ли менять отдельные узлы и расширять конфигурацию.</small></div><div><b>Запас</b><small>Мощность, нагрузка, интерфейсы и свободные каналы на будущее.</small></div><div><b>Совместимость</b><small>Ширина выбора компонентов и отсутствие жёсткой привязки.</small></div></div><section class="explain-card"><h3>Как читается процент</h3><p><b>85–100%</b> — платформа рассчитана на несколько этапов обновления. <b>70–84%</b> — хороший запас. <b>50–69%</b> — часть улучшений потребует компромиссов. Ниже 50% — закрытая или близкая к пределу система.</p></section><section class="issue warn"><span class="dot"></span><span>Это прогноз удобства обновления, а не гарантия будущей совместимости: производители могут менять стандарты и поддержку.</span></section></div>`,true);
+}
+function openAnnualHelp(buildId='',itemId=''){
+  const build=buildId?getBuild(buildId):null;
+  const item=itemId?getItem(itemId):null;
+  let power=0, recurring=0, energy=0, total=0, title='Методика SetupLab';
+  if(build){ const m=calculateBuild(build); power=m.power; recurring=m.recurringAnnual; energy=m.energyAnnual; total=m.annual; title=build.name; }
+  else if(item){ power=Number(item.powerW||0); recurring=Number(item.futureAnnualEUR||0); energy=power/1000*state.hoursPerDay*365*state.electricityEUR; total=recurring+energy; title=`${item.brand} ${item.name}`; }
+  const formula=`${number(power)} Вт × ${number(state.hoursPerDay,1)} ч/день × 365 × ${money(state.electricityEUR)}/кВт·ч`;
+  openModal('Как считаются расходы в год',title,`<div class="score-explainer"><section class="explain-card"><h3>1. Электроэнергия</h3><p>Используется паспортная или ориентировочная мощность, среднее время работы из настроек и заданный тариф электроэнергии.</p><div class="cost-formula"><span>${escapeHTML(formula)}</span><b>${money(energy)} / год</b></div></section><section class="explain-card"><h3>2. Регулярные расходы</h3><p>Сюда входят расходники, подписки, обслуживание, замена фильтров, картриджей, ламп, носителей и другие ежегодные затраты, записанные в каталоге.</p><div class="cost-formula"><span>Обслуживание и расходники</span><b>${money(recurring)} / год</b></div></section><section class="annual-total"><span>Итоговый ориентир</span><b>${money(total)} / год</b></section><section class="issue warn"><span class="dot"></span><span>Расчёт не включает кредит, доставку, ремонт после поломок и изменение тарифа. Часы использования и стоимость энергии меняются в настройках.</span></section></div>`,true);
+}
+
 function openProduct(id){
   const item=getItem(id); if(!item)return;
   const img=itemImage(item), price=priceState(item), links=purchaseLinks(item);
   const specs=Object.entries(item.specs||{}).map(([k,v])=>`<div class="spec-row"><span>${escapeHTML(k)}</span><b>${escapeHTML(v)}</b></div>`).join('');
   const stores=links.map(link=>`<a class="store-card ${link.id==='market'?'featured':''}" href="${escapeHTML(link.url)}" target="_blank" rel="noopener noreferrer"><span class="store-icon">${escapeHTML(link.icon)}</span><span><b>${escapeHTML(link.label)}</b><small>${escapeHTML(link.note)}</small></span><i>↗</i></a>`).join('');
   const priceReference=item.priceReferenceUrl?`<a class="price-reference" href="${escapeHTML(item.priceReferenceUrl)}" target="_blank" rel="noopener noreferrer">Открыть источник ценового ориентира ↗</a>`:'';
-  openModal(item.name,item.brand,`<div class="detail-layout"><div><div class="detail-image" data-item-image="${item.id}"><div class="product-placeholder">${iconFor(item.group)}</div>${img?imageHTML(img,item):''}<span class="price-status ${price.className}">${price.label}</span></div><div class="actions" style="margin-top:10px"><button class="secondary" data-action="find-image" data-id="${item.id}">Найти фото</button></div></div><div class="detail-data"><div class="metric-grid"><article class="metric-card metric-price"><small>Цена каталога</small><b>${money(item.priceEUR)}</b><span>${price.date?`проверено ${escapeHTML(price.date)}`:'редактируется локально'}</span></article><article class="metric-card metric-clickable" data-action="score-help" data-group="${item.group}"><small>Баллы · ${escapeHTML(scoreBand(item.score))}</small><b>${item.score}/100</b><span>Нажмите для объяснения</span></article><article class="metric-card"><small>Апгрейд</small><b>${item.upgrade}%</b></article><article class="metric-card"><small>Расходы/год</small><b>${money(item.futureAnnualEUR||0)}</b></article></div><div class="spec-table">${specs||'<div class="spec-row"><span>Характеристики</span><b>Не заполнены</b></div>'}</div><section class="purchase-panel"><div class="panel-head"><div><h3>Купить или проверить цену</h3><p>Ссылки открываются в новой вкладке. Цена и наличие могут измениться.</p></div></div><div class="store-grid">${stores}</div>${priceReference}</section><div class="actions"><button class="primary" data-action="add-item" data-id="${item.id}">Добавить в сборку</button><button class="secondary" data-action="edit-product" data-id="${item.id}">Изменить цену и данные</button></div><p class="muted source-note">${escapeHTML(item.sourceNote||'Данные редактируются локально.')}</p></div></div>`,true);
+  const itemEnergy=Number(item.powerW||0)/1000*state.hoursPerDay*365*state.electricityEUR;
+  openModal(item.name,item.brand,`<div class="detail-layout"><div><div class="detail-image" data-item-image="${item.id}"><div class="product-placeholder">${iconFor(item.group)}</div>${img?imageHTML(img,item):''}<span class="price-status ${price.className}">${price.label}</span></div><div class="actions" style="margin-top:10px"><button class="secondary" data-action="find-image" data-id="${item.id}">Найти фото</button></div></div><div class="detail-data"><section class="product-summary"><span class="eyebrow">Кратко о модели</span><p>${escapeHTML(item.description||'Описание не заполнено.')}</p></section><div class="metric-grid"><article class="metric-card metric-price"><small>Цена каталога</small><b>${money(item.priceEUR)}</b><span>${price.date?`проверено ${escapeHTML(price.date)}`:'редактируется локально'}</span></article><article class="metric-card metric-clickable" data-action="score-help" data-group="${item.group}"><small>Баллы · ${escapeHTML(scoreBand(item.score))}</small><b>${item.score}/100</b><span>Нажмите для объяснения</span></article><article class="metric-card metric-clickable" data-action="upgrade-help" data-item-id="${item.id}"><small>Апгрейдность</small><b>${item.upgrade}%</b><span>Что влияет на оценку</span></article><article class="metric-card metric-clickable" data-action="annual-help" data-item-id="${item.id}"><small>Расходы/год</small><b>${money((item.futureAnnualEUR||0)+itemEnergy)}</b><span>Энергия + обслуживание</span></article></div><div class="spec-table">${specs||'<div class="spec-row"><span>Характеристики</span><b>Не заполнены</b></div>'}</div><section class="purchase-panel"><div class="panel-head"><div><h3>Купить или проверить цену</h3><p>Ссылки открываются в новой вкладке. Цена и наличие могут измениться.</p></div></div><div class="store-grid">${stores}</div>${priceReference}</section><div class="actions"><button class="primary" data-action="add-item" data-id="${item.id}">Добавить в сборку</button><button class="secondary" data-action="edit-product" data-id="${item.id}">Изменить цену и данные</button></div><p class="muted source-note">${escapeHTML(item.sourceNote||'Данные редактируются локально.')}</p></div></div>`,true);
   hydrateImages();
 }
+
 function openAddItem(id){
   const item=getItem(id); if(!item)return;
   const compatibleBuilds=state.builds.filter(b=>b.group===item.group);
@@ -662,23 +709,23 @@ function openCustomItem(prefill={}){
   const group=prefill.group||state.catalogGroup||'pc';
   const groupOptions=Object.entries(catalog.categories).map(([id,c])=>`<option value="${id}" ${id===group?'selected':''}>${escapeHTML(c.name)}</option>`).join('');
   const typeOptions=Object.entries(typeLabels).map(([id,label])=>`<option value="${id}" ${prefill.type===id?'selected':''}>${escapeHTML(label)}</option>`).join('');
-  openModal('Своя позиция','Пользовательский каталог',`<form id="customItemForm" class="form-grid"><label><span>Раздел</span><select name="group">${groupOptions}</select></label><label><span>Тип</span><select name="type">${typeOptions}</select></label><label><span>Бренд</span><input name="brand" required value="${escapeHTML(prefill.brand||'')}"></label><label><span>Модель</span><input name="name" required value="${escapeHTML(prefill.name||'')}"></label><label><span>Базовая цена, EUR</span><input name="priceEUR" type="number" min="0" step="0.01" value="${prefill.priceEUR||0}"></label><label><span>Производительность, 0–100</span><input name="score" type="number" min="0" max="100" value="${prefill.score||70}"></label><label><span>Апгрейдность, 0–100</span><input name="upgrade" type="number" min="0" max="100" value="${prefill.upgrade||70}"></label><label><span>Будущие расходы/год, EUR</span><input name="futureAnnualEUR" type="number" min="0" step="0.01" value="${prefill.futureAnnualEUR||0}"></label><label><span>Потребление, Вт</span><input name="powerW" type="number" min="0" value="${prefill.powerW||0}"></label><label><span>URL фотографии</span><input name="image" type="url" value="${escapeHTML(prefill.image||'')}"></label><label class="full"><span>Прямая ссылка на покупку (необязательно)</span><input name="purchaseURL" type="url" value="${escapeHTML(prefill.purchaseURL||'')}" placeholder="https://..."></label><label class="full"><span>Характеристики: одна строка «Название: значение»</span><textarea name="specs" placeholder="Сокет: AM5&#10;Память: DDR5">${escapeHTML(prefill.specsText||'')}</textarea></label><div class="full actions"><button type="button" class="ghost" data-action="close-modal">Отмена</button><button class="primary" type="submit">Сохранить</button></div></form>`,true);
+  openModal('Своя позиция','Пользовательский каталог',`<form id="customItemForm" class="form-grid"><label><span>Раздел</span><select name="group">${groupOptions}</select></label><label><span>Тип</span><select name="type">${typeOptions}</select></label><label><span>Бренд</span><input name="brand" required value="${escapeHTML(prefill.brand||'')}"></label><label><span>Модель</span><input name="name" required value="${escapeHTML(prefill.name||'')}"></label><label><span>Базовая цена, EUR</span><input name="priceEUR" type="number" min="0" step="0.01" value="${prefill.priceEUR||0}"></label><label><span>Производительность, 0–100</span><input name="score" type="number" min="0" max="100" value="${prefill.score||70}"></label><label><span>Апгрейдность, 0–100</span><input name="upgrade" type="number" min="0" max="100" value="${prefill.upgrade||70}"></label><label><span>Будущие расходы/год, EUR</span><input name="futureAnnualEUR" type="number" min="0" step="0.01" value="${prefill.futureAnnualEUR||0}"></label><label><span>Потребление, Вт</span><input name="powerW" type="number" min="0" value="${prefill.powerW||0}"></label><label class="full"><span>Краткое описание</span><textarea name="description" placeholder="Для чего подходит модель и чем она выделяется">${escapeHTML(prefill.description||'')}</textarea></label><label><span>URL фотографии</span><input name="image" type="url" value="${escapeHTML(prefill.image||'')}"></label><label class="full"><span>Прямая ссылка на покупку (необязательно)</span><input name="purchaseURL" type="url" value="${escapeHTML(prefill.purchaseURL||'')}" placeholder="https://..."></label><label class="full"><span>Характеристики: одна строка «Название: значение»</span><textarea name="specs" placeholder="Сокет: AM5&#10;Память: DDR5">${escapeHTML(prefill.specsText||'')}</textarea></label><div class="full actions"><button type="button" class="ghost" data-action="close-modal">Отмена</button><button class="primary" type="submit">Сохранить</button></div></form>`,true);
 }
 function parseSpecs(text){
   return Object.fromEntries(String(text||'').split('\n').map(s=>s.trim()).filter(Boolean).map(line=>{ const idx=line.indexOf(':'); return idx>-1?[line.slice(0,idx).trim(),line.slice(idx+1).trim()]:['Описание',line]; }));
 }
 function submitCustomItem(form){
-  const d=new FormData(form); const item={id:uid('custom'),group:String(d.get('group')),type:String(d.get('type')),brand:String(d.get('brand')).trim(),name:String(d.get('name')).trim(),priceEUR:Number(d.get('priceEUR'))||0,score:clamp(Number(d.get('score'))||0,0,100),upgrade:clamp(Number(d.get('upgrade'))||0,0,100),futureAnnualEUR:Number(d.get('futureAnnualEUR'))||0,powerW:Number(d.get('powerW'))||0,image:String(d.get('image')||'').trim(),purchase:{market:String(d.get('purchaseURL')||'').trim()},priceBasis:'estimate',priceChecked:new Date().toISOString().slice(0,10),specs:parseSpecs(d.get('specs')),compatibility:{},imageQuery:`${d.get('brand')} ${d.get('name')} product photo`,sourceNote:'Пользовательская позиция',updated:new Date().toISOString().slice(0,10)};
+  const d=new FormData(form); const item={id:uid('custom'),group:String(d.get('group')),type:String(d.get('type')),brand:String(d.get('brand')).trim(),name:String(d.get('name')).trim(),priceEUR:Number(d.get('priceEUR'))||0,score:clamp(Number(d.get('score'))||0,0,100),upgrade:clamp(Number(d.get('upgrade'))||0,0,100),futureAnnualEUR:Number(d.get('futureAnnualEUR'))||0,powerW:Number(d.get('powerW'))||0,description:String(d.get('description')||'').trim(),image:String(d.get('image')||'').trim(),purchase:{market:String(d.get('purchaseURL')||'').trim()},priceBasis:'estimate',priceChecked:new Date().toISOString().slice(0,10),specs:parseSpecs(d.get('specs')),compatibility:{},imageQuery:`${d.get('brand')} ${d.get('name')} product photo`,sourceNote:'Пользовательская позиция',updated:new Date().toISOString().slice(0,10)};
   state.customItems.unshift(item); state.catalogGroup=item.group; saveState(); closeModal(); renderAll(); setActiveView('catalog'); toast('Позиция добавлена','Совместимость можно уточнить через импорт расширенного JSON.');
 }
 
 function openEditProduct(id){
   const item=getItem(id); if(!item)return;
-  openModal('Изменить данные','Локальное переопределение',`<form id="editProductForm" class="form-grid"><input type="hidden" name="id" value="${item.id}"><label><span>Базовая цена, EUR</span><input name="priceEUR" type="number" min="0" step="0.01" value="${item.priceEUR}"></label><label><span>Баллы, 0–100</span><input name="score" type="number" min="0" max="100" value="${item.score}"></label><label><span>Апгрейдность, 0–100</span><input name="upgrade" type="number" min="0" max="100" value="${item.upgrade}"></label><label><span>Расходы/год, EUR</span><input name="futureAnnualEUR" type="number" min="0" step="0.01" value="${item.futureAnnualEUR||0}"></label><label><span>Потребление, Вт</span><input name="powerW" type="number" min="0" value="${item.powerW||0}"></label><label><span>URL фотографии</span><input name="image" type="url" value="${escapeHTML(item.image||'')}"></label><label class="full"><span>Прямая ссылка на покупку</span><input name="purchaseURL" type="url" value="${escapeHTML(item.purchase?.market||'')}" placeholder="https://..."></label><label class="full"><span>Характеристики</span><textarea name="specs">${escapeHTML(Object.entries(item.specs||{}).map(([k,v])=>`${k}: ${v}`).join('\n'))}</textarea></label><div class="full actions"><button type="button" class="secondary" data-action="find-image" data-id="${item.id}">Найти фото</button><button class="primary" type="submit">Сохранить</button></div></form>`,true);
+  openModal('Изменить данные','Локальное переопределение',`<form id="editProductForm" class="form-grid"><input type="hidden" name="id" value="${item.id}"><label><span>Базовая цена, EUR</span><input name="priceEUR" type="number" min="0" step="0.01" value="${item.priceEUR}"></label><label><span>Баллы, 0–100</span><input name="score" type="number" min="0" max="100" value="${item.score}"></label><label><span>Апгрейдность, 0–100</span><input name="upgrade" type="number" min="0" max="100" value="${item.upgrade}"></label><label><span>Расходы/год, EUR</span><input name="futureAnnualEUR" type="number" min="0" step="0.01" value="${item.futureAnnualEUR||0}"></label><label><span>Потребление, Вт</span><input name="powerW" type="number" min="0" value="${item.powerW||0}"></label><label class="full"><span>Краткое описание</span><textarea name="description">${escapeHTML(item.description||'')}</textarea></label><label><span>URL фотографии</span><input name="image" type="url" value="${escapeHTML(item.image||'')}"></label><label class="full"><span>Прямая ссылка на покупку</span><input name="purchaseURL" type="url" value="${escapeHTML(item.purchase?.market||'')}" placeholder="https://..."></label><label class="full"><span>Характеристики</span><textarea name="specs">${escapeHTML(Object.entries(item.specs||{}).map(([k,v])=>`${k}: ${v}`).join('\n'))}</textarea></label><div class="full actions"><button type="button" class="secondary" data-action="find-image" data-id="${item.id}">Найти фото</button><button class="primary" type="submit">Сохранить</button></div></form>`,true);
 }
 function submitEditProduct(form){
   const d=new FormData(form), id=String(d.get('id'));
-  state.catalogOverrides[id]={...(state.catalogOverrides[id]||{}),priceEUR:Number(d.get('priceEUR'))||0,score:clamp(Number(d.get('score'))||0,0,100),upgrade:clamp(Number(d.get('upgrade'))||0,0,100),futureAnnualEUR:Number(d.get('futureAnnualEUR'))||0,powerW:Number(d.get('powerW'))||0,image:String(d.get('image')||'').trim(),purchase:{...(getItem(id)?.purchase||{}),market:String(d.get('purchaseURL')||'').trim()},priceBasis:'local',priceChecked:new Date().toISOString().slice(0,10),specs:parseSpecs(d.get('specs'))};
+  state.catalogOverrides[id]={...(state.catalogOverrides[id]||{}),priceEUR:Number(d.get('priceEUR'))||0,score:clamp(Number(d.get('score'))||0,0,100),upgrade:clamp(Number(d.get('upgrade'))||0,0,100),futureAnnualEUR:Number(d.get('futureAnnualEUR'))||0,powerW:Number(d.get('powerW'))||0,description:String(d.get('description')||'').trim(),image:String(d.get('image')||'').trim(),purchase:{...(getItem(id)?.purchase||{}),market:String(d.get('purchaseURL')||'').trim()},priceBasis:'local',priceChecked:new Date().toISOString().slice(0,10),specs:parseSpecs(d.get('specs'))};
   saveState(); closeModal(); renderAll(); toast('Данные обновлены','Изменения сохранены только на этом устройстве.');
 }
 
@@ -704,14 +751,16 @@ function selectImage(id,index){
 
 function hydrateImages(){
   imageObserver?.disconnect();
-  const targets=$$('[data-item-image]').filter(el=>!el.querySelector('img'));
-  const enqueue=el=>{
-    const id=el.dataset.itemImage, item=getItem(id); if(!item||state.imageCache[id]||item.image)return;
-    if(!imageQueue.some(x=>x.id===id)) imageQueue.push({id,el});
+  imageQueue=imageQueue.filter(job=>job.img?.isConnected);
+  const targets=$$('img[data-remote-src]:not([data-remote-loaded])');
+  const enqueue=img=>{
+    if(!img?.dataset.remoteSrc || img.dataset.remoteQueued==='1')return;
+    img.dataset.remoteQueued='1';
+    imageQueue.push({img,src:img.dataset.remoteSrc});
     processImageQueue();
   };
   if(!('IntersectionObserver' in window)){
-    targets.slice(0,24).forEach(enqueue);
+    targets.slice(0,8).forEach(enqueue);
     return;
   }
   imageObserver=new IntersectionObserver(entries=>{
@@ -720,32 +769,39 @@ function hydrateImages(){
       imageObserver.unobserve(entry.target);
       enqueue(entry.target);
     });
-  },{rootMargin:'420px 0px'});
-  targets.forEach(el=>imageObserver.observe(el));
+  },{rootMargin:'180px 0px'});
+  targets.forEach(img=>imageObserver.observe(img));
 }
 function processImageQueue(){
   while(imageQueueBusy<IMAGE_CONCURRENCY&&imageQueue.length){
-    const job=imageQueue.shift(); imageQueueBusy++;
-    fetchImageForItem(job.id).finally(()=>{ imageQueueBusy--; processImageQueue(); });
+    const job=imageQueue.shift();
+    if(!job.img?.isConnected)continue;
+    imageQueueBusy++;
+    loadRemoteImage(job).finally(()=>{ imageQueueBusy--; processImageQueue(); });
   }
 }
-async function fetchImageForItem(id){
-  const item=getItem(id); if(!item)return;
-  try {
-    const controller=new AbortController(); const timer=setTimeout(()=>controller.abort(),8000);
-    const url=`https://api.openverse.org/v1/images/?q=${encodeURIComponent(item.imageQuery||item.brand+' '+item.name)}&page_size=1&mature=false`;
-    const res=await fetch(url,{signal:controller.signal,headers:{Accept:'application/json'}}); clearTimeout(timer); if(!res.ok)return;
-    const data=await res.json(), r=data.results?.[0]; if(!r)return;
-    state.imageCache[id]={url:r.url,thumbnail:r.thumbnail||r.url,creator:r.creator||'',license:(r.license||'').toUpperCase(),landing:r.foreign_landing_url||r.detail_url||''}; saveState();
-    $$(`[data-item-image="${id}"]`).forEach(el=>{ const current=getItem(id); if(current&&!el.querySelector('img')) el.insertAdjacentHTML('beforeend',imageHTML(itemImage(current),current)); });
-  } catch {}
+function loadRemoteImage(job){
+  return new Promise(resolve=>{
+    const probe=new Image();
+    let done=false;
+    const finish=ok=>{ if(done)return; done=true; clearTimeout(timer); if(ok&&job.img?.isConnected){ job.img.src=job.src; job.img.dataset.remoteLoaded='1'; job.img.closest('.using-fallback')?.classList.remove('using-fallback'); const credit=job.img.parentElement?.querySelector('.image-credit'); if(credit)credit.textContent='Веб-фото'; } resolve(); };
+    const timer=setTimeout(()=>finish(false),6000);
+    probe.referrerPolicy='no-referrer';
+    probe.decoding='async';
+    probe.onload=()=>finish(true);
+    probe.onerror=()=>finish(false);
+    probe.src=job.src;
+  });
 }
 
 function setTheme(theme){
-  if(!['dark','light','corsa'].includes(theme))return;
-  state.theme=theme; saveState(); applyTheme(); renderAll(); toast('Тема изменена',theme==='corsa'?'Assetto Corsa: карбон и красные акценты.':theme==='light'?'Светлый режим включён.':'Тёмный режим включён.');
+  const list=['dark','light','graphite','navy','titanium','mono','corsa'];
+  if(!list.includes(theme))return;
+  state.theme=theme; saveState(); applyTheme(); renderAll();
+  const names={dark:'Тёмная',light:'Светлая',graphite:'Graphite',navy:'Midnight Navy',titanium:'Titanium',mono:'Monochrome',corsa:'Assetto Corsa'};
+  toast('Тема изменена',`${names[theme]} включена.`);
 }
-function cycleTheme(){ const list=['dark','light','corsa']; setTheme(list[(list.indexOf(state.theme)+1)%list.length]); }
+function cycleTheme(){ const list=['dark','light','graphite','navy','titanium','mono','corsa']; setTheme(list[(list.indexOf(state.theme)+1)%list.length]); }
 
 function downloadJSON(data,filename){
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=filename; a.click(); setTimeout(()=>URL.revokeObjectURL(url),1000);
@@ -755,13 +811,13 @@ function exportData(){ downloadJSON({app:'SetupLab',version:APP_VERSION,exported
 function exportCatalog(){ downloadJSON({version:1,updated:new Date().toISOString().slice(0,10),currency:'EUR',categories:catalog.categories,items:allItems()},`setuplab-catalog-${new Date().toISOString().slice(0,10)}.json`); }
 function pickJSON(handler){ const input=document.createElement('input'); input.type='file'; input.accept='application/json,.json'; input.onchange=()=>{ const f=input.files?.[0]; if(f)handler(f); }; input.click(); }
 async function importDataFile(file){
-  try { const data=JSON.parse(await file.text()); const incoming=data.state||data; if(!Array.isArray(incoming.builds))throw new Error('Invalid backup'); state={...structuredClone(defaultState),...incoming,rates:{...defaultState.rates,...(incoming.rates||{})}}; saveState(); applyTheme(); renderAll(); toast('Резервная копия восстановлена'); }
+  try { const data=JSON.parse(await file.text()); const incoming=data.state||data; if(!Array.isArray(incoming.builds))throw new Error('Invalid backup'); state={...deepClone(defaultState),...incoming,rates:{...defaultState.rates,...(incoming.rates||{})}}; saveState(); applyTheme(); renderAll(); toast('Резервная копия восстановлена'); }
   catch { toast('Ошибка импорта','Файл не похож на резервную копию SetupLab.','bad'); }
 }
 async function importCatalogFile(file){
   try {
     const data=JSON.parse(await file.text()); if(!Array.isArray(data.items))throw new Error('Invalid catalog');
-    const normalized=data.items.map((i,index)=>({id:i.id||uid(`import-${index}`),group:i.group||'pc',type:i.type||'custom',brand:i.brand||'Без бренда',name:i.name||`Позиция ${index+1}`,priceEUR:Number(i.priceEUR)||0,score:clamp(Number(i.score)||0,0,100),upgrade:clamp(Number(i.upgrade)||0,0,100),futureAnnualEUR:Number(i.futureAnnualEUR)||0,powerW:Number(i.powerW)||0,specs:i.specs||{},compatibility:i.compatibility||{},image:i.image||'',imageQuery:i.imageQuery||`${i.brand||''} ${i.name||''} product photo`,sourceNote:i.sourceNote||'Импортированная позиция',purchase:i.purchase||{},priceBasis:i.priceBasis||'estimate',priceChecked:i.priceChecked||i.updated||new Date().toISOString().slice(0,10),updated:i.updated||new Date().toISOString().slice(0,10)}));
+    const normalized=data.items.map((i,index)=>({id:i.id||uid(`import-${index}`),group:i.group||'pc',type:i.type||'custom',brand:i.brand||'Без бренда',name:i.name||`Позиция ${index+1}`,priceEUR:Number(i.priceEUR)||0,score:clamp(Number(i.score)||0,0,100),upgrade:clamp(Number(i.upgrade)||0,0,100),futureAnnualEUR:Number(i.futureAnnualEUR)||0,powerW:Number(i.powerW)||0,specs:i.specs||{},compatibility:i.compatibility||{},description:i.description||'',image:i.image||'',imageQuery:i.imageQuery||`${i.brand||''} ${i.name||''} product photo`,sourceNote:i.sourceNote||'Импортированная позиция',purchase:i.purchase||{},priceBasis:i.priceBasis||'estimate',priceChecked:i.priceChecked||i.updated||new Date().toISOString().slice(0,10),updated:i.updated||new Date().toISOString().slice(0,10)}));
     const ids=new Set([...catalog.items.map(i=>i.id),...state.customItems.map(i=>i.id)]); normalized.forEach(i=>{ if(ids.has(i.id)) i.id=uid('import'); ids.add(i.id); }); state.customItems=[...normalized,...state.customItems]; saveState(); renderAll(); setActiveView('catalog'); toast('Каталог импортирован',`Добавлено позиций: ${normalized.length}`);
   } catch { toast('Ошибка каталога','Ожидается JSON-объект с массивом items.','bad'); }
 }
@@ -783,7 +839,7 @@ async function submitRemoteCatalog(form){
 
 function resetApp(){
   if(!confirm('Удалить все локальные сборки, пользовательский каталог и настройки SetupLab?'))return;
-  localStorage.removeItem(STORAGE_KEY); state=structuredClone(defaultState); applyTheme(); seedDemoBuilds(); renderAll(); toast('Локальные данные сброшены');
+  localStorage.removeItem(STORAGE_KEY); state=deepClone(defaultState); applyTheme(); seedDemoBuilds(); renderAll(); toast('Локальные данные сброшены');
 }
 
 function exportComparisonReport(){
